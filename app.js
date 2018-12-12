@@ -1,8 +1,25 @@
 var createError = require('http-errors');
+
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
+
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash = require('connect-flash');
+var timeout = require('connect-timeout'); //express v4
+
+
+
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('mongodb://jacksrf:trey33@ds243755-a0.mlab.com:43755,ds243755-a1.mlab.com:43755/centurion_production?replicaSet=rs-ds243755');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
