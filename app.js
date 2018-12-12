@@ -19,7 +19,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://jacksrf:trey33@ds243755-a0.mlab.com:43755,ds243755-a1.mlab.com:43755/centurion_production?replicaSet=rs-ds243755');
+var db = monk('mongodb://jacksrf:trey3333@ds155461.mlab.com:55461/als-flowers-api');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
