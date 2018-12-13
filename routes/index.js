@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/new/order', function(req, res, next) {
   console.log(Object.keys(req.body))
+  console.log(req.body.line_items)
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
