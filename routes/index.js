@@ -7,7 +7,6 @@ router.post('/new/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
-
   res.send()
 });
 
