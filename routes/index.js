@@ -27,8 +27,8 @@ router.post('/new/order', function(req, res, next) {
   ordersDB.insert(req.body)
   var items = req.body.line_items;
   for (i=0; i<items.length; i++) {
-    console.log(item[i].title)
-    rest.get(shopifyURIapi + '/admin/products/#' + item[i].id + '.json').on('complete', function(result) {
+    console.log(items[i].title)
+    rest.get(shopifyURIapi + '/admin/products/#' + items[i].id + '.json').on('complete', function(result) {
           if (result instanceof Error) {
             console.log('Error:', result.message);
             this.retry(5000); // try again after 5 sec
