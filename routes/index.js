@@ -20,8 +20,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/new/order', function(req, res, next) {
-  console.log(shopify)
-  var client = new Client();
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
