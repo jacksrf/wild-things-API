@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body style="width: 8in;height: 10.5in;margin: .25in;font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif; box-sizing: border-box;">
+    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+      <h1 style="margin-top: 0px;">From:</h1>
+      <div><%= order.customer.default_address.name %></div>
+      <div><%= order.customer.email %></div>
+      <div><%= order.customer.default_address.phone %></div>
+    </div>
+    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+      <h1 style="margin-top: 0px;">To:</h1>
+      <div><%= order.shipping_address.name %></div>
+      <div><%= order.shipping_address.address1 %></div>
+      <div><%= order.shipping_address.address2 %></div>
+      <div><%= order.shipping_address.city %>, <%= order.shipping_address.state %> <%= order.shipping_address.zip %></div>
+      <div><%= order.shipping_address.phone %></div>
+    </div>
+
+    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+      <h1 style="margin-top: 0px;">Note:</h1>
+      <div><%= order.note %></div>
+      <h1 style="margin-top: 0px;">Colors:</h1>
+      <div><%= order.note_attributes[0]["value"] %></div>
+      <h1 style="margin-top: 0px;">Delivery Date:</h1>
+      <div><%= order.note_attributes[3]["value"] %></div>
+    </div>
+
+    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+      <h1 style="margin-top: 0px;">Items:</h1>
+      <div><%= order.line_items[0].title %></div>
+      <div><%= order.line_items[0].price %></div>
+    </div>
+  </body>
+</html>
