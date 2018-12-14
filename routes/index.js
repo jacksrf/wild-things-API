@@ -33,8 +33,9 @@ router.post('/new/order', function(req, res, next) {
             console.log('Error:', result.message);
             this.retry(5000); // try again after 5 sec
           } else {
-            console.log(result.product.product_type)
-
+            if (result.product.product_type === "Flowers") {
+              console.log("DELIVERY")
+            }
           }
         })
     if (i === items.length -1) {
