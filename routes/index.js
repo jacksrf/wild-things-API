@@ -19,18 +19,6 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
 router.get('/', function(req, res, next) {
-  // request('http://localhost:8090/order/pdf/5c14273221a30375248c4293', function (error, response, html) {
-  //   if (!error && response.statusCode == 200) {
-  //     console.log(Object.keys(response));
-  //     var $ = cheerio.load(html)
-  //
-  //     console.log(html_parsed)
-
-      // var options = { "height": "14in", "width": "in" };
-
-
-  //   }
-  // });
     var options = {
         screenSize: {
           'width': 2200,
@@ -42,7 +30,8 @@ router.get('/', function(req, res, next) {
             'height': 1350
         }
 
-  webshot("http://api.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(){
+  webshot("api.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(){
+
     // var html_parsed = '<img src="./public/pdf/test.png"/>'
     // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
     //   if (err) return console.log(err);
