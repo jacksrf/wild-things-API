@@ -27,8 +27,20 @@
         <div><%= order.shipping_address.phone %></div>
       </div> -->
 
-      <div class="half" id="message_holder">
-        <div id="message"><%= order.note %></div>
+      <div class="half" id="message_holder" style="transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      position: absolute;
+      top: 325px;
+      right: 100px;
+      width: 500px;
+      height: 200px;
+      text-align: center;
+      display: table;">
+        <div id="message" style="display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        width: 100%;
+        height: 100%;font-size: 18px;"><%= order.note %></div>
       </div>
 
       <!-- <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
@@ -46,63 +58,63 @@
         <div><%= order.line_items[0].price %></div>
       </div> -->
     </div>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs" crossorigin="anonymous"></script>
+</body>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs" crossorigin="anonymous"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
   <script>
   // (function($) {
-    $(window).on('load',function() {
-      var albumBucketName = 'als-flowers';
-      AWS.config.update({
-        "accessKeyId":"AKIAIDJRB5WLXVMNWEPA",
-        "secretAccessKey":"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",
-        "region":"us-east-1",
-        "s3BucketEndpoint": true,
-        "endpoint": "http://als-flowers.s3.amazonaws.com"
-      });
-
-      var s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-        params: {Bucket: albumBucketName},
-        sslEnabled: false
-      });
-
-      var order_id = $('#order_id').data('id')
-      var filename  = './'+ order_id +'.pdf';
-      html2canvas(document.querySelector('#pdf'),
-      								{scale: 1}
-      						 ).then(function(canvas) {
-            $('.ignore').show()
-      			var pdf = new jsPDF('p', 'mm', 'a4');
-      			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
-            var image = canvas.toDataURL('image/png')
-            console.log(canvas.toDataURL('image/png'))
-      			pdf.save(filename);
-            // var albumPhotosKey = encodeURIComponent('pdfs') + '//';
-            setTimeout(function() {
-              console.log("UPLOAD")
-              var photoKey = filename;
-              var data = {
-                Key: order_id + '.pdf',
-                Body: filename,
-                ACL: 'public-read',
-                ContentType: 'application/pdf'
-              };
-              s3.putObject(data, function(err, data) {
-                console.log(err)
-                if (err) {
-                  // return alert('There was an error uploading your photo: ', err.message);
-                  console.log(data)
-                } else {
-                  alert('Successfully uploaded photo.');
-                }
-
-              });
-            },1000)
-
-        })
-      })
+    // $(window).on('load',function() {
+    //   var albumBucketName = 'als-flowers';
+    //   AWS.config.update({
+    //     "accessKeyId":"AKIAIDJRB5WLXVMNWEPA",
+    //     "secretAccessKey":"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",
+    //     "region":"us-east-1",
+    //     "s3BucketEndpoint": true,
+    //     "endpoint": "http://als-flowers.s3.amazonaws.com"
+    //   });
+    //
+    //   var s3 = new AWS.S3({
+    //     apiVersion: '2006-03-01',
+    //     params: {Bucket: albumBucketName},
+    //     sslEnabled: false
+    //   });
+    //
+    //   var order_id = $('#order_id').data('id')
+    //   var filename  = './'+ order_id +'.pdf';
+    //   html2canvas(document.querySelector('#pdf'),
+    //   								{scale: 1}
+    //   						 ).then(function(canvas) {
+    //         $('.ignore').show()
+    //   			var pdf = new jsPDF('p', 'mm', 'a4');
+    //   			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+    //         var image = canvas.toDataURL('image/png')
+    //         console.log(canvas.toDataURL('image/png'))
+    //   			pdf.save(filename);
+    //         // var albumPhotosKey = encodeURIComponent('pdfs') + '//';
+    //         setTimeout(function() {
+    //           console.log("UPLOAD")
+    //           var photoKey = filename;
+    //           var data = {
+    //             Key: order_id + '.pdf',
+    //             Body: filename,
+    //             ACL: 'public-read',
+    //             ContentType: 'application/pdf'
+    //           };
+    //           s3.putObject(data, function(err, data) {
+    //             console.log(err)
+    //             if (err) {
+    //               // return alert('There was an error uploading your photo: ', err.message);
+    //               console.log(data)
+    //             } else {
+    //               alert('Successfully uploaded photo.');
+    //             }
+    //
+    //           });
+    //         },1000)
+    //
+    //     })
+    //   })
     // });
-  </script>
+  </script>-->
 </html>
