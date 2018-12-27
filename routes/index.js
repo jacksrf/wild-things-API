@@ -18,15 +18,15 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
 router.get('/', function(req, res, next) {
-  request('http://localhost:8090/order/pdf/5c14273221a30375248c4293', function (error, response, html) {
+  request('http://alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293', function (error, response, html) {
     if (!error && response.statusCode == 200) {
-      console.log(html);
-      var options = { "height": "14in", "width": "8.5in" };
-      console.log(html);
-      pdf.create(html, options).toFile('./public/pdf/businesscard.pdf', function(err, res) {
-        if (err) return console.log(err);
-        console.log(res); // { filename: '/app/businesscard.pdf' }
-      });
+      console.log(response);
+      // var options = { "height": "14in", "width": "8.5in" };
+      // console.log(html);
+      // pdf.create(html, options).toFile('./public/pdf/businesscard.pdf', function(err, res) {
+      //   if (err) return console.log(err);
+      //   console.log(res); // { filename: '/app/businesscard.pdf' }
+      // });
     }
   });
 });
