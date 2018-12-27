@@ -30,7 +30,8 @@ router.get('/', function(req, res, next) {
             'height': 1350
         }
 
-  webshot("api.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(){
+  webshot("/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(err) {
+
 
     // var html_parsed = '<img src="./public/pdf/test.png"/>'
     // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
