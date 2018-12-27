@@ -43,11 +43,11 @@ router.get('/', function(req, res, next) {
         }
 
   webshot("http://localhost:8090/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(){
-    var html_parsed = '<img src="./public/pdf/test.png"/>'
-    pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
-      if (err) return console.log(err);
-      console.log(res); // { filename: '/app/businesscard.pdf' }
-    });
+    // var html_parsed = '<img src="./public/pdf/test.png"/>'
+    // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
+    //   if (err) return console.log(err);
+    //   console.log(res); // { filename: '/app/businesscard.pdf' }
+    // });
   });
 
 });
