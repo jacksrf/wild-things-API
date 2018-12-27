@@ -21,16 +21,16 @@ var multipartMiddleware = multipart();
 router.get('/', function(req, res, next) {
     var options = {
         screenSize: {
-          'width': 2200,
-          'height': 1350
+          'width': 1350,
+          'height': 2200
         }
       }
       var options2 = {
-            'width': 2200,
-            'height': 1350
+            'width': 1350,
+            'height': 2200
         }
 
-  webshot("/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(err) {
+  webshot("api.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.png", options, function(err) {
 
 
     // var html_parsed = '<img src="./public/pdf/test.png"/>'
