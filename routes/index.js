@@ -20,7 +20,7 @@ var multipartMiddleware = multipart();
 router.get('/', function(req, res, next) {
   request('http://api.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293', function (error, response, html) {
     if (!error && response.statusCode == 200) {
-      console.log(Object.Keys(response));
+      console.log(Object.keys(response));
       // var options = { "height": "14in", "width": "8.5in" };
       // console.log(html);
       // pdf.create(html, options).toFile('./public/pdf/businesscard.pdf', function(err, res) {
