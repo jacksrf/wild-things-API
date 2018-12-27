@@ -6,7 +6,9 @@
     "start": "node ./bin/als-flowers-API"
   },
   "dependencies": {
+    "body-parser": "1.18",
     "connect-flash": "^0.1.1",
+    "connect-multiparty": "^2.2.0",
     "connect-timeout": "^1.9.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -16,6 +18,7 @@
     "html-pdf": "^2.2.0",
     "html-scrape": "^0.2.0",
     "http-errors": "~1.6.2",
+    "jspdf": "^1.5.3",
     "mongoose": "^5.3.16",
     "monk": "^6.0.6",
     "morgan": "~1.9.0",

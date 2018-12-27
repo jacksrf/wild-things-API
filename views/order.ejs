@@ -3,36 +3,106 @@
   <head>
     <title></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
   </head>
-  <body style="width: 8in;height: 10.5in;margin: .25in;font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif; box-sizing: border-box;">
-    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
-      <h1 style="margin-top: 0px;">From:</h1>
-      <div><%= order.customer.default_address.name %></div>
-      <div><%= order.customer.email %></div>
-      <div><%= order.customer.default_address.phone %></div>
-    </div>
-    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
-      <h1 style="margin-top: 0px;">To:</h1>
-      <div><%= order.shipping_address.name %></div>
-      <div><%= order.shipping_address.address1 %></div>
-      <div><%= order.shipping_address.address2 %></div>
-      <div><%= order.shipping_address.city %>, <%= order.shipping_address.state %> <%= order.shipping_address.zip %></div>
-      <div><%= order.shipping_address.phone %></div>
-    </div>
+  <body>
+    <div id="pdf" class="holder" style="width: 1275px; height: 2100px; background-image: url('/images/background.jpg');    background-size: cover;background-position: center;">
+      <div id="order_id" data-id="<%= order._id %>" style="display: none;"></div>
+      <!-- <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+        <h1 style="margin-top: 0px;">From:</h1>
+        <div><%= order.customer.default_address.name %></div>
+        <div><%= order.customer.email %></div>
+        <div><%= order.customer.default_address.phone %></div>
+      </div>
+      <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+        <h1 style="margin-top: 0px;">To:</h1>
+        <div><%= order.shipping_address.name %></div>
+        <div><%= order.shipping_address.address1 %></div>
+        <div><%= order.shipping_address.address2 %></div>
+        <div><%= order.shipping_address.city %>, <%= order.shipping_address.state %> <%= order.shipping_address.zip %></div>
+        <div><%= order.shipping_address.phone %></div>
+      </div> -->
 
-    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
-      <h1 style="margin-top: 0px;">Note:</h1>
-      <div><%= order.note %></div>
-      <h1 style="margin-top: 0px;">Colors:</h1>
-      <div><%= order.note_attributes[0]["value"] %></div>
-      <h1 style="margin-top: 0px;">Delivery Date:</h1>
-      <div><%= order.note_attributes[3]["value"] %></div>
-    </div>
+      <div class="half" id="message_holder">
+        <div id="message"><%= order.note %></div>
+      </div>
 
-    <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
-      <h1 style="margin-top: 0px;">Items:</h1>
-      <div><%= order.line_items[0].title %></div>
-      <div><%= order.line_items[0].price %></div>
+      <!-- <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+        <h1 style="margin-top: 0px;">Note:</h1>
+        <div><%= order.note %></div>
+        <h1 style="margin-top: 0px;">Colors:</h1>
+        <div><%= order.note_attributes[0]["value"] %></div>
+        <h1 style="margin-top: 0px;">Delivery Date:</h1>
+        <div><%= order.note_attributes[3]["value"] %></div>
+      </div>
+
+      <div class="half" style="float: left; width: 4in; margin-bottom:30px;">
+        <h1 style="margin-top: 0px;">Items:</h1>
+        <div><%= order.line_items[0].title %></div>
+        <div><%= order.line_items[0].price %></div>
+      </div> -->
     </div>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs" crossorigin="anonymous"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+  <script>
+  // (function($) {
+    $(window).on('load',function() {
+      var albumBucketName = 'als-flowers';
+      AWS.config.update({
+        "accessKeyId":"AKIAIDJRB5WLXVMNWEPA",
+        "secretAccessKey":"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",
+        "region":"us-east-1",
+        "s3BucketEndpoint": true,
+        "endpoint": "http://als-flowers.s3.amazonaws.com"
+      });
+
+      var s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: {Bucket: albumBucketName},
+        sslEnabled: false
+      });
+
+      var order_id = $('#order_id').data('id')
+      var filename  = './'+ order_id +'.pdf';
+      html2canvas(document.querySelector('#pdf'),
+      								{scale: 1}
+      						 ).then(function(canvas) {
+            $('.ignore').show()
+      			var pdf = new jsPDF('p', 'mm', 'a4');
+      			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+            var image = canvas.toDataURL('image/png')
+            console.log(canvas.toDataURL('image/png'))
+      			pdf.save(filename);
+            // var albumPhotosKey = encodeURIComponent('pdfs') + '//';
+            setTimeout(function() {
+              console.log("UPLOAD")
+              var photoKey = filename;
+              var data = {
+                Key: order_id + '.pdf',
+                Body: filename,
+                ACL: 'public-read',
+                ContentType: 'application/pdf'
+              };
+              s3.putObject(data, function(err, data) {
+                console.log(err)
+                if (err) {
+                  // return alert('There was an error uploading your photo: ', err.message);
+                  console.log(data)
+                } else {
+                  alert('Successfully uploaded photo.');
+                }
+
+              });
+            },1000)
+
+        })
+      })
+    // });
+  </script>
 </html>
