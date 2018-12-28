@@ -49,23 +49,50 @@ router.post('/new/order', function(req, res, next) {
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
   var items = req.body.line_items;
-  for (i=0; i<items.length; i++) {
-    console.log(items[i].title)
-    rest.get(shopifyURIapi + '/admin/products/' + items[i].product_id + '.json').on('complete', function(result) {
-          if (result instanceof Error) {
-            console.log('Error:', result.message);
-            this.retry(5000); // try again after 5 sec
-          } else {
-            if (result.product.product_type === "Flowers") {
-              console.log("DELIVERY")
-
-              // var html = fs.readFileSync('./test/businesscard.html', 'utf8');
-            }
+    ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+      console.log("DELIVERY")
+      var options = {
+          screenSize: {
+            'width': 1350,
+            'height': 2200
           }
-        })
-    if (i === items.length -1) {
-      res.send()
-    }
+        }
+        var options2 = {
+              'width': 1350,
+              'height': 2200
+          }
+
+      webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+        console.log(err)
+          var formData = {
+                "printer":544379,
+                "title": "Order: "+ doc.order_number,
+                "contentType": "pdf_uri",
+                "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+                "source": "api documentation!",
+                "options": {
+                	"paper": "Legal"
+                }
+          }
+          var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+          var password = "";
+          var url = "https://api.printnode.com/printjobs";
+          var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+        request(
+            {
+                url : url,
+                headers : {
+                    "Authorization" : auth
+                },
+                formData: formData
+            },
+            function (error, response, body) {
+                // Do more stuff with 'body' here
+            }
+);
+      });
+    })
   }
 });
 
