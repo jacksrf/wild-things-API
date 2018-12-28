@@ -90,10 +90,9 @@ router.post('/new/order', function(req, res, next) {
             function (error, response, body) {
                 // Do more stuff with 'body' here
             }
-);
+          );
       });
     })
-  }
 });
 
 router.get('/order/pdf/:id', function(req, res, next) {
