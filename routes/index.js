@@ -79,7 +79,7 @@ router.post('/new/order', function(req, res, next) {
           var url = "https://api.printnode.com/printjobs";
           var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
-        request(
+        request.post(
             {
                 url : url,
                 headers : {
