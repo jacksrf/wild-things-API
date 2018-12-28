@@ -85,11 +85,13 @@ router.post('/new/order', function(req, res, next) {
                 headers : {
                     "Authorization" : auth
                 },
-                formData: formData
+                json: true,
+                body: formData
             },
             function (error, response, body) {
-                // Do more stuff with 'body' here
-            }
+              console.log(error)
+              console.log(response)
+                        }
           );
       });
     })
