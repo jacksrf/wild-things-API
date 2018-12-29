@@ -65,7 +65,7 @@ router.post('/new/order', function(req, res, next) {
       webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
         console.log(err)
           var formData = {
-                "printer":544379,
+                "printer":545151,
                 "title": "Order: "+ doc.order_number,
                 "contentType": "pdf_uri",
                 "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
