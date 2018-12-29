@@ -50,8 +50,8 @@ router.post('/new/order', function(req, res, next) {
   ordersDB.insert(req.body)
   var items = req.body.line_items;
     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-      console.log("DELIVERY")
-      if (order.note_attributes[1]['value'] != undefined) {
+      console.log(order.note_attributes[1]['value'])
+      if ( order.note_attributes[1]['value'] != undefined) {
         var options = {
             screenSize: {
               'width': 1350,
@@ -90,8 +90,8 @@ router.post('/new/order', function(req, res, next) {
                   body: formData
               },
               function (error, response, body) {
-                console.log(error)
-                console.log(response)
+                // console.log(error)
+                // console.log(response)
                 res.send()
                           }
             );
