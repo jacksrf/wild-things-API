@@ -50,8 +50,8 @@ router.post('/new/order', function(req, res, next) {
   ordersDB.insert(req.body)
   var items = req.body.line_items;
     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-      console.log(order.note_attributes[1]['value'])
-      if ( order.note_attributes[1]['value'] != undefined) {
+      console.log(doc.note_attributes[1]['value'])
+      if ( doc.note_attributes[1]['value'] != undefined) {
         var options = {
             screenSize: {
               'width': 1350,
