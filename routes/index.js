@@ -43,14 +43,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/new/order', function(req, res, next) {
-  console.log(Object.keys(req.body))
-  console.log(req.body.line_items)
+  console.log(req.body)
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
   var items = req.body.line_items;
     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-      console.log(doc.note_attributes[1])
+      console.log(doc)
       if ( doc.note_attributes[1] != undefined) {
         var options = {
             screenSize: {
