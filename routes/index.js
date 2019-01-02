@@ -50,6 +50,9 @@ router.post('/new/order', function(req, res, next) {
   var items = req.body.line_items;
     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
       console.log(doc)
+      var printerDB = db.get('printer')
+      printerDB.findOne({}, {}, function(err, printer) {
+        console.log(printer.printer_id)
       if ( doc.note_attributes[1] != undefined) {
         var options = {
             screenSize: {
@@ -64,9 +67,7 @@ router.post('/new/order', function(req, res, next) {
 
         webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
           console.log(err)
-          var printerDB = db.get('printer')
-          printerDB.findOne({}, {}, function(err, printer) {
-            console.log(printer.printer_id)
+
             // 545151
             //   var formData = {
             //         "printer":,
@@ -98,10 +99,11 @@ router.post('/new/order', function(req, res, next) {
                   res.send()
               //               }
               // );
-          })
+
 
         });
       }
+      })
 
     })
 });
