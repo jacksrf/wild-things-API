@@ -69,36 +69,36 @@ router.post('/new/order', function(req, res, next) {
           console.log(err)
 
             // 545151
-            //   var formData = {
-            //         "printer":,
-            //         "title": "Order: "+ doc.order_number,
-            //         "contentType": "pdf_uri",
-            //         "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
-            //         "source": "api documentation!",
-            //         "options": {
-            //           "paper": "Legal"
-            //         }
-            //   }
-            //   var username = "ee9da1bb0d504255374eb90055e050609fc54402";
-            //   var password = "";
-            //   var url = "https://api.printnode.com/printjobs";
-            //   var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-            //
-            // request.post(
-            //     {
-            //         url : url,
-            //         headers : {
-            //             "Authorization" : auth
-            //         },
-            //         json: true,
-            //         body: formData
-            //     },
-            //     function (error, response, body) {
-            //       // console.log(error)
-            //       // console.log(response)
+              var formData = {
+                    "printer": printer.printer_id,
+                    "title": "Order: "+ doc.order_number,
+                    "contentType": "pdf_uri",
+                    "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+                    "source": "api documentation!",
+                    "options": {
+                      "paper": "Legal"
+                    }
+              }
+              var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+              var password = "";
+              var url = "https://api.printnode.com/printjobs";
+              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+            request.post(
+                {
+                    url : url,
+                    headers : {
+                        "Authorization" : auth
+                    },
+                    json: true,
+                    body: formData
+                },
+                function (error, response, body) {
+                  // console.log(error)
+                  // console.log(response)
                   res.send()
-              //               }
-              // );
+                            }
+              );
 
 
         });
