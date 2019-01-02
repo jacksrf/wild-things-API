@@ -102,6 +102,8 @@ router.post('/new/order', function(req, res, next) {
 
 
         });
+      } else {
+        res.send()
       }
       })
 
@@ -166,6 +168,8 @@ router.get('/order/pdf/:id', function(req, res, next) {
 
 
       });
+    } else {
+
     }
     })
   } )
