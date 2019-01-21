@@ -3,8 +3,9 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+a  {
+   color: white!important;
+   text-decoration: none!important;
 }
 
 .half {
@@ -28,4 +29,40 @@ div#message {
     text-align: center;
     width: 100%;
     height: 100%;
+}
+
+
+.row {
+    margin: 25px 0px;
+    float: left;
+    width: 100%;
+    display: inline-block;
+    /* padding: 0px 25px; */
+}
+
+.item {
+    display: inline-block;
+    line-height: 38px;
+}
+
+.item.number {
+    width: 10%;
+}
+.item.name {
+    width: 20%;
+}
+.item.total {
+    width: 5%;
+    margin: 0px 25px;
+}
+
+button.item.button.btn.btn-success {
+    width: 150px;
+    margin: 0px 25px;
+}
+
+button.item.button.btn.btn-info {
+    width: 100px;
+    margin: 0px 25px;
+    /* float: right; */
 }

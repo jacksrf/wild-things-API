@@ -42,6 +42,14 @@ router.get('/', function(req, res, next) {
 
 });
 
+router.get('/orders', function(req, res, next) {
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  ordersDB.find({}, {sort: {'processed_at': -1}}, function(err, orders) {
+    res.render('orders', {orders: orders})
+  })
+});
+
 router.post('/new/order', function(req, res, next) {
   console.log(req.body)
   var db = req.db;
