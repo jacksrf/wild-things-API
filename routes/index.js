@@ -169,7 +169,7 @@ router.get('/order/pdf/:id', function(req, res, next) {
               },
               function (error, response, body) {
                 // console.log(error)
-                console.log(response)
+                // console.log(response)
                 res.render('index')
                           }
             );
