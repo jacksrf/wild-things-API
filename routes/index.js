@@ -51,16 +51,16 @@ router.get('/orders', function(req, res, next) {
 });
 
 router.post('/new/order', function(req, res, next) {
-  console.log(req.body)
+  // console.log(req.body)
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.insert(req.body)
   var items = req.body.line_items;
     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-      console.log(doc)
+      // console.log(doc)
       var printerDB = db.get('printer')
       printerDB.findOne({}, {}, function(err, printer) {
-        console.log(printer.printer_id)
+        // console.log(printer.printer_id)
       if ( doc.note_attributes[1] != undefined) {
         var options = {
             screenSize: {
@@ -102,8 +102,8 @@ router.post('/new/order', function(req, res, next) {
                     body: formData
                 },
                 function (error, response, body) {
-                  // console.log(error)
-                  // console.log(response)
+                  console.log(error)
+                  console.log(response)
                   res.send()
                             }
               );
