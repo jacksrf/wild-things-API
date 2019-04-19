@@ -104,10 +104,12 @@ router.post('/new/order', function(req, res, next) {
                 function (error, response, body) {
                   console.log(error)
                   console.log(response)
-                  res.send()
+
                             }
               );
-
+              setTimeout(function() {
+                res.send()
+              }, 1000)
 
         });
       } else {
