@@ -117,7 +117,7 @@ router.post('/new/order', function(req, res, next) {
               }, 1000)
 
         });
-        }, 1000)
+      }, 4000)
       } else {
         res.send()
       }
