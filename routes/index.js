@@ -13,7 +13,7 @@ var shopifyURIapi = 'https://' + apiKey + ':' + apiSecret + '@'+ shop;
 var cheerio = require('cheerio')
 var htmlToImage = require('html-to-image');
 var webshot = require('webshot');
-
+var moment = require('moment');
 
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
@@ -108,7 +108,8 @@ router.post('/new/order', function(req, res, next) {
                     console.log(error)
                   } else {
                     console.log(response)
-                    console.log('PRINTED ------ ORDER#:' + doc.order_number)
+                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                    console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
                   }
                 }
               );
@@ -180,7 +181,9 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                     console.log(error)
                   } else {
                     console.log(response)
-                    console.log('PRINTED ------ ORDER#:' + doc.order_number)
+                    console.log('REPRINT')
+                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                    console.log('REPRINTED ------ ORDER#:' + doc.order_number)
                   }
                 }
               );
