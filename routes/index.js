@@ -179,11 +179,13 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                 function (error, response, body) {
                   if (error) {
                     console.log(error)
+                    res.send()
                   } else {
                     // console.log(response)
                     console.log('REPRINT')
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('REPRINTED ------ ORDER#:' + doc.order_number)
+                    res.send()
                   }
                 }
               );
