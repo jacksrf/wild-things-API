@@ -76,7 +76,7 @@ router.post('/new/order', function(req, res, next) {
             }
 
         webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-          console.log(err)
+          // console.log(err)
             setTimeout(function() {
             // 545151
               var formData = {
@@ -107,7 +107,7 @@ router.post('/new/order', function(req, res, next) {
                   if (error) {
                     console.log(error)
                   } else {
-                    console.log(response)
+                    // console.log(response)
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
                   }
@@ -180,7 +180,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                   if (error) {
                     console.log(error)
                   } else {
-                    console.log(response)
+                    // console.log(response)
                     console.log('REPRINT')
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('REPRINTED ------ ORDER#:' + doc.order_number)
