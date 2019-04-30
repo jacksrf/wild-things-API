@@ -45,7 +45,8 @@ router.get('/', function(req, res, next) {
 router.get('/orders', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.find({}, {sort: {'processed_at': -1}}, function(err, orders) {
+  ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+    console.log(err)
     res.render('orders', {orders: orders})
   })
 });
