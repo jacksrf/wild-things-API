@@ -77,7 +77,7 @@ router.post('/new/order', function(req, res, next) {
 
         webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
           console.log(err)
-
+            setTimeout(function() {
             // 545151
               var formData = {
                     "printer": printer.printer_id,
@@ -117,6 +117,7 @@ router.post('/new/order', function(req, res, next) {
               }, 1000)
 
         });
+        }, 1000)
       } else {
         res.send()
       }
