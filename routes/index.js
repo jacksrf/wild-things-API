@@ -135,23 +135,22 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
     console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      console.log(printer.printer_id)
-    // if ( doc.note_attributes[1] != undefined) {
-    //   var options = {
-    //       screenSize: {
-    //         'width': 1350,
-    //         'height': 2200
-    //       }
-    //     }
-    //     var options2 = {
-    //           'width': 1350,
-    //           'height': 2200
-    //       }
-    //
-    //   webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-    //     console.log(err)
+      if ( doc.note_attributes[1] != undefined) {
+        var options = {
+            screenSize: {
+              'width': 1350,
+              'height': 2200
+            }
+          }
+          var options2 = {
+                'width': 1350,
+                'height': 2200
+            }
 
-          // 545151
+            webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+              // console.log(err)
+                setTimeout(function() {
+      console.log(printer.printer_id)
             var formData = {
                   "printer": printer.printer_id,
                   "title": "Order: "+ doc.order_number,
@@ -190,13 +189,15 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                 }
               );
 
+            }, 4000)
+        });
 
+      } else {
+        res.send()
+      }
       });
-    // } else {
-    //
-    // }
+
     })
-  // } )
 })
 
 router.post('/order/pdf/save/:id', multipartMiddleware, function(req, res, next) {
