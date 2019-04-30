@@ -19,26 +19,27 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
 router.get('/', function(req, res, next) {
-    var options = {
-        screenSize: {
-          'width': 1350,
-          'height': 2200
-        }
-      }
-      var options2 = {
-            'width': 1350,
-            'height': 2200
-        }
-
-  webshot("admin.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.pdf", options, function(err) {
-    console.log(err)
-
-    // var html_parsed = '<img src="./public/pdf/test.png"/>'
-    // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
-    //   if (err) return console.log(err);
-    //   console.log(res); // { filename: '/app/businesscard.pdf' }
-    // });
-  });
+  res.redirect('/orders')
+  //   var options = {
+  //       screenSize: {
+  //         'width': 1350,
+  //         'height': 2200
+  //       }
+  //     }
+  //     var options2 = {
+  //           'width': 1350,
+  //           'height': 2200
+  //       }
+  //
+  // webshot("admin.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.pdf", options, function(err) {
+  //   console.log(err)
+  //
+  //   // var html_parsed = '<img src="./public/pdf/test.png"/>'
+  //   // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
+  //   //   if (err) return console.log(err);
+  //   //   console.log(res); // { filename: '/app/businesscard.pdf' }
+  //   // });
+  // });
 
 });
 
@@ -103,10 +104,13 @@ router.post('/new/order', function(req, res, next) {
                     body: formData
                 },
                 function (error, response, body) {
-                  console.log(error)
-                  console.log(response)
-
-                            }
+                  if (error) {
+                    console.log(error)
+                  } else {
+                    console.log(response)
+                    console.log('PRINTED: ' + req.body.id)
+                  }
+                }
               );
               setTimeout(function() {
                 res.send()
