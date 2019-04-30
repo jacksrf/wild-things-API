@@ -106,16 +106,20 @@ router.post('/new/order', function(req, res, next) {
                 function (error, response, body) {
                   if (error) {
                     console.log(error)
+                    setTimeout(function() {
+                      res.send()
+                    }, 1000)
                   } else {
                     // console.log(response)
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
+                    setTimeout(function() {
+                      res.send()
+                    }, 1000)
                   }
                 }
               );
-              setTimeout(function() {
-                res.send()
-              }, 1000)
+
             }, 4000)
         });
 
@@ -178,13 +182,13 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                 function (error, response, body) {
                   if (error) {
                     console.log(error)
-                    res.send()
+                    res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
                   } else {
                     // console.log(response)
                     console.log('REPRINT')
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('REPRINTED ------ ORDER#:' + doc.order_number)
-                    res.send()
+                    res.send('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
                   }
                 }
               );
