@@ -116,9 +116,9 @@ router.post('/new/order', function(req, res, next) {
               setTimeout(function() {
                 res.send()
               }, 1000)
-
+            }, 4000)
         });
-      }, 4000)
+
       } else {
         res.send()
       }
