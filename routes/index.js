@@ -167,7 +167,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                     console.log('REPRINT')
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('REPRINTED ------ ORDER#:' + doc.order_number)
-                    res.send('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
+                    res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
                   }
                 }
               );
