@@ -20,27 +20,6 @@ var multipartMiddleware = multipart();
 
 router.get('/', function(req, res, next) {
   res.redirect('/orders')
-  //   var options = {
-  //       screenSize: {
-  //         'width': 1350,
-  //         'height': 2200
-  //       }
-  //     }
-  //     var options2 = {
-  //           'width': 1350,
-  //           'height': 2200
-  //       }
-  //
-  // webshot("admin.alsflowersmontgomery.com/order/pdf/5c14273221a30375248c4293", "./public/pdf/test.pdf", options, function(err) {
-  //   console.log(err)
-  //
-  //   // var html_parsed = '<img src="./public/pdf/test.png"/>'
-  //   // pdf.create(html_parsed, options2).toFile('./public/pdf/order.pdf', function(err, res) {
-  //   //   if (err) return console.log(err);
-  //   //   console.log(res); // { filename: '/app/businesscard.pdf' }
-  //   // });
-  // });
-
 });
 
 router.get('/orders', function(req, res, next) {
@@ -107,14 +86,14 @@ router.post('/new/order', function(req, res, next) {
                   if (error) {
                     console.log(error)
                     // setTimeout(function() {
-                      res.send()
+                      res.end();
                     // }, 1000)
                   } else {
                     // console.log(response)
                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
                     console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
                     // setTimeout(function() {
-                      res.send()
+                      res.end();
                     // }, 1000)
                   }
                 }
@@ -124,7 +103,7 @@ router.post('/new/order', function(req, res, next) {
         });
 
       } else {
-        res.send()
+        res.end();
       }
       })
 
