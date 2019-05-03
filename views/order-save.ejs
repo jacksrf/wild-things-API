@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href="/stylesheets/bootstrap.min.css"/>
+  </head>
+  <body style="padding: 50px">
+    <button class="btn btn-default"><a href="/orders" style="color: black!important;">< RETURN TO ORDERS</a></button>
+
+    <h1>NOTES SAVED!!!</h1>
+
+    <% if (order.note_attributes.length === 12) { %>
+      <% for (i=0; i < order.note_attributes.length;i++) {%>
+        <div style="width: 100%; margin-bottom: 30px;">
+          <div style="float: left; width: 100%"><b><%= order.note_attributes[i].name %>:</b> <%= order.note_attributes[i].value %></div>
+        </div>
+      <% } %>
+    <% } else if (order.note_attributes.length === 7) { %>
+      <% for (i=0; i < order.note_attributes.length;i++) {%>
+        <div style="width: 100%; margin-bottom: 30px;">
+          <div style="float: left; width: 100%"><b><%= order.note_attributes[i].name %>:</b> <%= order.note_attributes[i].value %></div>
+        </div>
+      <% } %>
+    <% } else if (order.note_attributes.length === 6) { %>
+      <% for (i=0; i < order.note_attributes.length;i++) {%>
+        <div style="width: 100%; margin-bottom: 30px;">
+          <div style="float: left; width: 100%"><b><%= order.note_attributes[i].name %>:</b> <%= order.note_attributes[i].value %></div>
+        </div>
+      <% } %>
+      <div style="width: 100%; margin-bottom: 30px;">
+        <div style="float: left; width: 100%"><b>Note:</b> <%= order.note %></div>
+      </div>
+    <% } else if (order.note_attributes.length === 11) { %>
+      <% for (i=0; i < order.note_attributes.length;i++) {%>
+        <div style="width: 100%; margin-bottom: 30px;">
+          <div style="float: left; width: 100%"><b><%= order.note_attributes[i].name %>:</b> <%= order.note_attributes[i].value %></div>
+        </div>
+      <% } %>
+      <div style="width: 100%; margin-bottom: 30px;">
+        <div style="float: left; width: 100%"><b>Note:</b> <%= order.note %></div>
+      </div>
+    <% } else { %>
+      <% for (i=0; i < order.note_attributes.length;i++) {%>
+        <div style="width: 100%; margin-bottom: 30px;">
+          <div style="float: left; width: 100%"><b><%= order.note_attributes[i].name %>:</b> <%= order.note_attributes[i].value %></div>
+        </div>
+      <% } %>
+    <% } %>
+      <button class="item button btn btn-success" style="margin-top: 25px;"><a href="/order/reprint/pdf/<%= order._id %>">PRINT</a></button>
+      <button class="item button btn btn-warning" style="margin-top: 25px;"><a href="/order/edit/<%= order._id %>">EDIT</a></button>
+  </body>
+</html>
