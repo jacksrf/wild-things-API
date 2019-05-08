@@ -198,6 +198,7 @@ router.get('/order/edit/:id', multipartMiddleware, function(req, res, next) {
   var ordersDB = db.get('orders')
   ordersDB.findOne({"_id": id}, {}, function(err, doc) {
     console.log(doc.note)
+    console.log(doc.note_attributes.length);
     res.render('order-edit', {"order": doc})
   })
 
@@ -225,10 +226,10 @@ router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
   var itemsProcessed = 0;
   Object.entries(form).forEach(
       ([key, value]) => {
-        // console.log(key, value)
+        console.log(key, value)
         if (key === 'note') {
           newNote = value
-          console.log(newNote)
+          console.log("note: " + newNote)
           itemsProcessed++;
           if(itemsProcessed === Object.entries(form).length) {
             callback();

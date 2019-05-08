@@ -22,7 +22,7 @@
             <textarea style="float: left; height: 100px; width: 300px;" name="<%= order.note_attributes[i].name %>"><%= order.note_attributes[i].value %></textarea>
           </div>
         <% } %>
-      <% } else if (order.note_attributes.length === 6) { %>
+      <% } else if (order.note_attributes.length === 6 || order.note_attributes.length === 5) { %>
         <% for (i=0; i < order.note_attributes.length;i++) {%>
           <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
             <label style="float: left; width: 100%"><%= order.note_attributes[i].name %></label>
@@ -33,7 +33,7 @@
           <label style="float: left; width: 100%">Note:</label>
           <textarea style="float: left; height: 100px; width: 300px;" name="note"><%= order.note %></textarea>
         </div>
-      <% } else if (order.note_attributes.length === 11) { %>
+      <% } else if (order.note_attributes.length === 11 || order.note_attributes.length === 10) { %>
         <% for (i=0; i < order.note_attributes.length;i++) {%>
           <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
             <label style="float: left; width: 100%"><%= order.note_attributes[i].name %></label>
