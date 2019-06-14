@@ -147,7 +147,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
                     // console.log(printer.printer_id)
               var formData = {
                     // "printer": printer.printer_id,
-                    "printer": 551547,
+                    "printer": 545151,
                     "title": "Order: "+ doc.order_number,
                     "contentType": "pdf_uri",
                     "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
