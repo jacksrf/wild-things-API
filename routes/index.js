@@ -208,7 +208,7 @@ router.post('/update/order', function(req, res, next) {
     var ordersDB = db.get('orders')
   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
     console.log(doc)
-    if (doc === null) {
+    if (doc === null || doc === "null") {
       if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
         res.end()
       } else {
