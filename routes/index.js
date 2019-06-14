@@ -208,14 +208,12 @@ router.post('/update/order', function(req, res, next) {
   var ordersDB = db.get('orders')
   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
     console.log(doc2)
+    var order = req.body;
     if (doc2 === null || doc2 === "null") {
       console.log('NEW')
-      if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
-        res.end()
-      } else {
         var db = req.db;
         var ordersDB = db.get('orders')
-        ordersDB.insert(req.body)
+        ordersDB.insert(order)
         var items = req.body.line_items;
           ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
             console.log(doc)
@@ -289,7 +287,6 @@ router.post('/update/order', function(req, res, next) {
             })
 
           })
-      }
     }
 
   })
