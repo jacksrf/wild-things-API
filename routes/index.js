@@ -206,9 +206,9 @@ router.post('/update/order', function(req, res, next) {
   console.log(req.body)
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-    console.log(doc)
-    if (doc === null || doc === "null") {
+  ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
+    console.log(doc2)
+    if (doc2 === null || doc2 === "null") {
       console.log('NEW')
       if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
         res.end()
