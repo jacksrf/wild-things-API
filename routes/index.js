@@ -233,7 +233,7 @@ router.post('/update/order', function(req, res, next) {
                   }
 
               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                // console.log(err)
+                console.log(err)
                   // setTimeout(function() {
                   // 545151
                     var formData = {
