@@ -204,13 +204,14 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
 
 router.post('/update/order', function(req, res, next) {
   console.log(req.body)
+    var db = req.db;
+    var ordersDB = db.get('orders')
   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
     console.log(doc)
     // if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
     //   res.end()
     // } else {
-    //   var db = req.db;
-    //   var ordersDB = db.get('orders')
+
     //   ordersDB.insert(req.body)
     //   var items = req.body.line_items;
     //     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
