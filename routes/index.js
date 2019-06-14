@@ -207,8 +207,9 @@ router.post('/update/order', function(req, res, next) {
     var db = req.db;
     var ordersDB = db.get('orders')
   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-    console.log(doc.length)
+    console.log(doc)
     if (doc === null || doc === "null") {
+      console.log('NEW')
       if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
         res.end()
       } else {
@@ -219,7 +220,7 @@ router.post('/update/order', function(req, res, next) {
             // console.log(doc)
             var printerDB = db.get('printer')
             printerDB.findOne({}, {}, function(err, printer) {
-              // console.log(printer.printer_id)
+              console.log(printer.printer_id)
             if ( doc.note_attributes[1] != undefined) {
               var options = {
                   screenSize: {
