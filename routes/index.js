@@ -125,10 +125,10 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
     // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      console.log(doc.closed_at)
-      var isafter = moment(doc.closed_at).isAfter('2019-05-23T00:00:00+00:00');
-      console.log(isafter)
-      if (isafter === true) {
+      // console.log(doc.closed_at)
+      // var isafter = moment(doc.closed_at).isAfter('2019-05-23T00:00:00+00:00');
+      // console.log(isafter)
+      // if (isafter === true) {
         if ( doc.note_attributes[1] != undefined) {
           var options = {
               screenSize: {
@@ -192,9 +192,9 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
         } else {
           res.send()
         }
-      } else {
-        res.send()
-      }
+      // } else {
+      //   res.send()
+      // }
 
       });
 
