@@ -129,6 +129,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
       var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
       console.log(isafter)
       if (isafter === "true" || isafter === true) {
+        console.log(doc.note_attributes)
         if ( doc.note_attributes[1] != undefined) {
           var options = {
               screenSize: {
