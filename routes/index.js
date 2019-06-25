@@ -128,6 +128,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
       console.log(doc.updated_at)
       var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
       console.log(isafter)
+      console.log(doc)
       if (isafter === "true" || isafter === true) {
         console.log(doc.note_attributes)
         if ( doc.note_attributes[1] != undefined) {
