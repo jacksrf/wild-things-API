@@ -125,7 +125,7 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
     // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      // console.log(doc.closed_at)
+      console.log(doc.closed_at)
       var isafter = moment(doc.closed_at).isAfter('2019-06-01T00:00:00+00:00');
       console.log(isafter)
       if (isafter === true) {
