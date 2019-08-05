@@ -24,6 +24,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/orders', function(req, res, next) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log(ip)
   var db = req.db;
   var ordersDB = db.get('orders')
   ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
@@ -118,9 +120,14 @@ router.post('/new/order', function(req, res, next) {
 });
 
 router.get('/order/reprint/pdf/:id', function(req, res, next) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log(ip)
+  var key = req.query.key;
+  console.log(key)
   var id = req.params.id;
   var db = req.db;
   var ordersDB = db.get('orders')
+  if (key != undefined) {
   ordersDB.findOne({"_id": id},{},function(err, doc){
     // console.log(doc)
     var printerDB = db.get('printer')
@@ -128,9 +135,9 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
       console.log(doc.updated_at)
       var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
       console.log(isafter)
-      console.log(doc)
+      // console.log(doc)
       if (isafter === "true" || isafter === true) {
-        console.log(doc.note_attributes)
+        // console.log(doc.note_attributes)
         if ( doc.note_attributes[1] != undefined) {
           var options = {
               screenSize: {
@@ -201,100 +208,102 @@ router.get('/order/reprint/pdf/:id', function(req, res, next) {
       });
 
     })
+  }
+
 })
 
 
-router.post('/update/order', function(req, res, next) {
-  console.log(req.body)
-  var db = req.db;
-  var ordersDB = db.get('orders')
-  ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
-    console.log(doc2)
-    var order = req.body;
-    if (doc2 === null || doc2 === "null") {
-      console.log('NEW')
-        var db = req.db;
-        var ordersDB = db.get('orders')
-        ordersDB.insert(order)
-        var items = req.body.line_items;
-          ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-            console.log(doc)
-            var printerDB = db.get('printer')
-            printerDB.findOne({}, {}, function(err, printer) {
-              console.log(doc.note_attributes[1])
-            if ( doc.note_attributes[1] != undefined) {
-              var options = {
-                  screenSize: {
-                    'width': 1350,
-                    'height': 2200
-                  }
-                }
-                var options2 = {
-                      'width': 1350,
-                      'height': 2200
-                  }
-
-              webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                console.log(err)
-                  // setTimeout(function() {
-                  // 545151
-                    var formData = {
-                          "printer": printer.printer_id,
-                          "title": "Order: "+ doc.order_number,
-                          "contentType": "pdf_uri",
-                          "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
-                          "source": "api documentation!",
-                          "options": {
-                            "paper": "Legal",
-                            "bin": "Tray 1"
-                          }
-                    }
-                    var username = "ee9da1bb0d504255374eb90055e050609fc54402";
-                    var password = "";
-                    var url = "https://api.printnode.com/printjobs";
-                    var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-                  request.post(
-                      {
-                          url : url,
-                          headers : {
-                              "Authorization" : auth
-                          },
-                          json: true,
-                          body: formData
-                      },
-                      function (error, response, body) {
-                        if (error) {
-                          console.log(error)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        } else {
-                          // console.log(response)
-                          console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                          console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        }
-                      }
-                    );
-
-                  // }, 4000)
-              });
-
-            } else {
-              res.end();
-            }
-            })
-
-          })
-    }
-
-  })
-
-
-});
+// router.post('/update/order', function(req, res, next) {
+//   console.log(req.body)
+//   var db = req.db;
+//   var ordersDB = db.get('orders')
+//   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
+//     console.log(doc2)
+//     var order = req.body;
+//     if (doc2 === null || doc2 === "null") {
+//       console.log('NEW')
+//         var db = req.db;
+//         var ordersDB = db.get('orders')
+//         ordersDB.insert(order)
+//         var items = req.body.line_items;
+//           ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+//             console.log(doc)
+//             var printerDB = db.get('printer')
+//             printerDB.findOne({}, {}, function(err, printer) {
+//               console.log(doc.note_attributes[1])
+//             if ( doc.note_attributes[1] != undefined) {
+//               var options = {
+//                   screenSize: {
+//                     'width': 1350,
+//                     'height': 2200
+//                   }
+//                 }
+//                 var options2 = {
+//                       'width': 1350,
+//                       'height': 2200
+//                   }
+//
+//               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+//                 console.log(err)
+//                   // setTimeout(function() {
+//                   // 545151
+//                     var formData = {
+//                           "printer": printer.printer_id,
+//                           "title": "Order: "+ doc.order_number,
+//                           "contentType": "pdf_uri",
+//                           "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+//                           "source": "api documentation!",
+//                           "options": {
+//                             "paper": "Legal",
+//                             "bin": "Tray 1"
+//                           }
+//                     }
+//                     var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+//                     var password = "";
+//                     var url = "https://api.printnode.com/printjobs";
+//                     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+//
+//                   request.post(
+//                       {
+//                           url : url,
+//                           headers : {
+//                               "Authorization" : auth
+//                           },
+//                           json: true,
+//                           body: formData
+//                       },
+//                       function (error, response, body) {
+//                         if (error) {
+//                           console.log(error)
+//                           // setTimeout(function() {
+//                             res.end();
+//                           // }, 1000)
+//                         } else {
+//                           // console.log(response)
+//                           console.log(moment().format('MMMM Do YYYY, h:mm a'));
+//                           console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
+//                           // setTimeout(function() {
+//                             res.end();
+//                           // }, 1000)
+//                         }
+//                       }
+//                     );
+//
+//                   // }, 4000)
+//               });
+//
+//             } else {
+//               res.end();
+//             }
+//             })
+//
+//           })
+//     }
+//
+//   })
+//
+//
+// });
 
 router.get('/order/edit/:id', multipartMiddleware, function(req, res, next) {
 
