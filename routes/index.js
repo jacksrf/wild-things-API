@@ -119,98 +119,98 @@ router.post('/new/order', function(req, res, next) {
 
 });
 
-router.get('/order/reprint/pdf/:id', function(req, res, next) {
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log(ip)
-  var key = req.query.key;
-  console.log(key)
-  var id = req.params.id;
-  var db = req.db;
-  var ordersDB = db.get('orders')
-  if (key != undefined) {
-  ordersDB.findOne({"_id": id},{},function(err, doc){
-    // console.log(doc)
-    var printerDB = db.get('printer')
-    printerDB.findOne({}, {}, function(err, printer) {
-      console.log(doc.updated_at)
-      var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
-      console.log(isafter)
-      // console.log(doc)
-      if (isafter === "true" || isafter === true) {
-        // console.log(doc.note_attributes)
-        if ( doc.note_attributes[1] != undefined) {
-          var options = {
-              screenSize: {
-                'width': 1350,
-                'height': 2200
-              }
-            }
-            var options2 = {
-                  'width': 1350,
-                  'height': 2200
-              }
-
-              webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                // console.log(err)
-                  setTimeout(function() {
-                    // console.log(printer.printer_id)
-              var formData = {
-                    // "printer": printer.printer_id,
-                    "printer": printer.printer_id,
-                    "title": "Order: "+ doc.order_number,
-                    "contentType": "pdf_uri",
-                    "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
-                    "source": "api documentation!",
-                    "options": {
-                      "paper": "Legal"
-                    }
-              }
-              var username = "ee9da1bb0d504255374eb90055e050609fc54402";
-              var password = "";
-              var url = "https://api.printnode.com/printjobs";
-              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-              request.post(
-                  {
-                      url : url,
-                      headers : {
-                          "Authorization" : auth
-                      },
-                      json: true,
-                      body: formData
-                  },
-                  function (error, response, body) {
-                    console.log(response.headers.date)
-                    // console.log(body)
-                    if (error) {
-                      // console.log(error)
-                      res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
-                    } else {
-                      // console.log(response)
-                      console.log('REPRINT')
-                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                      console.log('REPRINTED ------ ORDER#:' + doc.order_number)
-                      res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
-                    }
-                  }
-                );
-
-              }, 4000)
-          });
-
-        } else {
-          res.send()
-        }
-      } else {
-        res.send()
-      }
-
-      });
-
-    })
-  }
-
-})
+// router.get('/order/reprint/pdf/:id', function(req, res, next) {
+//   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+//   console.log(ip)
+//   var key = req.query.key;
+//   console.log(key)
+//   var id = req.params.id;
+//   var db = req.db;
+//   var ordersDB = db.get('orders')
+//   if (key != undefined) {
+//   ordersDB.findOne({"_id": id},{},function(err, doc){
+//     // console.log(doc)
+//     var printerDB = db.get('printer')
+//     printerDB.findOne({}, {}, function(err, printer) {
+//       console.log(doc.updated_at)
+//       var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
+//       console.log(isafter)
+//       // console.log(doc)
+//       if (isafter === "true" || isafter === true) {
+//         // console.log(doc.note_attributes)
+//         if ( doc.note_attributes[1] != undefined) {
+//           var options = {
+//               screenSize: {
+//                 'width': 1350,
+//                 'height': 2200
+//               }
+//             }
+//             var options2 = {
+//                   'width': 1350,
+//                   'height': 2200
+//               }
+//
+//               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+//                 // console.log(err)
+//                   setTimeout(function() {
+//                     // console.log(printer.printer_id)
+//               var formData = {
+//                     // "printer": printer.printer_id,
+//                     "printer": printer.printer_id,
+//                     "title": "Order: "+ doc.order_number,
+//                     "contentType": "pdf_uri",
+//                     "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+//                     "source": "api documentation!",
+//                     "options": {
+//                       "paper": "Legal"
+//                     }
+//               }
+//               var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+//               var password = "";
+//               var url = "https://api.printnode.com/printjobs";
+//               var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+//
+//               request.post(
+//                   {
+//                       url : url,
+//                       headers : {
+//                           "Authorization" : auth
+//                       },
+//                       json: true,
+//                       body: formData
+//                   },
+//                   function (error, response, body) {
+//                     console.log(response.headers.date)
+//                     // console.log(body)
+//                     if (error) {
+//                       // console.log(error)
+//                       res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
+//                     } else {
+//                       // console.log(response)
+//                       console.log('REPRINT')
+//                       console.log(moment().format('MMMM Do YYYY, h:mm a'));
+//                       console.log('REPRINTED ------ ORDER#:' + doc.order_number)
+//                       res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
+//                     }
+//                   }
+//                 );
+//
+//               }, 4000)
+//           });
+//
+//         } else {
+//           res.send()
+//         }
+//       } else {
+//         res.send()
+//       }
+//
+//       });
+//
+//     })
+//   }
+//
+// })
 
 
 // router.post('/update/order', function(req, res, next) {
