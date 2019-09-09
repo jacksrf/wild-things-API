@@ -34,6 +34,10 @@ router.get('/login', function(req, res, next) {
   res.render('login')
 });
 
+router.get('/signup', isSuperAdmin, isLoggedIn, function(req, res, next) {
+  res.render('signup')
+});
+
 router.get('/profile', function(req, res) {
     if (req.user) {
         res.render('profile', {
