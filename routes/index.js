@@ -108,7 +108,7 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
   })
 });
 
-router.post('/new/order', isLoggedIn, function(req, res, next) {
+router.post('/new/order', function(req, res, next) {
   // console.log(req.body)
   if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
     res.end()
