@@ -1,10 +1,80 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
+  <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href="/stylesheets/bootstrap.min.css"/>
-  </head>
+</head>
+<style>
+body {
+  padding: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a  {
+   color: white!important;
+   text-decoration: none!important;
+}
+
+.half {
+    transform: rotate(90deg);
+}
+
+#message_holder {
+    transform: rotate(90deg);
+    position: absolute;
+    top: 325px;
+    right: 100px;
+    width: 500px;
+    height: 200px;
+    text-align: center;
+    display: table;
+}
+
+div#message {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+.row {
+    margin: 25px 0px;
+    float: left;
+    width: 100%;
+    display: inline-block;
+    /* padding: 0px 25px; */
+}
+
+.item {
+    display: inline-block;
+    line-height: 38px;
+}
+
+.item.number {
+    width: 10%;
+}
+.item.name {
+    width: 20%;
+}
+.item.total {
+    width: 5%;
+    margin: 0px 25px;
+}
+
+button.item.button.btn.btn-success {
+    width: 150px;
+    margin: 0px 25px;
+}
+
+button.item.button.btn.btn-info {
+    width: 100px;
+    margin: 0px 25px;
+    /* float: right; */
+}
+</style>
   <body style="padding: 50px">
     <button class="btn btn-default"><a href="/orders" style="color: black!important;">< RETURN TO ORDERS</a></button>
 
