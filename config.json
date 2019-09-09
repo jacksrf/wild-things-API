@@ -1,0 +1,7 @@
+{
+  "accessKeyId":"AKIAIDJRB5WLXVMNWEPA",
+  "secretAccessKey":"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",
+  "region":"us-west-2",
+  "s3BucketEndpoint": true,
+  "endpoint": "http://centurion-sigs.s3.amazonaws.com"
+}

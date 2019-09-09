@@ -19,11 +19,81 @@ var nl2br  = require('nl2br');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
-router.get('/', function(req, res, next) {
+var passport = require('passport');
+var express = require('express');
+var router = express.Router();
+var mongo = require('mongodb')
+
+router.use(function(req, res, next) {
+    next();
+});
+// app/routes.js
+// root with login links
+
+router.get('/login', function(req, res, next) {
+  res.render('login')
+});
+
+router.get('/profile', function(req, res) {
+    if (req.user) {
+        res.render('profile', {
+            user: req.user
+        });
+    } else {
+        res.redirect('/login');
+    }
+});
+router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+router.post('/signup', function(req, res, next) {
+    // console.log(req.body)
+    passport.authenticate('local-signup',
+        function(err, user, info) {
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                req.flash('info', info.message);
+                return res.redirect('/admin/signup')
+            }
+            req.flash('info', info.message);
+            res.redirect('/admin/home');
+        })(req, res, next);
+});
+router.post('/login', function(req, res, next) {
+    passport.authenticate('local-login',
+        function(err, user, info) {
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                req.flash('info', info.message);
+                return res.redirect('/login');
+            }
+            req.logIn(user, function(err) {
+                if (err) {
+                    return next(err);
+                }
+                // console.log(req.user.local.email)
+                return res.redirect('/orders');
+
+            });
+        })(req, res, next);
+});
+
+router.get('/logout', function(req, res) {
+    req.session.destroy(function(err) {
+        res.redirect('/login'); //Inside a callback… bulletproof!
+    });
+});
+
+router.get('/', isLoggedIn, function(req, res, next) {
   res.redirect('/orders')
 });
 
-router.get('/orders', function(req, res, next) {
+router.get('/orders', isLoggedIn, function(req, res, next) {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log(ip)
   var db = req.db;
@@ -34,7 +104,7 @@ router.get('/orders', function(req, res, next) {
   })
 });
 
-router.post('/new/order', function(req, res, next) {
+router.post('/new/order', isLoggedIn, function(req, res, next) {
   // console.log(req.body)
   if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
     res.end()
@@ -119,98 +189,98 @@ router.post('/new/order', function(req, res, next) {
 
 });
 
-// router.get('/order/reprint/pdf/:id', function(req, res, next) {
-//   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-//   console.log(ip)
-//   var key = req.query.key;
-//   console.log(key)
-//   var id = req.params.id;
-//   var db = req.db;
-//   var ordersDB = db.get('orders')
-//   if (key != undefined) {
-//   ordersDB.findOne({"_id": id},{},function(err, doc){
-//     // console.log(doc)
-//     var printerDB = db.get('printer')
-//     printerDB.findOne({}, {}, function(err, printer) {
-//       console.log(doc.updated_at)
-//       var isafter = moment(doc.updated_at).isAfter('2019-06-01T00:00:00+00:00');
-//       console.log(isafter)
-//       // console.log(doc)
-//       if (isafter === "true" || isafter === true) {
-//         // console.log(doc.note_attributes)
-//         if ( doc.note_attributes[1] != undefined) {
-//           var options = {
-//               screenSize: {
-//                 'width': 1350,
-//                 'height': 2200
-//               }
-//             }
-//             var options2 = {
-//                   'width': 1350,
-//                   'height': 2200
-//               }
-//
-//               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-//                 // console.log(err)
-//                   setTimeout(function() {
-//                     // console.log(printer.printer_id)
-//               var formData = {
-//                     // "printer": printer.printer_id,
-//                     "printer": printer.printer_id,
-//                     "title": "Order: "+ doc.order_number,
-//                     "contentType": "pdf_uri",
-//                     "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
-//                     "source": "api documentation!",
-//                     "options": {
-//                       "paper": "Legal"
-//                     }
-//               }
-//               var username = "ee9da1bb0d504255374eb90055e050609fc54402";
-//               var password = "";
-//               var url = "https://api.printnode.com/printjobs";
-//               var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-//
-//               request.post(
-//                   {
-//                       url : url,
-//                       headers : {
-//                           "Authorization" : auth
-//                       },
-//                       json: true,
-//                       body: formData
-//                   },
-//                   function (error, response, body) {
-//                     console.log(response.headers.date)
-//                     // console.log(body)
-//                     if (error) {
-//                       // console.log(error)
-//                       res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
-//                     } else {
-//                       // console.log(response)
-//                       console.log('REPRINT')
-//                       console.log(moment().format('MMMM Do YYYY, h:mm a'));
-//                       console.log('REPRINTED ------ ORDER#:' + doc.order_number)
-//                       res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
-//                     }
-//                   }
-//                 );
-//
-//               }, 4000)
-//           });
-//
-//         } else {
-//           res.send()
-//         }
-//       } else {
-//         res.send()
-//       }
-//
-//       });
-//
-//     })
-//   }
-//
-// })
+router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log(ip)
+  var key = req.query.key;
+  console.log(key)
+  var id = req.params.id;
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  // if (key != undefined) {
+  ordersDB.findOne({"_id": id},{},function(err, doc){
+    // console.log(doc)
+    var printerDB = db.get('printer')
+    printerDB.findOne({}, {}, function(err, printer) {
+      console.log(doc.updated_at)
+      var isafter = moment(doc.updated_at).isAfter('2018-06-01T00:00:00+00:00');
+      console.log(isafter)
+      // console.log(doc)
+      // if (isafter === "true" || isafter === true) {
+        // console.log(doc.note_attributes)
+        if ( doc.note_attributes[1] != undefined) {
+          var options = {
+              screenSize: {
+                'width': 1350,
+                'height': 2200
+              }
+            }
+            var options2 = {
+                  'width': 1350,
+                  'height': 2200
+              }
+
+              webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+                console.log(err)
+                  setTimeout(function() {
+                    // console.log(printer.printer_id)
+              var formData = {
+                    // "printer": printer.printer_id,
+                    "printer": printer.printer_id,
+                    "title": "Order: "+ doc.order_number,
+                    "contentType": "pdf_uri",
+                    "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
+                    "source": "api documentation!",
+                    "options": {
+                      "paper": "Legal"
+                    }
+              }
+              var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+              var password = "";
+              var url = "https://api.printnode.com/printjobs";
+              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+              request.post(
+                  {
+                      url : url,
+                      headers : {
+                          "Authorization" : auth
+                      },
+                      json: true,
+                      body: formData
+                  },
+                  function (error, response, body) {
+                    console.log(response.headers.date)
+                    console.log(body)
+                    if (error) {
+                      console.log(error)
+                      res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
+                    } else {
+                      // console.log(response)
+                      console.log('REPRINT')
+                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                      console.log('REPRINTED ------ ORDER#:' + doc.order_number)
+                      res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
+                    }
+                  }
+                );
+
+              }, 4000)
+          });
+
+        } else {
+          res.send()
+        }
+      // } else {
+      //   res.send()
+      // }
+
+      });
+
+    })
+  // }
+
+})
 
 
 // router.post('/update/order', function(req, res, next) {
@@ -305,7 +375,7 @@ router.post('/new/order', function(req, res, next) {
 //
 // });
 
-router.get('/order/edit/:id', multipartMiddleware, function(req, res, next) {
+router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
   var id = req.params.id;
   // var filename  = './'+ id +'.pdf';
@@ -365,7 +435,7 @@ router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
 
 })
 
-router.get('/order/save/confirmation/:id', multipartMiddleware, function(req, res, next) {
+router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
   var id = req.params.id;
   // var filename  = './'+ id +'.pdf';
@@ -395,5 +465,27 @@ router.post('/order/pdf/save/:id', multipartMiddleware, function(req, res, next)
   //
   // fs.writeFileSync(filename, data);
 })
+
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/login');
+}
+
+function isSuperAdmin(req, res, next) {
+    var email = req.user.local.email
+    if (email === "jacksrf@gmail.com") {
+        return next();
+    } else {
+        res.redirect('/admin/home', {
+            "message": "****You dont have access to that page... sorry!"
+        });
+    }
+}
 
 module.exports = router;
