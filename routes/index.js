@@ -287,157 +287,157 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 })
 
 
-router.post('/update/order', function(req, res, next) {
-  console.log(req.body)
-  var db = req.db;
-  var ordersDB = db.get('orders')
-  ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
-    console.log(doc2)
-    var order = req.body;
-    if (doc2 === null || doc2 === "null") {
-      console.log('NEW')
-        var db = req.db;
-        var ordersDB = db.get('orders')
-        ordersDB.insert(order)
-        var items = req.body.line_items;
-          ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-            console.log(doc)
-            var printerDB = db.get('printer')
-            printerDB.findOne({}, {}, function(err, printer) {
-              console.log(doc.note_attributes[1])
-            if ( doc.note_attributes[1] != undefined) {
-              var options = {
-                  screenSize: {
-                    'width': 1350,
-                    'height': 2200
-                  }
-                }
-                var options2 = {
-                      'width': 1350,
-                      'height': 2200
-                  }
-
-              webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                console.log(err)
-                  // setTimeout(function() {
-                  // 545151
-                    var formData = {
-                          "printer": printer.printer_id,
-                          "title": "Order: "+ doc.order_number,
-                          "contentType": "pdf_uri",
-                          "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
-                          "source": "api documentation!",
-                          "options": {
-                            "paper": "Legal",
-                            "bin": "Tray 1"
-                          }
-                    }
-                    var username = "ee9da1bb0d504255374eb90055e050609fc54402";
-                    var password = "";
-                    var url = "https://api.printnode.com/printjobs";
-                    var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-                  request.post(
-                      {
-                          url : url,
-                          headers : {
-                              "Authorization" : auth
-                          },
-                          json: true,
-                          body: formData
-                      },
-                      function (error, response, body) {
-                        if (error) {
-                          console.log(error)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        } else {
-                          // console.log(response)
-                          console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                          console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        }
-                      }
-                    );
-
-                  // }, 4000)
-              });
-
-            } else {
-              res.end();
-            }
-            })
-
-          })
-    }
-
-  })
-
-
-});
-
-router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
-
-  var id = req.params.id;
-  // var filename  = './'+ id +'.pdf';
-  console.log(id);
-  var db = req.db;
-  var ordersDB = db.get('orders')
-  ordersDB.findOne({"_id": id}, {}, function(err, doc) {
-    console.log(doc.note)
-    console.log(doc.note_attributes.length);
-    res.render('order-edit', {"order": doc})
-  })
-
-})
-
-router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
-
-  var id = req.params.id;
-  // var filename  = './'+ id +'.pdf';
-  var form = req.body
-  console.log(id);
-  console.log(form)
-  var newNoteAttributes = [];
-  var newNote = ''
-  function callback () {
-    console.log('all done');
-    console.log(newNoteAttributes)
-    var db = req.db;
-    var ordersDB = db.get('orders')
-    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "note": newNote}}, function(err, doc) {
-      console.log(doc)
-      res.redirect('/order/save/confirmation/'+ id)
-    })
-  }
-  var itemsProcessed = 0;
-  Object.entries(form).forEach(
-      ([key, value]) => {
-        console.log(key, value)
-        if (key === 'note') {
-          newNote = value
-          console.log("note: " + newNote)
-          itemsProcessed++;
-          if(itemsProcessed === Object.entries(form).length) {
-            callback();
-          }
-        } else {
-          var item = {name: key, value: value}
-          console.log(item)
-          newNoteAttributes.push(item)
-          itemsProcessed++;
-          if(itemsProcessed === Object.entries(form).length) {
-            callback();
-          }
-        }
-      }
-  );
-
-
-})
+// router.post('/update/order', function(req, res, next) {
+//   console.log(req.body)
+//   var db = req.db;
+//   var ordersDB = db.get('orders')
+//   ordersDB.findOne({"id": req.body.id}, {}, function(err, doc2) {
+//     console.log(doc2)
+//     var order = req.body;
+//     if (doc2 === null || doc2 === "null") {
+//       console.log('NEW')
+//         var db = req.db;
+//         var ordersDB = db.get('orders')
+//         ordersDB.insert(order)
+//         var items = req.body.line_items;
+//           ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+//             console.log(doc)
+//             var printerDB = db.get('printer')
+//             printerDB.findOne({}, {}, function(err, printer) {
+//               console.log(doc.note_attributes[1])
+//             if ( doc.note_attributes[1] != undefined) {
+//               var options = {
+//                   screenSize: {
+//                     'width': 1350,
+//                     'height': 2200
+//                   }
+//                 }
+//                 var options2 = {
+//                       'width': 1350,
+//                       'height': 2200
+//                   }
+//
+//               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+//                 console.log(err)
+//                   // setTimeout(function() {
+//                   // 545151
+//                     var formData = {
+//                           "printer": printer.printer_id,
+//                           "title": "Order: "+ doc.order_number,
+//                           "contentType": "pdf_uri",
+//                           "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+//                           "source": "api documentation!",
+//                           "options": {
+//                             "paper": "Legal",
+//                             "bin": "Tray 1"
+//                           }
+//                     }
+//                     var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+//                     var password = "";
+//                     var url = "https://api.printnode.com/printjobs";
+//                     var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+//
+//                   request.post(
+//                       {
+//                           url : url,
+//                           headers : {
+//                               "Authorization" : auth
+//                           },
+//                           json: true,
+//                           body: formData
+//                       },
+//                       function (error, response, body) {
+//                         if (error) {
+//                           console.log(error)
+//                           // setTimeout(function() {
+//                             res.end();
+//                           // }, 1000)
+//                         } else {
+//                           // console.log(response)
+//                           console.log(moment().format('MMMM Do YYYY, h:mm a'));
+//                           console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
+//                           // setTimeout(function() {
+//                             res.end();
+//                           // }, 1000)
+//                         }
+//                       }
+//                     );
+//
+//                   // }, 4000)
+//               });
+//
+//             } else {
+//               res.end();
+//             }
+//             })
+//
+//           })
+//     }
+//
+//   })
+//
+//
+// });
+//
+// router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
+//
+//   var id = req.params.id;
+//   // var filename  = './'+ id +'.pdf';
+//   console.log(id);
+//   var db = req.db;
+//   var ordersDB = db.get('orders')
+//   ordersDB.findOne({"_id": id}, {}, function(err, doc) {
+//     console.log(doc.note)
+//     console.log(doc.note_attributes.length);
+//     res.render('order-edit', {"order": doc})
+//   })
+//
+// })
+//
+// router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
+//
+//   var id = req.params.id;
+//   // var filename  = './'+ id +'.pdf';
+//   var form = req.body
+//   console.log(id);
+//   console.log(form)
+//   var newNoteAttributes = [];
+//   var newNote = ''
+//   function callback () {
+//     console.log('all done');
+//     console.log(newNoteAttributes)
+//     var db = req.db;
+//     var ordersDB = db.get('orders')
+//     ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "note": newNote}}, function(err, doc) {
+//       console.log(doc)
+//       res.redirect('/order/save/confirmation/'+ id)
+//     })
+//   }
+//   var itemsProcessed = 0;
+//   Object.entries(form).forEach(
+//       ([key, value]) => {
+//         console.log(key, value)
+//         if (key === 'note') {
+//           newNote = value
+//           console.log("note: " + newNote)
+//           itemsProcessed++;
+//           if(itemsProcessed === Object.entries(form).length) {
+//             callback();
+//           }
+//         } else {
+//           var item = {name: key, value: value}
+//           console.log(item)
+//           newNoteAttributes.push(item)
+//           itemsProcessed++;
+//           if(itemsProcessed === Object.entries(form).length) {
+//             callback();
+//           }
+//         }
+//       }
+//   );
+//
+//
+// })
 
 router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
