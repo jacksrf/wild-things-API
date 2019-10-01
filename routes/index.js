@@ -379,65 +379,65 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 //
 // });
 //
-// router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
+router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
+
+  var id = req.params.id;
+  // var filename  = './'+ id +'.pdf';
+  console.log(id);
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  ordersDB.findOne({"_id": id}, {}, function(err, doc) {
+    console.log(doc.note)
+    console.log(doc.note_attributes.length);
+    res.render('order-edit', {"order": doc})
+  })
+
+})
 //
-//   var id = req.params.id;
-//   // var filename  = './'+ id +'.pdf';
-//   console.log(id);
-//   var db = req.db;
-//   var ordersDB = db.get('orders')
-//   ordersDB.findOne({"_id": id}, {}, function(err, doc) {
-//     console.log(doc.note)
-//     console.log(doc.note_attributes.length);
-//     res.render('order-edit', {"order": doc})
-//   })
-//
-// })
-//
-// router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
-//
-//   var id = req.params.id;
-//   // var filename  = './'+ id +'.pdf';
-//   var form = req.body
-//   console.log(id);
-//   console.log(form)
-//   var newNoteAttributes = [];
-//   var newNote = ''
-//   function callback () {
-//     console.log('all done');
-//     console.log(newNoteAttributes)
-//     var db = req.db;
-//     var ordersDB = db.get('orders')
-//     ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "note": newNote}}, function(err, doc) {
-//       console.log(doc)
-//       res.redirect('/order/save/confirmation/'+ id)
-//     })
-//   }
-//   var itemsProcessed = 0;
-//   Object.entries(form).forEach(
-//       ([key, value]) => {
-//         console.log(key, value)
-//         if (key === 'note') {
-//           newNote = value
-//           console.log("note: " + newNote)
-//           itemsProcessed++;
-//           if(itemsProcessed === Object.entries(form).length) {
-//             callback();
-//           }
-//         } else {
-//           var item = {name: key, value: value}
-//           console.log(item)
-//           newNoteAttributes.push(item)
-//           itemsProcessed++;
-//           if(itemsProcessed === Object.entries(form).length) {
-//             callback();
-//           }
-//         }
-//       }
-//   );
-//
-//
-// })
+router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
+
+  var id = req.params.id;
+  // var filename  = './'+ id +'.pdf';
+  var form = req.body
+  console.log(id);
+  console.log(form)
+  var newNoteAttributes = [];
+  var newNote = ''
+  function callback () {
+    console.log('all done');
+    console.log(newNoteAttributes)
+    var db = req.db;
+    var ordersDB = db.get('orders')
+    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "note": newNote}}, function(err, doc) {
+      console.log(doc)
+      res.redirect('/order/save/confirmation/'+ id)
+    })
+  }
+  var itemsProcessed = 0;
+  Object.entries(form).forEach(
+      ([key, value]) => {
+        console.log(key, value)
+        if (key === 'note') {
+          newNote = value
+          console.log("note: " + newNote)
+          itemsProcessed++;
+          if(itemsProcessed === Object.entries(form).length) {
+            callback();
+          }
+        } else {
+          var item = {name: key, value: value}
+          console.log(item)
+          newNoteAttributes.push(item)
+          itemsProcessed++;
+          if(itemsProcessed === Object.entries(form).length) {
+            callback();
+          }
+        }
+      }
+  );
+
+
+})
 
 router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
@@ -468,6 +468,17 @@ router.post('/order/pdf/save/:id', multipartMiddleware, function(req, res, next)
   // var data = pdf.output();
   //
   // fs.writeFileSync(filename, data);
+})
+
+
+router.get('/order/delete/:id', multipartMiddleware, function(req, res, next) {
+
+  var id = req.params.id;
+  console.log(id);
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  ordersDB.remove({'_id': id})
+  res.redirect('/orders')
 })
 
 
