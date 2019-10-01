@@ -394,7 +394,7 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
 
 })
 //
-router.post('/order/edit/:id', multipartMiddleware, function(req, res, next) {
+router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
   var id = req.params.id;
   // var filename  = './'+ id +'.pdf';
