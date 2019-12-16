@@ -145,8 +145,8 @@ router.post('/new/order', function(req, res, next) {
                       "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
                       "source": "api documentation!",
                       "options": {
-                        "paper": "Legal",
-                        "bin": "Tray 1"
+                        "paper": "Legal (8 1/2 x 14 in)",
+                        "bin": "Auto Select"
                       }
                 }
                 var username = "ee9da1bb0d504255374eb90055e050609fc54402";
@@ -236,7 +236,8 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                     "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
                     "source": "api documentation!",
                     "options": {
-                      "paper": "Legal"
+                      "paper": "Legal (8 1/2 x 14 in)",
+                      "bin": "Auto Select"
                     }
               }
               var username = "ee9da1bb0d504255374eb90055e050609fc54402";
