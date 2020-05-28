@@ -19,7 +19,9 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://jacksrf:trey3333@ds155461.mlab.com:55461/als-flowers-api');
+var db = monk('mongodb://jacksrf2:trey3333@ds155461.mlab.com:55461/als-flowers-api');
+// var db = monk('mongodb://jacksrf:trey3333@als-flowers-api-shard-00-00-oou3u.mongodb.net:27017,als-flowers-api-shard-00-01-oou3u.mongodb.net:27017,als-flowers-api-shard-00-02-oou3u.mongodb.net:27017/test?ssl=true&replicaSet=als-flowers-api-shard-0&authSource=admin&retryWrites=true&w=majority');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
