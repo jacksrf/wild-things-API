@@ -4,6 +4,7 @@ var express = require('express');
 var path = require('path');
 
 var mongoose = require('mongoose');
+mongoose.set('useNewUrlParser', true);
 var passport = require('passport');
 var flash = require('connect-flash');
 var timeout = require('connect-timeout'); //express v4
@@ -16,12 +17,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoClient = require('mongodb').MongoClient;
+
 var assert = require('assert');
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://jacksrf2:trey3333@ds155461.mlab.com:55461/als-flowers-api');
-// var db = monk('mongodb://jacksrf:trey3333@als-flowers-api-shard-00-00-oou3u.mongodb.net:27017,als-flowers-api-shard-00-01-oou3u.mongodb.net:27017,als-flowers-api-shard-00-02-oou3u.mongodb.net:27017/test?ssl=true&replicaSet=als-flowers-api-shard-0&authSource=admin&retryWrites=true&w=majority');
 
+// var db = monk('mongodb://jacksrf2:trey3333@ds155461.mlab.com:55461/als-flowers-api');
+var db = monk('mongodb+srv://jacksrf:trey3333@als-flowers-api.oou3u.mongodb.net/als-flowers-api?retryWrites=true&w=majority');
+console.log(db.collection)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
