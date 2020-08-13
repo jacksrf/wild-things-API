@@ -148,7 +148,6 @@ router.post('/new/order', function(req, res, next) {
                       "source": "api documentation!",
                       "options": {
                         "paper": "Legal",
-                        "bin": "Auto Select"
                       }
                 }
                 var username = "ee9da1bb0d504255374eb90055e050609fc54402";
@@ -239,7 +238,6 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                     "source": "api documentation!",
                     "options": {
                       "paper": "Legal",
-                      "bin": "Auto Select"
                     }
               }
               var username = "ee9da1bb0d504255374eb90055e050609fc54402";
