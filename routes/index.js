@@ -147,7 +147,7 @@ router.post('/new/order', function(req, res, next) {
                       "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
                       "source": "api documentation!",
                       "options": {
-                        "paper": "Legal (8 1/2 x 14 in)",
+                        "paper": "Legal",
                         "bin": "Auto Select"
                       }
                 }
