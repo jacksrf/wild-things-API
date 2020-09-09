@@ -136,7 +136,7 @@ router.post('/new/order', function(req, res, next) {
                   'height': 2200
               }
 
-          webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+          webshot("admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
             // console.log(err)
               // setTimeout(function() {
               // 545151
@@ -225,7 +225,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                   'height': 2200
               }
 
-              webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+              webshot("admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
                 console.log(err)
                   setTimeout(function() {
                     // console.log(printer.printer_id)
@@ -318,7 +318,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 //                       'height': 2200
 //                   }
 //
-//               webshot("admin.alsflowersmontgomery.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+//               webshot("admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
 //                 console.log(err)
 //                   // setTimeout(function() {
 //                   // 545151
