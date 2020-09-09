@@ -144,7 +144,7 @@ router.post('/new/order', function(req, res, next) {
                         "paper": "Legal",
                       }
                 }
-                var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+                var username = process.env.printNodeUsername;
                 var password = "";
                 var url = "https://api.printnode.com/printjobs";
                 var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
