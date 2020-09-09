@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/als-flowers-API"
+    "start": "node ./bin/als-flowers-API",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -49,5 +50,8 @@
     "pdfmake": "^0.1.38",
     "serve-favicon": "^2.5.0",
     "vcards-js": "^2.9.0"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
   }
 }
