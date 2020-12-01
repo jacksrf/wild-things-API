@@ -3,6 +3,7 @@ var router = express.Router();
 var rest = require('restler');
 var fs = require('fs');
 var pdf = require('html-pdf');
+var request = require('request');
 // var jsPDF = require('jspdf');
 var cheerio = require('cheerio')
 var htmlToImage = require('html-to-image');
