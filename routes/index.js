@@ -138,13 +138,13 @@ router.post('/new/order', function(req, res, next) {
                       "printer": printer.printer_id,
                       "title": "Order: "+ doc.order_number,
                       "contentType": "pdf_uri",
-                      "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
                       "source": "api documentation!",
                       "options": {
                         "paper": "Legal",
                       }
                 }
-                var username = process.env.printNodeUsername;
+                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
                 var password = "";
                 var url = "https://api.printnode.com/printjobs";
                 var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
@@ -228,13 +228,13 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                     "printer": printer.printer_id,
                     "title": "Order: "+ doc.order_number,
                     "contentType": "pdf_uri",
-                    "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
+                    "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
                     "source": "api documentation!",
                     "options": {
                       "paper": "Legal",
                     }
               }
-              var username = "ee9da1bb0d504255374eb90055e050609fc54402";
+              var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
               var password = "";
               var url = "https://api.printnode.com/printjobs";
               var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
@@ -320,7 +320,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 //                           "printer": printer.printer_id,
 //                           "title": "Order: "+ doc.order_number,
 //                           "contentType": "pdf_uri",
-//                           "content": "https://api.alsflowersmontgomery.com/pdf/"+ doc._id +".pdf",
+//                           "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
 //                           "source": "api documentation!",
 //                           "options": {
 //                             "paper": "Legal",
