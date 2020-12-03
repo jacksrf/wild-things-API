@@ -191,9 +191,9 @@ router.post('/new/order', function(req, res, next) {
 
 router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log(ip)
+  // console.log(ip)
   var key = req.query.key;
-  console.log(key)
+  // console.log(key)
   var id = req.params.id;
   var db = req.db;
   var ordersDB = db.get('orders')
@@ -202,10 +202,10 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
     // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      console.log(doc.updated_at)
+      // console.log(doc.updated_at)
       var isafter = moment(doc.updated_at).isAfter('2018-06-01T00:00:00+00:00');
-      console.log(isafter)
-      console.log(doc.note_attributes)
+      // console.log(isafter)
+      // console.log(doc.note_attributes)
       // if (isafter === "true" || isafter === true) {
         // console.log(doc.note_attributes)
         if ( doc.note_attributes[1] != undefined) {
@@ -250,8 +250,8 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                       body: formData
                   },
                   function (error, response, body) {
-                    console.log(response.headers.date)
-                    console.log(body)
+                    // console.log(response.headers.date)
+                    // console.log(body)
                     if (error) {
                       console.log(error)
                       res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
