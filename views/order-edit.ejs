@@ -84,12 +84,10 @@ button.item.button.btn.btn-info {
             <textarea style="float: left; height: 100px; width: 300px;" name="<%= order.note_attributes[i].name %>"><%= order.note_attributes[i].value %></textarea>
           </div>
         <% } %>
-        <% for (i=0; i < order.shipping_address.length;i++) {%>
           <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
-            <label style="float: left; width: 100%"><%= order.shipping_address[i].name %></label>
-            <textarea style="float: left; height: 100px; width: 300px;" name="<%= order.shipping_address[i].name %>"><%= order.shipping_address[i].value %></textarea>
+            <label style="float: left; width: 100%"><%= order.shipping_address.first_name %></label>
+            <textarea style="float: left; height: 100px; width: 300px;" name="<%= order.shipping_address.first_name %>"><%= order.shipping_address.first_name %></textarea>
           </div>
-        <% } %>
         <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
           <label style="float: left; width: 100%">Note:</label>
           <textarea style="float: left; height: 100px; width: 300px;" name="note"><%= order.note %></textarea>
