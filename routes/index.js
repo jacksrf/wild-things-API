@@ -312,16 +312,16 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
   console.log(form)
   var newNoteAttributes = [];
   var newNote = ''
-  // function callback () {
-  //   console.log('all done');
-  //   console.log(newNoteAttributes)
-  //   var db = req.db;
-  //   var ordersDB = db.get('orders')
-  //   ordersDB.update({"_id": id}, {$set: {"note_attributes": req.body.note_attributes,"shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
-  //     console.log(doc)
-  //     res.redirect('/order/save/confirmation/'+ id)
-  //   })
-  // }
+  function callback () {
+    console.log('all done');
+    console.log(newNoteAttributes)
+    var db = req.db;
+    var ordersDB = db.get('orders')
+    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes,"shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
+      console.log(doc)
+      res.redirect('/order/save/confirmation/'+ id)
+    })
+  }
   var itemsProcessed = 0;
   Object.entries(form).forEach(
       ([key, value]) => {
