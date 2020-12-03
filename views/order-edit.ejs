@@ -81,7 +81,7 @@ button.item.button.btn.btn-info {
         <% for (i=0; i < order.note_attributes.length;i++) {%>
           <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
             <label style="float: left; width: 100%"><%= order.note_attributes[i].name %></label>
-            <textarea style="float: left; height: 100px; width: 300px;" name="<%= order.note_attributes[i].name %>"><%= order.note_attributes[i].value %></textarea>
+            <textarea style="float: left; height: 100px; width: 300px;" name="note_attributes[<%= order.note_attributes[i].name %>]"><%= order.note_attributes[i].value %></textarea>
           </div>
         <% } %>
           <div style="width: 46%; margin:30px 2%; float: left;margin-bottom: 30px;">
