@@ -297,6 +297,7 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
   ordersDB.findOne({"_id": id}, {}, function(err, doc) {
     console.log(doc.note)
     console.log(doc.note_attributes.length);
+    console.log(doc)
     res.render('order-edit', {"order": doc})
   })
 
