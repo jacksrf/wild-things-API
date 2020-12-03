@@ -199,7 +199,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   var ordersDB = db.get('orders')
   // if (key != undefined) {
   ordersDB.findOne({"_id": id},{},function(err, doc){
-    // console.log(doc)
+    console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
       // console.log(doc.updated_at)
