@@ -220,7 +220,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                   'height': 2200
               }
               console.log(doc._id)
-              webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+              webshot("admin-wildthings.devotestudio.com/order/pdf/"+doc._id, doc._id +".pdf", options, function(err) {
                 console.log(err)
                   setTimeout(function() {
                     // console.log(printer.printer_id)
