@@ -305,13 +305,13 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
 //
 router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
   console.log(req.body)
-  // var id = req.params.id;
+  var id = req.params.id;
   // // var filename  = './'+ id +'.pdf';
-  // var form = req.body
-  // console.log(id);
-  // console.log(form)
-  // var newNoteAttributes = [];
-  // var newNote = ''
+  var form = req.body.note_attributes
+  console.log(id);
+  console.log(form)
+  var newNoteAttributes = [];
+  var newNote = ''
   // function callback () {
   //   console.log('all done');
   //   console.log(newNoteAttributes)
@@ -322,28 +322,28 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
   //     res.redirect('/order/save/confirmation/'+ id)
   //   })
   // }
-  // var itemsProcessed = 0;
-  // Object.entries(form).forEach(
-  //     ([key, value]) => {
-  //       console.log(key, value)
-  //       if (key === 'note') {
-  //         newNote = value
-  //         console.log("note: " + newNote)
-  //         itemsProcessed++;
-  //         if(itemsProcessed === Object.entries(form).length) {
-  //           callback();
-  //         }
-  //       } else {
-  //         var item = {name: key, value: value}
-  //         console.log(item)
-  //         newNoteAttributes.push(item)
-  //         itemsProcessed++;
-  //         if(itemsProcessed === Object.entries(form).length) {
-  //           callback();
-  //         }
-  //       }
-  //     }
-  // );
+  var itemsProcessed = 0;
+  Object.entries(form).forEach(
+      ([key, value]) => {
+        console.log(key, value)
+        if (key === 'note') {
+          newNote = value
+          console.log("note: " + newNote)
+          itemsProcessed++;
+          if(itemsProcessed === Object.entries(form).length) {
+            callback();
+          }
+        } else {
+          var item = {name: key, value: value}
+          console.log(item)
+          newNoteAttributes.push(item)
+          itemsProcessed++;
+          if(itemsProcessed === Object.entries(form).length) {
+            callback();
+          }
+        }
+      }
+  );
 
 
 })
