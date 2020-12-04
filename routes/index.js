@@ -286,10 +286,12 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 
 router.post('/update/order', function(req, res, next) {
   console.log(req.body)
+  res.send()
 });
 
 router.post('/order/update', function(req, res, next) {
   console.log(req.body)
+  res.send()
 });
 
 router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
