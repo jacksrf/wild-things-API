@@ -115,6 +115,7 @@ router.post('/new/order', function(req, res, next) {
     ordersDB.insert(req.body)
     console.log(req.body)
     var items = req.body.line_items;
+
       ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
         console.log(doc)
         var printerDB = db.get('printer')
@@ -283,6 +284,15 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
 
 })
 
+router.get('/order/json/:id', function(req, res, next) {
+  var id = req.params.id;
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  // if (key != undefined) {
+  ordersDB.findOne({"_id": id},{},function(err, doc){
+    res.send(doc)
+  })
+});
 
 router.post('/update/order', function(req, res, next) {
   console.log(req.body)
