@@ -288,6 +288,10 @@ router.post('/update/order', function(req, res, next) {
   console.log(req.body)
 });
 
+router.post('/order/update', function(req, res, next) {
+  console.log(req.body)
+});
+
 router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
 
   var id = req.params.id;
