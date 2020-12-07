@@ -138,7 +138,7 @@ router.post('/new/order', function(req, res, next) {
               // setTimeout(function() {
               // 545151
                 var formData = {
-                      "printer": 69889163,
+                      "printer": 69908361,
                       "title": "Order: "+ doc.order_number,
                       "contentType": "pdf_uri",
                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
@@ -228,7 +228,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                     // console.log(printer.printer_id)
               var formData = {
                     // "printer": printer.printer_id,
-                    "printer": 69889163,
+                    "printer": 69908361,
                     "title": "Order: "+ doc.order_number,
                     "contentType": "pdf_uri",
                     "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
