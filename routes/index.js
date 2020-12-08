@@ -105,6 +105,28 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
   })
 });
 
+router.post('/orders/search', isLoggedIn, function(req, res, next) {
+  var order = req.body.order;
+  console.log(order)
+  var order_number = '#'+order;
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  if (order === "") {
+    ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+      console.log(err)
+      console.log(orders)
+      res.render('orders', {orders: orders})
+    })
+  } else {
+    ordersDB.find({$or: [{"name": order_number},{"customer.first_name" : new RegExp('^'+order+'$', "i")}]}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+      console.log(err)
+      console.log(orders)
+      res.render('orders', {orders: orders})
+    })
+  }
+
+})
+
 router.post('/new/order', function(req, res, next) {
   // console.log(req.body)
   if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {

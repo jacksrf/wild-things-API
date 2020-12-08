@@ -74,9 +74,37 @@
       margin: 0px 25px;
       /* float: right; */
   }
+
+  form {
+margin: 40px 0px;
+height: 50px;
+display: flex;
+align-content: center;
+justify-content: center;
+width: 50%;
+}
+
+form input {
+height: 100%;
+padding: 0px 30px;
+width: 100%;
+}
+
+form button {
+height: 100%;
+padding: 0px 0px;
+width: 100px;
+text-align: center;
+}
   </style>
   <body>
     <div style="padding: 50px;">
+      <div class="">
+        <form action="/orders/search" method="post">
+          <input name="order" placeholder="Order # or Name" type="text"/>
+          <button type="submit" value="SEARCH">SEARCH</button>
+        </form>
+      </div>
       <h1>Orders:</h1>
       <% for (i=0; i<orders.length; i++) { %>
         <div class="row">
@@ -90,7 +118,7 @@
           <!-- <button class="item button btn btn-info"><a href="">EDIT</a></button> -->
           <button class="item button btn btn-success"><a href="/order/reprint/pdf/<%= orders[i]._id %>?key=<%= Math.random() %>">PRINT</a></button>
           <button class="item button btn btn-warning"><a href="/order/edit/<%= orders[i]._id %>">EDIT NOTES</a></button>
-          <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button>
+          <!-- <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button> -->
         </div>
       <% } %>
     </div>
