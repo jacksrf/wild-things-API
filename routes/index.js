@@ -121,65 +121,65 @@ router.post('/new/order', function(req, res, next) {
         var printerDB = db.get('printer')
         printerDB.findOne({}, {}, function(err, printer) {
           // console.log(printer.printer_id)
-        if ( doc.note_attributes[1] != undefined) {
-          var options = {
-              screenSize: {
-                'width': 1350,
-                'height': 2200
-              }
-            }
-            var options2 = {
-                  'width': 1350,
-                  'height': 2200
-              }
-              console.log(doc._id)
-          webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-            console.log(err)
-              // setTimeout(function() {
-              // 545151
-                var formData = {
-                      "printer": 69910985,
-                      "title": "Order: "+ doc.order_number,
-                      "contentType": "pdf_uri",
-                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-                      "source": "api documentation!",
-                      "options": {
-                        "paper": "Legal",
-                      }
-                }
-                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-                var password = "";
-                var url = "https://api.printnode.com/printjobs";
-                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-              request.post(
-                  {
-                      url : url,
-                      headers : {
-                          "Authorization" : auth
-                      },
-                      json: true,
-                      body: formData
-                  },
-                  function (error, response, body) {
-                    if (error) {
-                      console.log(error)
-                      // setTimeout(function() {
-                        res.end();
-                      // }, 1000)
-                    } else {
+        // if ( doc.note_attributes[1] != undefined) {
+        //   var options = {
+        //       screenSize: {
+        //         'width': 1350,
+        //         'height': 2200
+        //       }
+        //     }
+        //     var options2 = {
+        //           'width': 1350,
+        //           'height': 2200
+        //       }
+        //       console.log(doc._id)
+        //   webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+        //     console.log(err)
+        //       // setTimeout(function() {
+        //       // 545151
+        //         var formData = {
+        //               "printer": 69910985,
+        //               "title": "Order: "+ doc.order_number,
+        //               "contentType": "pdf_uri",
+        //               "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+        //               "source": "api documentation!",
+        //               "options": {
+        //                 "paper": "Legal",
+        //               }
+        //         }
+        //         var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+        //         var password = "";
+        //         var url = "https://api.printnode.com/printjobs";
+        //         var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+        //
+        //       request.post(
+        //           {
+        //               url : url,
+        //               headers : {
+        //                   "Authorization" : auth
+        //               },
+        //               json: true,
+        //               body: formData
+        //           },
+        //           function (error, response, body) {
+        //             if (error) {
+        //               console.log(error)
+        //               // setTimeout(function() {
+        //                 res.end();
+        //               // }, 1000)
+        //             } else {
                       // console.log(response)
                       console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                      console.log('NEW PRINT ------ ORDER#:' + doc.order_number)
+                      console.log('NEW ORDER#:' + doc.order_number)
                       // setTimeout(function() {
                         res.end();
                       // }, 1000)
-                    }
-                  }
-                );
-
-              // }, 4000)
-          });
+          //           }
+          //         }
+          //       );
+          //
+          //     // }, 4000)
+          // });
 
         } else {
           res.end();
