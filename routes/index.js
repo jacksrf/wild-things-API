@@ -181,9 +181,9 @@ router.post('/new/order', function(req, res, next) {
           //     // }, 4000)
           // });
 
-        } else {
-          res.end();
-        }
+        // } else {
+        //   res.end();
+        // }
         })
 
       })
