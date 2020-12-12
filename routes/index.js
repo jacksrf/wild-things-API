@@ -784,7 +784,7 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
     console.log(newNoteAttributes)
     var db = req.db;
     var ordersDB = db.get('orders')
-    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes,"shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
+    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
       console.log(doc)
       res.redirect('/order/save/confirmation/'+ id)
     })
