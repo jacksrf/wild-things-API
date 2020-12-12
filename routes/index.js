@@ -212,7 +212,7 @@ router.post('/new/order', function(req, res, next) {
 
           })
       } else {
-        // console.log(doc)
+        console.log(doc.number)
         // var printerDB = db.get('printer')
         // printerDB.findOne({}, {}, function(err, printer) {
         //   // console.log(printer.printer_id)
