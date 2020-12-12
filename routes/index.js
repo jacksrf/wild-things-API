@@ -550,163 +550,163 @@ router.get('/order/json/:id', function(req, res, next) {
 
 router.post('/order/update', function(req, res, next) {
   console.log(req.body)
-  // res.send()
-  var db = req.db;
-  var ordersDB = db.get('orders')
-
-  var order_number = "#" + req.body.number;
-  console.log(order_number)
-  ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
-    console.log(err)
-    if (doc === null || doc === undefined) {
-      var db = req.db;
-      var ordersDB = db.get('orders')
-      ordersDB.insert(req.body)
-      console.log(req.body)
-      var items = req.body.line_items;
-
-        ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-          console.log(doc)
-          var printerDB = db.get('printer')
-          printerDB.findOne({}, {}, function(err, printer) {
-            // console.log(printer.printer_id)
-          if ( doc.note_attributes[1] != undefined) {
-            var options = {
-                screenSize: {
-                  'width': 1350,
-                  'height': 2200
-                }
-              }
-              var options2 = {
-                    'width': 1350,
-                    'height': 2200
-                }
-                console.log(doc._id)
-            webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-              console.log(err)
-                // setTimeout(function() {
-                // 545151
-                  var formData = {
-                        "printer": 69910985,
-                        "title": "Order: "+ doc.order_number,
-                        "contentType": "pdf_uri",
-                        "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-                        "source": "api documentation!",
-                        "options": {
-                          "paper": "Legal",
-                        }
-                  }
-                  var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-                  var password = "";
-                  var url = "https://api.printnode.com/printjobs";
-                  var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-                request.post(
-                    {
-                        url : url,
-                        headers : {
-                            "Authorization" : auth
-                        },
-                        json: true,
-                        body: formData
-                    },
-                    function (error, response, body) {
-                      if (error) {
-                        console.log(error)
-                        // setTimeout(function() {
-                          res.end();
-                        // }, 1000)
-                      } else {
-                        // console.log(response)
-                        console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                        console.log('NEW ORDER#:' + doc.order_number)
-                        // setTimeout(function() {
-                          res.end();
-                        // }, 1000)
-                      }
-                    }
-                  );
-
-                // }, 4000)
-            });
-
-          } else {
-            res.end();
-          }
-          })
-
-        })
-    } else {
-      console.log(doc.number)
-      var printerDB = db.get('printer')
-      printerDB.findOne({}, {}, function(err, printer) {
-        // console.log(printer.printer_id)
-      if ( doc.note_attributes[1] != undefined) {
-        var options = {
-            screenSize: {
-              'width': 1350,
-              'height': 2200
-            }
-          }
-          var options2 = {
-                'width': 1350,
-                'height': 2200
-            }
-            console.log(doc._id)
-        webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-          console.log(err)
-            // setTimeout(function() {
-            // 545151
-              var formData = {
-                    "printer": 69910985,
-                    "title": "Order: "+ doc.order_number,
-                    "contentType": "pdf_uri",
-                    "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-                    "source": "api documentation!",
-                    "options": {
-                      "paper": "Legal",
-                    }
-              }
-              var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-              var password = "";
-              var url = "https://api.printnode.com/printjobs";
-              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-
-            request.post(
-                {
-                    url : url,
-                    headers : {
-                        "Authorization" : auth
-                    },
-                    json: true,
-                    body: formData
-                },
-                function (error, response, body) {
-                  if (error) {
-                    console.log(error)
-                    // setTimeout(function() {
-                      res.end();
-                    // }, 1000)
-                  } else {
-                    // console.log(response)
-                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                    console.log('NEW ORDER#:' + doc.order_number)
-                    // setTimeout(function() {
-                      res.end();
-                    // }, 1000)
-                  }
-                }
-              );
-
-            // }, 4000)
-        });
-      } else {
-        res.end();
-      }
-      })
-        // res.send();
-    }
-  })
+  res.send()
+  // var db = req.db;
+  // var ordersDB = db.get('orders')
+  //
+  // var order_number = "#" + req.body.number;
+  // console.log(order_number)
+  // ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
+  //   console.log(err)
+  //   if (doc === null || doc === undefined) {
+  //     var db = req.db;
+  //     var ordersDB = db.get('orders')
+  //     ordersDB.insert(req.body)
+  //     console.log(req.body)
+  //     var items = req.body.line_items;
+  //
+  //       ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+  //         console.log(doc)
+  //         var printerDB = db.get('printer')
+  //         printerDB.findOne({}, {}, function(err, printer) {
+  //           // console.log(printer.printer_id)
+  //         if ( doc.note_attributes[1] != undefined) {
+  //           var options = {
+  //               screenSize: {
+  //                 'width': 1350,
+  //                 'height': 2200
+  //               }
+  //             }
+  //             var options2 = {
+  //                   'width': 1350,
+  //                   'height': 2200
+  //               }
+  //               console.log(doc._id)
+  //           webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+  //             console.log(err)
+  //               // setTimeout(function() {
+  //               // 545151
+  //                 var formData = {
+  //                       "printer": 69910985,
+  //                       "title": "Order: "+ doc.order_number,
+  //                       "contentType": "pdf_uri",
+  //                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+  //                       "source": "api documentation!",
+  //                       "options": {
+  //                         "paper": "Legal",
+  //                       }
+  //                 }
+  //                 var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+  //                 var password = "";
+  //                 var url = "https://api.printnode.com/printjobs";
+  //                 var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+  //
+  //               request.post(
+  //                   {
+  //                       url : url,
+  //                       headers : {
+  //                           "Authorization" : auth
+  //                       },
+  //                       json: true,
+  //                       body: formData
+  //                   },
+  //                   function (error, response, body) {
+  //                     if (error) {
+  //                       console.log(error)
+  //                       // setTimeout(function() {
+  //                         res.end();
+  //                       // }, 1000)
+  //                     } else {
+  //                       // console.log(response)
+  //                       console.log(moment().format('MMMM Do YYYY, h:mm a'));
+  //                       console.log('NEW ORDER#:' + doc.order_number)
+  //                       // setTimeout(function() {
+  //                         res.end();
+  //                       // }, 1000)
+  //                     }
+  //                   }
+  //                 );
+  //
+  //               // }, 4000)
+  //           });
+  //
+  //         } else {
+  //           res.end();
+  //         }
+  //         })
+  //
+  //       })
+  //   } else {
+  //     console.log(doc.number)
+  //     var printerDB = db.get('printer')
+  //     printerDB.findOne({}, {}, function(err, printer) {
+  //       // console.log(printer.printer_id)
+  //     if ( doc.note_attributes[1] != undefined) {
+  //       var options = {
+  //           screenSize: {
+  //             'width': 1350,
+  //             'height': 2200
+  //           }
+  //         }
+  //         var options2 = {
+  //               'width': 1350,
+  //               'height': 2200
+  //           }
+  //           console.log(doc._id)
+  //       webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+  //         console.log(err)
+  //           // setTimeout(function() {
+  //           // 545151
+  //             var formData = {
+  //                   "printer": 69910985,
+  //                   "title": "Order: "+ doc.order_number,
+  //                   "contentType": "pdf_uri",
+  //                   "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+  //                   "source": "api documentation!",
+  //                   "options": {
+  //                     "paper": "Legal",
+  //                   }
+  //             }
+  //             var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+  //             var password = "";
+  //             var url = "https://api.printnode.com/printjobs";
+  //             var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+  //
+  //           request.post(
+  //               {
+  //                   url : url,
+  //                   headers : {
+  //                       "Authorization" : auth
+  //                   },
+  //                   json: true,
+  //                   body: formData
+  //               },
+  //               function (error, response, body) {
+  //                 if (error) {
+  //                   console.log(error)
+  //                   // setTimeout(function() {
+  //                     res.end();
+  //                   // }, 1000)
+  //                 } else {
+  //                   // console.log(response)
+  //                   console.log(moment().format('MMMM Do YYYY, h:mm a'));
+  //                   console.log('NEW ORDER#:' + doc.order_number)
+  //                   // setTimeout(function() {
+  //                     res.end();
+  //                   // }, 1000)
+  //                 }
+  //               }
+  //             );
+  //
+  //           // }, 4000)
+  //       });
+  //     } else {
+  //       res.end();
+  //     }
+  //     })
+  //       // res.send();
+  //   }
+  // })
 });
 
 router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res, next) {
