@@ -128,6 +128,8 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
 })
 
 router.post('/new/order', function(req, res, next) {
+  var db = req.db;
+  var ordersDB = db.get('orders')
     var order_number = "#" + req.body.number;
     ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
       console.log(err)
@@ -549,8 +551,11 @@ router.get('/order/json/:id', function(req, res, next) {
 router.post('/order/update', function(req, res, next) {
   console.log(req.body)
   // res.send()
+  var db = req.db;
+  var ordersDB = db.get('orders')
 
   var order_number = "#" + req.body.number;
+  console.log(order_number)
   ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
     console.log(err)
     if (doc === null || doc === undefined) {
