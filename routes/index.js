@@ -128,10 +128,6 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
 })
 
 router.post('/new/order', function(req, res, next) {
-  // console.log(req.body)
-  // if (req.body.number === 4029 || req.body.number === 4032 || req.body.number === 4033) {
-  //   res.end()
-  // } else {
     var order_number = "#" + req.body.number;
     ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
       console.log(err)
