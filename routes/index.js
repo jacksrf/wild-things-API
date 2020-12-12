@@ -130,10 +130,10 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
 router.post('/new/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
-    var order_number = "#" + req.body.number;
-    ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
-      console.log(err)
-      if (doc === null || doc === undefined) {
+  var order_number = "#" + req.body.number;
+  ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
+  console.log(err)
+  if (doc === null || doc === undefined) {
         var db = req.db;
         var ordersDB = db.get('orders')
         ordersDB.insert(req.body)
@@ -141,6 +141,26 @@ router.post('/new/order', function(req, res, next) {
         var items = req.body.line_items;
 
           ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+            doc.note = nl2br(doc.note);
+            console.log(doc.note);
+            doc.deliver_day = "";
+            if (doc.user_id) {
+
+            } else {
+              doc.user_id = "";
+            }
+            doc.orderNotes = {};
+
+            for (i=0; i<doc.note_attributes.length; i++) {
+                var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+                var value = doc.note_attributes[i].value.toString();
+                doc.orderNotes[key] = value;
+                if (i=== doc.note_attributes.length-1) {
+                  console.log(doc.orderNotes)
+
+                }
+            }
+            if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
             console.log(doc)
             var printerDB = db.get('printer')
             printerDB.findOne({}, {}, function(err, printer) {
@@ -209,9 +229,31 @@ router.post('/new/order', function(req, res, next) {
               res.end();
             }
             })
-
+          } else {
+            res.send()
+          }
           })
       } else {
+        doc.note = nl2br(doc.note);
+        console.log(doc.note);
+        doc.deliver_day = "";
+        if (doc.user_id) {
+
+        } else {
+          doc.user_id = "";
+        }
+        doc.orderNotes = {};
+
+        for (i=0; i<doc.note_attributes.length; i++) {
+            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+            var value = doc.note_attributes[i].value.toString();
+            doc.orderNotes[key] = value;
+            if (i=== doc.note_attributes.length-1) {
+              console.log(doc.orderNotes)
+
+            }
+        }
+        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
         console.log(doc.number)
         var printerDB = db.get('printer')
         printerDB.findOne({}, {}, function(err, printer) {
@@ -279,7 +321,10 @@ router.post('/new/order', function(req, res, next) {
           res.end();
         }
         })
-          // res.send();
+      } else {
+        res.send();
+      }
+           // res.send();
       }
     })
 
