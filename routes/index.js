@@ -601,9 +601,11 @@ router.post('/order/update', function(req, res, next) {
   console.log(order_number)
   ordersDB.findOneAndUpdate({ "name" : order_number}, req.body, { upsert: true, setDefaultsOnInsert: true }, function(err, doc) {
     if (err) {
+      console.log(err)
       res.send()
     } else {
       console.log(doc)
+      res.send()
     }
   })
 });
