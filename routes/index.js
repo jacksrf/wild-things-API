@@ -604,6 +604,7 @@ router.post('/order/update', function(req, res, next) {
       res.send()
     } else {
       ordersDB.update({ "name" : order_number}, req.body, function(err, doc) {
+        console.log(doc)
         res.send()
       })
     }
