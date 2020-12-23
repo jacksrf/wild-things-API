@@ -114,13 +114,13 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
   if (order === "") {
     ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
       console.log(err)
-      console.log(orders)
+      // console.log(orders)
       res.render('orders', {orders: orders})
     })
   } else {
     ordersDB.find({$or: [{"name": order_number},{"customer.first_name" : new RegExp('^'+order+'$', "i")}]}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
       console.log(err)
-      console.log(orders)
+      // console.log(orders)
       res.render('orders', {orders: orders})
     })
   }
@@ -132,17 +132,19 @@ router.post('/new/order', function(req, res, next) {
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
   ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
+  console.log('*/-----------NEW ORDER------------/*')
   console.log(err)
+  console.log(doc)
   if (doc) {
         var db = req.db;
         var ordersDB = db.get('orders')
         ordersDB.insert(req.body)
-        console.log(req.body)
+        // console.log(req.body)
         var items = req.body.line_items;
 
           ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
             doc.note = nl2br(doc.note);
-            console.log(doc.note);
+            // console.log(doc.note);
             doc.deliver_day = "";
             if (doc.user_id) {
 
@@ -156,12 +158,12 @@ router.post('/new/order', function(req, res, next) {
                 var value = doc.note_attributes[i].value.toString();
                 doc.orderNotes[key] = value;
                 if (i=== doc.note_attributes.length-1) {
-                  console.log(doc.orderNotes)
+                  // console.log(doc.orderNotes)
 
                 }
             }
             if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-            console.log(doc)
+            // console.log(doc)
             var printerDB = db.get('printer')
             printerDB.findOne({}, {}, function(err, printer) {
               // console.log(printer.printer_id)
@@ -176,7 +178,7 @@ router.post('/new/order', function(req, res, next) {
                       'width': 1350,
                       'height': 2200
                   }
-                  console.log(doc._id)
+                  // console.log(doc._id)
               webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
                 console.log(err)
                   // setTimeout(function() {
@@ -235,7 +237,7 @@ router.post('/new/order', function(req, res, next) {
           })
       } else {
         doc.note = nl2br(doc.note);
-        console.log(doc.note);
+        // console.log(doc.note);
         doc.deliver_day = "";
         if (doc.user_id) {
 
@@ -249,12 +251,12 @@ router.post('/new/order', function(req, res, next) {
             var value = doc.note_attributes[i].value.toString();
             doc.orderNotes[key] = value;
             if (i=== doc.note_attributes.length-1) {
-              console.log(doc.orderNotes)
+              // console.log(doc.orderNotes)
 
             }
         }
         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-        console.log(doc.number)
+        // console.log(doc.number)
         var printerDB = db.get('printer')
         printerDB.findOne({}, {}, function(err, printer) {
           // console.log(printer.printer_id)
@@ -269,7 +271,7 @@ router.post('/new/order', function(req, res, next) {
                   'width': 1350,
                   'height': 2200
               }
-              console.log(doc._id)
+              // console.log(doc._id)
           webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
             console.log(err)
               // setTimeout(function() {
@@ -343,7 +345,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   var ordersDB = db.get('orders')
   // if (key != undefined) {
   ordersDB.findOne({"_id": id},{},function(err, doc){
-    console.log(doc)
+    // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
       // console.log(doc.updated_at)
@@ -447,7 +449,7 @@ router.post('/order/update', function(req, res, next) {
       console.log(err)
       res.send()
     } else {
-      console.log(doc)
+      // console.log(doc)
       res.send()
     }
   })
@@ -463,7 +465,7 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
   ordersDB.findOne({"_id": id}, {}, function(err, doc) {
     console.log(doc.note)
     console.log(doc.note_attributes.length);
-    console.log(doc)
+    // console.log(doc)
     res.render('order-edit', {"order": doc})
   })
 
@@ -475,7 +477,7 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
   // // var filename  = './'+ id +'.pdf';
   var form = req.body.note_attributes
   console.log(id);
-  console.log(form)
+  // console.log(form)
   var newNoteAttributes = [];
   var newNote = ''
   function callback () {
@@ -484,7 +486,7 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
     var db = req.db;
     var ordersDB = db.get('orders')
     ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
-      console.log(doc)
+      // console.log(doc)
       res.redirect('/order/save/confirmation/'+ id)
     })
   }
@@ -536,7 +538,7 @@ router.post('/order/pdf/save/:id', multipartMiddleware, function(req, res, next)
   console.log(id);
   var db = req.db;
   var file = req.body
-  console.log(file)
+  // console.log(file)
   // var pdf = new jsPDF('p', 'mm', 'a4');
   // pdf.addImage(file.image, 'PNG', 0, 0, 211, 298);
   // console.log(pdf)
