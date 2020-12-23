@@ -600,6 +600,7 @@ router.post('/order/update', function(req, res, next) {
   var order_number = req.body.name;
   console.log(order_number)
   ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
+    console.log(doc)
     if (doc === null || doc === undefined) {
       res.send()
     } else {
