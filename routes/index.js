@@ -110,8 +110,8 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
   console.log(ip)
   console.log(req)
   var db = req.db;
-  // var today = moment().format('YYYY/MM/DD').toString()
-  var today = '2020/12/23'
+  var today = moment().format('YYYY/MM/DD').toString()
+  // var today = '2020/12/23'
   console.log(today)
   var ordersDB = db.get('orders')
   var todaysOrders = [];
