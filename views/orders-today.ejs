@@ -102,13 +102,11 @@ text-align: center;
       <div class="" style="display: flex;
     align-items: center;
     justify-content: space-between;">
-        <form action="/orders/search" method="post">
-          <input name="order" placeholder="Order # or Name" type="text"/>
-          <button type="submit" value="SEARCH">SEARCH</button>
-        </form>
-        <button class="item button btn btn-success" style="width: 200px;"><a href="/orders/today">TODAYS ORDERS</a></button>
-      </div>
-      <h1>Orders:</h1>
+      <button class="btn btn-default" style="margin-bottom: 50px;"><a href="/orders" style="color: black!important;">< RETURN TO ORDERS</a></button>
+      <!-- <button class="button btn btn-warning" style="margin-bottom: 50px;"><a href="/orders">PRINT</a></button> -->
+
+    </div>
+      <h1>Todays Orders:</h1>
       <% for (i=0; i<orders.length; i++) { %>
         <div class="row">
           <div class="item number">#<%= orders[i].order_number %></div>
@@ -119,7 +117,7 @@ text-align: center;
           <% } %>
           <div class="item total">$<%= orders[i].total_price_usd %></div>
           <!-- <button class="item button btn btn-info"><a href="">EDIT</a></button> -->
-          <button class="item button btn btn-success"><a href="/order/reprint/pdf/<%= orders[i]._id %>?key=<%= Math.random() %>">PRINT</a></button>
+          <!-- <button class="item button btn btn-success"><a href="/order/reprint/pdf/<%= orders[i]._id %>?key=<%= Math.random() %>">PRINT</a></button> -->
           <!-- <button class="item button btn btn-warning"><a href="/order/edit/<%= orders[i]._id %>">EDIT NOTES</a></button> -->
           <!-- <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button> -->
         </div>
