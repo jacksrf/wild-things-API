@@ -685,7 +685,10 @@ router.post('/new2/order', function(req, res, next) {
             } else {
               var orders = JSON.parse(body).orders;
               orders.forEach(order => {
-                console.log(order.shipping_lines[0].title); 
+                if (order.shipping_lines[0].title === 'Subscription shipping') {
+                  console.log(order.note_attributes)
+                  console.log(tags)
+                }
               });
               // console.log(orders)
               // res.send({'orders': orders});
