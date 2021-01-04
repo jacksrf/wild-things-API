@@ -685,7 +685,7 @@ router.post('/new2/order', function(req, res, next) {
             } else {
               var orders = JSON.parse(body).orders;
               console.log(orders)
-              res.send('orders': orders);
+              res.send({'orders': orders});
             }
           }
         );
