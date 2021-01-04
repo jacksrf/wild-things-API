@@ -687,7 +687,7 @@ router.post('/new2/order', function(req, res, next) {
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping') {
                   console.log(order.note_attributes)
-                  console.log(tags)
+                  console.log(order.tags)
                 }
               });
               // console.log(orders)
