@@ -663,6 +663,7 @@ router.post('/new2/order', function(req, res, next) {
   // console.log(doc)
   if (doc) {
     if (doc.source_name === 'subscription_contract') {
+      var original_order = doc;
       console.log(doc.customer.id)
       var username = "dfaae36a8dfe43777643418b1252f183";
       var password = "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";
@@ -688,6 +689,38 @@ router.post('/new2/order', function(req, res, next) {
                 if (order.shipping_lines[0].title === 'Subscription shipping') {
                   console.log(order.note_attributes)
                   console.log(order.tags)
+                  var formData2 = {
+                    "order": {
+                    "id": original_order.id,
+                    "tags": order.tags,
+                    "note_attributes": order.note_attributes
+                    }
+                  }
+                  var username2 = "dfaae36a8dfe43777643418b1252f183";
+                  var password2 = "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";
+                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/"+ original_order.id +".json";
+                  var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
+
+                  request.post(
+                      {
+                          url : url2,
+                          headers : {
+                              "Authorization" : auth2
+                          },
+                          json: true,
+                          body: formData2
+                      },
+                      function (error, response, body) {
+                        // console.log(response.headers.date)
+                        // console.log(body)
+                        if (error) {
+                          console.log(error)
+                        } else {
+                          // console.log(response)
+                         res.send();
+                        }
+                      }
+                    );
                 }
               });
               // console.log(orders)
