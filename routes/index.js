@@ -101,7 +101,11 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
   ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
     console.log(err)
     console.log(orders)
-    res.render('orders', {orders: orders})
+    var todaysOrdersClean = Array.from(new Set(orders.map(a => a.id)))
+       .map(id => {
+         return orders.find(a => a.id === id)
+       })
+    res.render('orders', {orders: todaysOrdersClean})
   })
 });
 
@@ -128,17 +132,25 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
             orders[j].orderNotes[key] = value;
             if (i=== orders[j].note_attributes.length-1) {
               // console.log(orders[j].orderNotes)
+              console.log(orders[j].orderNotes.delivery_date)
+              console.log(today)
               if (orders[j].orderNotes.checkout_method === 'delivery') {
-                if (orders[j].orderNotes.delivery_date === today) {
-                  console.log(orders[j].name)
-                  todaysOrders.push(orders[j])
+                if (orders[j].orderNotes.delivery_date) {
+                  var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
+                  if (delivery_date_clean === today) {
+                    console.log(orders[j].name)
+                    todaysOrders.push(orders[j])
+                  }
                 }
               }
 
               if (orders[j].orderNotes.checkout_method === 'pickup') {
-                if (orders[j].orderNotes.pickup_date === today) {
-                  console.log(orders[j].name)
-                  todaysOrders.push(orders[j])
+                if (orders[j].orderNotes.pickup_date) {
+                  var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
+                  if (pickup_date_clean === today) {
+                    console.log(orders[j].name)
+                    todaysOrders.push(orders[j])
+                  }
                 }
               }
             }

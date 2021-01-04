@@ -115,6 +115,8 @@ text-align: center;
           <% } else { %>
           <div class="item name">------------------</div>
           <% } %>
+          <div class="item number"><%= orders[i].orderNotes.checkout_method %></div>
+
           <div class="item total">$<%= orders[i].total_price_usd %></div>
           <!-- <button class="item button btn btn-info"><a href="">EDIT</a></button> -->
           <!-- <button class="item button btn btn-success"><a href="/order/reprint/pdf/<%= orders[i]._id %>?key=<%= Math.random() %>">PRINT</a></button> -->
