@@ -716,7 +716,7 @@ router.post('/new2/order', function(req, res, next) {
                         if (error) {
                           console.log(error)
                         } else {
-                          // console.log(response)
+                          console.log(response)
                          res.send();
                         }
                       }
