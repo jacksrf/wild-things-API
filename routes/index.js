@@ -689,6 +689,7 @@ router.post('/new2/order', function(req, res, next) {
                 if (order.shipping_lines[0].title === 'Subscription shipping') {
                   console.log(order.note_attributes)
                   console.log(order.tags)
+                  console.log(original_order.id)
                   var formData2 = {
                     "order": {
                     "id": original_order.id,
@@ -701,7 +702,7 @@ router.post('/new2/order', function(req, res, next) {
                   var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/"+ original_order.id +".json";
                   var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
 
-                  request.post(
+                  request.put(
                       {
                           url : url2,
                           headers : {
