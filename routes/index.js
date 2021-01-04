@@ -660,11 +660,35 @@ router.post('/new2/order', function(req, res, next) {
   ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
   console.log('*/-----------NEW ORDER------------/*')
   console.log(err)
-  console.log(doc)
+  // console.log(doc)
   if (doc) {
     if (doc.source_name === 'subscription_contract') {
       console.log(doc.customer.id)
-      res.send();
+      var username = "dfaae36a8dfe43777643418b1252f183";
+      var password = "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";
+      var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/"+ doc.customer.id +"/orders.json";
+      var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+      request.get(
+          {
+              url : url,
+              headers : {
+                  "Authorization" : auth
+              },
+          },
+          function (error, response, body) {
+            // console.log(response.headers.date)
+            // console.log(body)
+            if (error) {
+              console.log(error)
+              res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
+            } else {
+              console.log(body)
+              res.send();
+            }
+          }
+        );
+
     }
       //   var db = req.db;
       //   var ordersDB = db.get('orders')
