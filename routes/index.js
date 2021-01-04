@@ -191,6 +191,26 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
 
 })
 
+// '01/05/2021, Local Delivery, Local Delivery Order'
+// '01/04/2021, 16:00, Pickup Order'
+
+router.get('/subscriptions', function(req, res, next) {
+  // "source_name": "subscription_contract",
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  ordersDB.find({ "source_name" : 'subscription_contract'}, {}, function(err, docs) {
+    console.log(docs.length)
+    var ordersClean = Array.from(new Set(docs.map(a => a.id)))
+       .map(id => {
+         return docs.find(a => a.id === id)
+       })
+    for (i=0;i<ordersClean.length;i++) {
+      console.log(ordersClean[i].name)
+    }
+    res.send()
+  })
+})
+
 router.post('/new/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
@@ -627,6 +647,243 @@ router.get('/order/delete/:id', multipartMiddleware, function(req, res, next) {
   ordersDB.remove({'_id': id})
   res.redirect('/orders')
 })
+
+
+
+
+
+
+router.post('/new2/order', function(req, res, next) {
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  var order_number = req.body.name;
+  ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
+  console.log('*/-----------NEW ORDER------------/*')
+  console.log(err)
+  console.log(doc)
+  if (doc) {
+    if (doc.source_name === 'subscription_contract') {
+      console.log(doc.customer.id)
+    }
+      //   var db = req.db;
+      //   var ordersDB = db.get('orders')
+      //   ordersDB.insert(req.body)
+      //   // console.log(req.body)
+      //   var items = req.body.line_items;
+      //
+      //     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
+      //       doc.note = nl2br(doc.note);
+      //       // console.log(doc.note);
+      //       doc.deliver_day = "";
+      //       if (doc.user_id) {
+      //
+      //       } else {
+      //         doc.user_id = "";
+      //       }
+      //       doc.orderNotes = {};
+      //
+      //       for (i=0; i<doc.note_attributes.length; i++) {
+      //           var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+      //           var value = doc.note_attributes[i].value.toString();
+      //           doc.orderNotes[key] = value;
+      //           if (i=== doc.note_attributes.length-1) {
+      //             // console.log(doc.orderNotes)
+      //           }
+      //       }
+      //       if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+      //       // console.log(doc)
+      //       if (doc.orderNotes.checkout_method === "delivery") {
+      //
+      //       }
+      //
+      //       if (doc.orderNotes.checkout_method === "pickup") {
+      //
+      //       }
+      //       var printerDB = db.get('printer')
+      //       printerDB.findOne({}, {}, function(err, printer) {
+      //         // console.log(printer.printer_id)
+      //       if ( doc.note_attributes[1] != undefined) {
+      //         var options = {
+      //             screenSize: {
+      //               'width': 1350,
+      //               'height': 2200
+      //             }
+      //           }
+      //           var options2 = {
+      //                 'width': 1350,
+      //                 'height': 2200
+      //             }
+      //             // console.log(doc._id)
+      //         webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+      //           console.log(err)
+      //             // setTimeout(function() {
+      //             // 545151
+      //               var formData = {
+      //                     "printer": 69910985,
+      //                     "title": "Order: "+ doc.order_number,
+      //                     "contentType": "pdf_uri",
+      //                     "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+      //                     "source": "api documentation!",
+      //                     "options": {
+      //                       "paper": "Legal",
+      //                     }
+      //               }
+      //               var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+      //               var password = "";
+      //               var url = "https://api.printnode.com/printjobs";
+      //               var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+      //
+      //             request.post(
+      //                 {
+      //                     url : url,
+      //                     headers : {
+      //                         "Authorization" : auth
+      //                     },
+      //                     json: true,
+      //                     body: formData
+      //                 },
+      //                 function (error, response, body) {
+      //                   if (error) {
+      //                     console.log(error)
+      //                     // setTimeout(function() {
+      //                       res.end();
+      //                     // }, 1000)
+      //                   } else {
+      //                     // console.log(response)
+      //                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
+      //                     console.log('NEW ORDER#:' + doc.order_number)
+      //                     // setTimeout(function() {
+      //                       res.end();
+      //                     // }, 1000)
+      //                   }
+      //                 }
+      //               );
+      //
+      //             // }, 4000)
+      //         });
+      //
+      //       } else {
+      //         res.end();
+      //       }
+      //       })
+      //     } else {
+      //       res.send()
+      //     }
+      //     })
+      // } else {
+      //   doc.note = nl2br(doc.note);
+      //   // console.log(doc.note);
+      //   doc.deliver_day = "";
+      //   if (doc.user_id) {
+      //
+      //   } else {
+      //     doc.user_id = "";
+      //   }
+      //   doc.orderNotes = {};
+      //
+      //   for (i=0; i<doc.note_attributes.length; i++) {
+      //       var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+      //       var value = doc.note_attributes[i].value.toString();
+      //       doc.orderNotes[key] = value;
+      //       if (i=== doc.note_attributes.length-1) {
+      //         // console.log(doc.orderNotes)
+      //
+      //       }
+      //   }
+      //   if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+      //   // console.log(doc.number)
+      //   var printerDB = db.get('printer')
+      //   printerDB.findOne({}, {}, function(err, printer) {
+      //     // console.log(printer.printer_id)
+      //   if ( doc.note_attributes[1] != undefined) {
+      //     var options = {
+      //         screenSize: {
+      //           'width': 1350,
+      //           'height': 2200
+      //         }
+      //       }
+      //       var options2 = {
+      //             'width': 1350,
+      //             'height': 2200
+      //         }
+      //         // console.log(doc._id)
+      //     webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+      //       console.log(err)
+      //         // setTimeout(function() {
+      //         // 545151
+      //           var formData = {
+      //                 "printer": 69910985,
+      //                 "title": "Order: "+ doc.order_number,
+      //                 "contentType": "pdf_uri",
+      //                 "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+      //                 "source": "api documentation!",
+      //                 "options": {
+      //                   "paper": "Legal",
+      //                 }
+      //           }
+      //           var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+      //           var password = "";
+      //           var url = "https://api.printnode.com/printjobs";
+      //           var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+      //
+      //         request.post(
+      //             {
+      //                 url : url,
+      //                 headers : {
+      //                     "Authorization" : auth
+      //                 },
+      //                 json: true,
+      //                 body: formData
+      //             },
+      //             function (error, response, body) {
+      //               if (error) {
+      //                 console.log(error)
+      //                 // setTimeout(function() {
+      //                   res.end();
+      //                 // }, 1000)
+      //               } else {
+      //                 // console.log(response)
+      //                 console.log(moment().format('MMMM Do YYYY, h:mm a'));
+      //                 console.log('NEW ORDER#:' + doc.order_number)
+      //                 // setTimeout(function() {
+      //                   res.end();
+      //                 // }, 1000)
+      //               }
+      //             }
+      //           );
+      //
+      //         // }, 4000)
+      //     });
+      //   } else {
+      //     res.end();
+      //   }
+      //   })
+      // } else {
+      //   res.send();
+      // }
+      //      // res.send();
+      }
+    })
+
+
+  // }
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function isLoggedIn(req, res, next) {
