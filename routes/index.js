@@ -664,6 +664,7 @@ router.post('/new2/order', function(req, res, next) {
   if (doc) {
     if (doc.source_name === 'subscription_contract') {
       console.log(doc.customer.id)
+      res.send();
     }
       //   var db = req.db;
       //   var ordersDB = db.get('orders')
