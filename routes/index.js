@@ -684,7 +684,7 @@ router.post('/new2/order', function(req, res, next) {
               res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
             } else {
               console.log(body)
-              res.send();
+              res.send(body);
             }
           }
         );
