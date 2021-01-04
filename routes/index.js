@@ -693,6 +693,10 @@ router.post('/new2/order', function(req, res, next) {
                   var today = moment().format('YYYY/MM/DD')
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   console.log(dateIndex)
+                  order.note_attributes[dateIndex] = {
+                    "name": 'Delivery-Date',
+                    "value": today
+                  }
                   var formData2 = {
                     "order": {
                     "id": original_order.id,
