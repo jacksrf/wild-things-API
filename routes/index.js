@@ -683,8 +683,8 @@ router.post('/new2/order', function(req, res, next) {
               console.log(error)
               res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
             } else {
-              console.log(body)
-              res.send(body);
+              console.log(body.orders)
+              res.send(body.orders);
             }
           }
         );
