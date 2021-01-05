@@ -9,7 +9,7 @@ var cheerio = require('cheerio')
 var htmlToImage = require('html-to-image');
 var webshot = require('webshot');
 var moment = require('moment');
-var nl2br  = require('nl2br');
+var nl2br = require('nl2br');
 
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
@@ -20,7 +20,7 @@ var router = express.Router();
 var mongo = require('mongodb')
 
 router.use(function(req, res, next) {
-    next();
+  next();
 });
 // app/routes.js
 // root with login links
@@ -34,58 +34,58 @@ router.get('/signup', isSuperAdmin, isLoggedIn, function(req, res, next) {
 });
 
 router.get('/profile', function(req, res) {
-    if (req.user) {
-        res.render('profile', {
-            user: req.user
-        });
-    } else {
-        res.redirect('/login');
-    }
+  if (req.user) {
+    res.render('profile', {
+      user: req.user
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
 router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+  req.logout();
+  res.redirect('/');
 });
 router.post('/signup', function(req, res, next) {
-    // console.log(req.body)
-    passport.authenticate('local-signup',
-        function(err, user, info) {
-            if (err) {
-                return next(err);
-            }
-            if (!user) {
-                req.flash('info', info.message);
-                return res.redirect('/admin/signup')
-            }
-            req.flash('info', info.message);
-            res.redirect('/admin/home');
-        })(req, res, next);
+  // console.log(req.body)
+  passport.authenticate('local-signup',
+    function(err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        req.flash('info', info.message);
+        return res.redirect('/admin/signup')
+      }
+      req.flash('info', info.message);
+      res.redirect('/admin/home');
+    })(req, res, next);
 });
 router.post('/login', function(req, res, next) {
-    passport.authenticate('local-login',
-        function(err, user, info) {
-            if (err) {
-                return next(err);
-            }
-            if (!user) {
-                req.flash('info', info.message);
-                return res.redirect('/login');
-            }
-            req.logIn(user, function(err) {
-                if (err) {
-                    return next(err);
-                }
-                // console.log(req.user.local.email)
-                return res.redirect('/orders');
+  passport.authenticate('local-login',
+    function(err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        req.flash('info', info.message);
+        return res.redirect('/login');
+      }
+      req.logIn(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        // console.log(req.user.local.email)
+        return res.redirect('/orders');
 
-            });
-        })(req, res, next);
+      });
+    })(req, res, next);
 });
 
 router.get('/logout', function(req, res) {
-    req.session.destroy(function(err) {
-        res.redirect('/login'); //Inside a callback… bulletproof!
-    });
+  req.session.destroy(function(err) {
+    res.redirect('/login'); //Inside a callback… bulletproof!
+  });
 });
 
 router.get('/', isLoggedIn, function(req, res, next) {
@@ -98,14 +98,21 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
   console.log(req)
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+  ordersDB.find({}, {
+    limit: 500,
+    sort: {
+      'processed_at': -1
+    }
+  }, function(err, orders) {
     console.log(err)
     console.log(orders)
     var todaysOrdersClean = Array.from(new Set(orders.map(a => a.id)))
-       .map(id => {
-         return orders.find(a => a.id === id)
-       })
-    res.render('orders', {orders: todaysOrdersClean})
+      .map(id => {
+        return orders.find(a => a.id === id)
+      })
+    res.render('orders', {
+      orders: todaysOrdersClean
+    })
   })
 });
 
@@ -119,50 +126,57 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
   console.log(today)
   var ordersDB = db.get('orders')
   var todaysOrders = [];
-  ordersDB.find({}, {limit:1000, sort: {'processed_at': -1}}, function(err, orders) {
+  ordersDB.find({}, {
+    limit: 1000,
+    sort: {
+      'processed_at': -1
+    }
+  }, function(err, orders) {
     console.log(err)
     // console.log(orders)
-    for (j=0; j<orders.length;j++) {
+    for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
       if (orders[j].note_attributes) {
-        for (i=0; i<orders[j].note_attributes.length; i++) {
-            var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
-            var value = orders[j].note_attributes[i].value.toString();
-            orders[j].orderNotes[key] = value;
-            if (i=== orders[j].note_attributes.length-1) {
-              // console.log(orders[j].orderNotes)
-              console.log(orders[j].orderNotes.delivery_date)
-              console.log(today)
-              if (orders[j].orderNotes.checkout_method === 'delivery') {
-                if (orders[j].orderNotes.delivery_date) {
-                  var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
-                  if (delivery_date_clean === today) {
-                    console.log(orders[j].name)
-                    todaysOrders.push(orders[j])
-                  }
-                }
-              }
-
-              if (orders[j].orderNotes.checkout_method === 'pickup') {
-                if (orders[j].orderNotes.pickup_date) {
-                  var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
-                  if (pickup_date_clean === today) {
-                    console.log(orders[j].name)
-                    todaysOrders.push(orders[j])
-                  }
+        for (i = 0; i < orders[j].note_attributes.length; i++) {
+          var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+          var value = orders[j].note_attributes[i].value.toString();
+          orders[j].orderNotes[key] = value;
+          if (i === orders[j].note_attributes.length - 1) {
+            // console.log(orders[j].orderNotes)
+            console.log(orders[j].orderNotes.delivery_date)
+            console.log(today)
+            if (orders[j].orderNotes.checkout_method === 'delivery') {
+              if (orders[j].orderNotes.delivery_date) {
+                var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
+                if (delivery_date_clean === today) {
+                  console.log(orders[j].name)
+                  todaysOrders.push(orders[j])
                 }
               }
             }
+
+            if (orders[j].orderNotes.checkout_method === 'pickup') {
+              if (orders[j].orderNotes.pickup_date) {
+                var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
+                if (pickup_date_clean === today) {
+                  console.log(orders[j].name)
+                  todaysOrders.push(orders[j])
+                }
+              }
+            }
+          }
         }
       }
-      if (j=== orders.length-1) {
+      if (j === orders.length - 1) {
         // var todaysOrdersSet = new Set(todaysOrders);
         var todaysOrdersClean = Array.from(new Set(todaysOrders.map(a => a.id)))
-           .map(id => {
-             return todaysOrders.find(a => a.id === id)
-           })
-        res.render('orders-today', {orders: todaysOrdersClean})
+          .map(id => {
+            return todaysOrders.find(a => a.id === id)
+          })
+        res.render('orders-today', {
+          orders: todaysOrdersClean
+        })
       }
     }
 
@@ -172,20 +186,40 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
 router.post('/orders/search', isLoggedIn, function(req, res, next) {
   var order = req.body.order;
   console.log(order)
-  var order_number = '#'+order;
+  var order_number = '#' + order;
   var db = req.db;
   var ordersDB = db.get('orders')
   if (order === "") {
-    ordersDB.find({}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+    ordersDB.find({}, {
+      limit: 500,
+      sort: {
+        'processed_at': -1
+      }
+    }, function(err, orders) {
       console.log(err)
       // console.log(orders)
-      res.render('orders', {orders: orders})
+      res.render('orders', {
+        orders: orders
+      })
     })
   } else {
-    ordersDB.find({$or: [{"name": order_number},{"customer.first_name" : new RegExp('^'+order+'$', "i")}]}, {limit:500, sort: {'processed_at': -1}}, function(err, orders) {
+    ordersDB.find({
+      $or: [{
+        "name": order_number
+      }, {
+        "customer.first_name": new RegExp('^' + order + '$', "i")
+      }]
+    }, {
+      limit: 500,
+      sort: {
+        'processed_at': -1
+      }
+    }, function(err, orders) {
       console.log(err)
       // console.log(orders)
-      res.render('orders', {orders: orders})
+      res.render('orders', {
+        orders: orders
+      })
     })
   }
 
@@ -198,13 +232,15 @@ router.get('/subscriptions', function(req, res, next) {
   // "source_name": "subscription_contract",
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.find({ "source_name" : 'subscription_contract'}, {}, function(err, docs) {
+  ordersDB.find({
+    "source_name": 'subscription_contract'
+  }, {}, function(err, docs) {
     console.log(docs.length)
     var ordersClean = Array.from(new Set(docs.map(a => a.id)))
-       .map(id => {
-         return docs.find(a => a.id === id)
-       })
-    for (i=0;i<ordersClean.length;i++) {
+      .map(id => {
+        return docs.find(a => a.id === id)
+      })
+    for (i = 0; i < ordersClean.length; i++) {
       console.log(ordersClean[i].name)
     }
     res.send()
@@ -215,212 +251,212 @@ router.post('/new/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
-  ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
-  console.log('*/-----------NEW ORDER------------/*')
-  console.log(err)
-  console.log(doc)
-  if (doc) {
-    doc.note = nl2br(doc.note);
-    // console.log(doc.note);
-    doc.deliver_day = "";
-    if (doc.user_id) {
+  ordersDB.findOne({
+    "name": order_number
+  }, {}, function(err, doc) {
+    console.log('*/-----------NEW ORDER------------/*')
+    console.log(err)
+    console.log(doc)
+    if (doc) {
+      doc.note = nl2br(doc.note);
+      // console.log(doc.note);
+      doc.deliver_day = "";
+      if (doc.user_id) {
 
-    } else {
-      doc.user_id = "";
-    }
-    doc.orderNotes = {};
+      } else {
+        doc.user_id = "";
+      }
+      doc.orderNotes = {};
 
-    for (i=0; i<doc.note_attributes.length; i++) {
+      for (i = 0; i < doc.note_attributes.length; i++) {
         var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
         var value = doc.note_attributes[i].value.toString();
         doc.orderNotes[key] = value;
-        if (i=== doc.note_attributes.length-1) {
+        if (i === doc.note_attributes.length - 1) {
           // console.log(doc.orderNotes)
 
         }
-    }
-    if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-    // console.log(doc.number)
-    var printerDB = db.get('printer')
-    printerDB.findOne({}, {}, function(err, printer) {
-      // console.log(printer.printer_id)
-    if ( doc.note_attributes[1] != undefined) {
-      var options = {
-          screenSize: {
-            'width': 1350,
-            'height': 2200
-          }
-        }
-        var options2 = {
+      }
+      if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+        // console.log(doc.number)
+        var printerDB = db.get('printer')
+        printerDB.findOne({}, {}, function(err, printer) {
+          // console.log(printer.printer_id)
+          if (doc.note_attributes[1] != undefined) {
+            var options = {
+              screenSize: {
+                'width': 1350,
+                'height': 2200
+              }
+            }
+            var options2 = {
               'width': 1350,
               'height': 2200
+            }
+            // console.log(doc._id)
+            webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+              console.log(err)
+              // setTimeout(function() {
+              // 545151
+              var formData = {
+                "printer": 69910985,
+                "title": "Order: " + doc.order_number,
+                "contentType": "pdf_uri",
+                "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                "source": "api documentation!",
+                "options": {
+                  "paper": "Legal",
+                }
+              }
+              var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+              var password = "";
+              var url = "https://api.printnode.com/printjobs";
+              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+              request.post({
+                  url: url,
+                  headers: {
+                    "Authorization": auth
+                  },
+                  json: true,
+                  body: formData
+                },
+                function(error, response, body) {
+                  if (error) {
+                    console.log(error)
+                    // setTimeout(function() {
+                    res.end();
+                    // }, 1000)
+                  } else {
+                    // console.log(response)
+                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                    console.log('NEW ORDER#:' + doc.order_number)
+                    // setTimeout(function() {
+                    res.end();
+                    // }, 1000)
+                  }
+                }
+              );
+
+              // }, 4000)
+            });
+          } else {
+            res.end();
           }
-          // console.log(doc._id)
-      webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-        console.log(err)
-          // setTimeout(function() {
-          // 545151
-            var formData = {
+        })
+      } else {
+        res.send();
+      }
+      // res.send();
+    } else {
+      var db = req.db;
+      var ordersDB = db.get('orders')
+      ordersDB.insert(req.body)
+      // console.log(req.body)
+      var items = req.body.line_items;
+
+      ordersDB.findOne({
+        "id": req.body.id
+      }, {}, function(err, doc) {
+        doc.note = nl2br(doc.note);
+        // console.log(doc.note);
+        doc.deliver_day = "";
+        if (doc.user_id) {
+
+        } else {
+          doc.user_id = "";
+        }
+        doc.orderNotes = {};
+
+        for (i = 0; i < doc.note_attributes.length; i++) {
+          var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+          var value = doc.note_attributes[i].value.toString();
+          doc.orderNotes[key] = value;
+          if (i === doc.note_attributes.length - 1) {
+            // console.log(doc.orderNotes)
+          }
+        }
+        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+          // console.log(doc)
+          if (doc.orderNotes.checkout_method === "delivery") {
+
+          }
+
+          if (doc.orderNotes.checkout_method === "pickup") {
+
+          }
+          var printerDB = db.get('printer')
+          printerDB.findOne({}, {}, function(err, printer) {
+            // console.log(printer.printer_id)
+            if (doc.note_attributes[1] != undefined) {
+              var options = {
+                screenSize: {
+                  'width': 1350,
+                  'height': 2200
+                }
+              }
+              var options2 = {
+                'width': 1350,
+                'height': 2200
+              }
+              // console.log(doc._id)
+              webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                console.log(err)
+                // setTimeout(function() {
+                // 545151
+                var formData = {
                   "printer": 69910985,
-                  "title": "Order: "+ doc.order_number,
+                  "title": "Order: " + doc.order_number,
                   "contentType": "pdf_uri",
-                  "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+                  "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
                   "source": "api documentation!",
                   "options": {
                     "paper": "Legal",
                   }
-            }
-            var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-            var password = "";
-            var url = "https://api.printnode.com/printjobs";
-            var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+                }
+                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                var password = "";
+                var url = "https://api.printnode.com/printjobs";
+                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
-          request.post(
-              {
-                  url : url,
-                  headers : {
-                      "Authorization" : auth
+                request.post({
+                    url: url,
+                    headers: {
+                      "Authorization": auth
+                    },
+                    json: true,
+                    body: formData
                   },
-                  json: true,
-                  body: formData
-              },
-              function (error, response, body) {
-                if (error) {
-                  console.log(error)
-                  // setTimeout(function() {
-                    res.end();
-                  // }, 1000)
-                } else {
-                  // console.log(response)
-                  console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                  console.log('NEW ORDER#:' + doc.order_number)
-                  // setTimeout(function() {
-                    res.end();
-                  // }, 1000)
-                }
-              }
-            );
-
-          // }, 4000)
-      });
-    } else {
-      res.end();
-    }
-    })
-  } else {
-    res.send();
-  }
-
-      } else {
-        var db = req.db;
-        var ordersDB = db.get('orders')
-        ordersDB.insert(req.body)
-        // console.log(req.body)
-        var items = req.body.line_items;
-
-          ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-            doc.note = nl2br(doc.note);
-            // console.log(doc.note);
-            doc.deliver_day = "";
-            if (doc.user_id) {
-
-            } else {
-              doc.user_id = "";
-            }
-            doc.orderNotes = {};
-
-            for (i=0; i<doc.note_attributes.length; i++) {
-                var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
-                var value = doc.note_attributes[i].value.toString();
-                doc.orderNotes[key] = value;
-                if (i=== doc.note_attributes.length-1) {
-                  // console.log(doc.orderNotes)
-                }
-            }
-            if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-            // console.log(doc)
-            if (doc.orderNotes.checkout_method === "delivery") {
-
-            }
-
-            if (doc.orderNotes.checkout_method === "pickup") {
-
-            }
-            var printerDB = db.get('printer')
-            printerDB.findOne({}, {}, function(err, printer) {
-              // console.log(printer.printer_id)
-            if ( doc.note_attributes[1] != undefined) {
-              var options = {
-                  screenSize: {
-                    'width': 1350,
-                    'height': 2200
-                  }
-                }
-                var options2 = {
-                      'width': 1350,
-                      'height': 2200
-                  }
-                  // console.log(doc._id)
-              webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                console.log(err)
-                  // setTimeout(function() {
-                  // 545151
-                    var formData = {
-                          "printer": 69910985,
-                          "title": "Order: "+ doc.order_number,
-                          "contentType": "pdf_uri",
-                          "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-                          "source": "api documentation!",
-                          "options": {
-                            "paper": "Legal",
-                          }
+                  function(error, response, body) {
+                    if (error) {
+                      console.log(error)
+                      // setTimeout(function() {
+                      res.end();
+                      // }, 1000)
+                    } else {
+                      // console.log(response)
+                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                      console.log('NEW ORDER#:' + doc.order_number)
+                      // setTimeout(function() {
+                      res.end();
+                      // }, 1000)
                     }
-                    var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-                    var password = "";
-                    var url = "https://api.printnode.com/printjobs";
-                    var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+                  }
+                );
 
-                  request.post(
-                      {
-                          url : url,
-                          headers : {
-                              "Authorization" : auth
-                          },
-                          json: true,
-                          body: formData
-                      },
-                      function (error, response, body) {
-                        if (error) {
-                          console.log(error)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        } else {
-                          // console.log(response)
-                          console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                          console.log('NEW ORDER#:' + doc.order_number)
-                          // setTimeout(function() {
-                            res.end();
-                          // }, 1000)
-                        }
-                      }
-                    );
-
-                  // }, 4000)
+                // }, 4000)
               });
 
             } else {
               res.end();
             }
-            })
-          } else {
-            res.send()
-          }
           })
-
-           // res.send();
-      }
-    })
+        } else {
+          res.send()
+        }
+      })
+    }
+  })
 
 
   // }
@@ -436,7 +472,9 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   // if (key != undefined) {
-  ordersDB.findOne({"_id": id},{},function(err, doc){
+  ordersDB.findOne({
+    "_id": id
+  }, {}, function(err, doc) {
     // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
@@ -445,77 +483,80 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
       // console.log(isafter)
       // console.log(doc.note_attributes)
       // if (isafter === "true" || isafter === true) {
-        // console.log(doc.note_attributes)
-        if ( doc.note_attributes[1] != undefined) {
-          var options = {
-              screenSize: {
-                'width': 1350,
-                'height': 2200
+      // console.log(doc.note_attributes)
+      if (doc.note_attributes[1] != undefined) {
+        var options = {
+          screenSize: {
+            'width': 1350,
+            'height': 2200
+          }
+        }
+        var options2 = {
+          'width': 1350,
+          'height': 2200
+        }
+        console.log(doc._id)
+        webshot("admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+          console.log(err)
+          setTimeout(function() {
+            // console.log(printer.printer_id)
+            var formData = {
+              // "printer": printer.printer_id,
+              "printer": 69910985,
+              "title": "Order: " + doc.order_number,
+              "contentType": "pdf_uri",
+              "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf?t=" + Math.random(),
+              "source": "api documentation!",
+              "options": {
+                "paper": "Legal",
               }
             }
-            var options2 = {
-                  'width': 1350,
-                  'height': 2200
+            var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+            var password = "";
+            var url = "https://api.printnode.com/printjobs";
+            var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+            request.post({
+                url: url,
+                headers: {
+                  "Authorization": auth
+                },
+                json: true,
+                body: formData
+              },
+              function(error, response, body) {
+                // console.log(response.headers.date)
+                // console.log(body)
+                if (error) {
+                  console.log(error)
+                  res.send('index', {
+                    "message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"
+                  })
+                } else {
+                  // console.log(response)
+                  console.log('REPRINT')
+                  console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                  console.log('REPRINTED ------ ORDER#:' + doc.order_number)
+                  res.render('index', {
+                    "message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."
+                  })
+                }
               }
-              console.log(doc._id)
-              webshot("admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-                console.log(err)
-                  setTimeout(function() {
-                    // console.log(printer.printer_id)
-              var formData = {
-                    // "printer": printer.printer_id,
-                    "printer": 69910985,
-                    "title": "Order: "+ doc.order_number,
-                    "contentType": "pdf_uri",
-                    "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf?t=" + Math.random(),
-                    "source": "api documentation!",
-                    "options": {
-                      "paper": "Legal",
-                    }
-              }
-              var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-              var password = "";
-              var url = "https://api.printnode.com/printjobs";
-              var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+            );
 
-              request.post(
-                  {
-                      url : url,
-                      headers : {
-                          "Authorization" : auth
-                      },
-                      json: true,
-                      body: formData
-                  },
-                  function (error, response, body) {
-                    // console.log(response.headers.date)
-                    // console.log(body)
-                    if (error) {
-                      console.log(error)
-                      res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
-                    } else {
-                      // console.log(response)
-                      console.log('REPRINT')
-                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
-                      console.log('REPRINTED ------ ORDER#:' + doc.order_number)
-                      res.render('index', {"message": "COMPLETED! YOURE PRINT SHOULD BECOMING SOON."})
-                    }
-                  }
-                );
+          }, 4000)
+        });
 
-              }, 4000)
-          });
-
-        } else {
-          res.send()
-        }
+      } else {
+        res.send()
+      }
       // } else {
       //   res.send()
       // }
 
-      });
+    });
 
-    })
+  })
   // }
 
 })
@@ -525,7 +566,9 @@ router.get('/order/json/:id', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   // if (key != undefined) {
-  ordersDB.findOne({"_id": id},{},function(err, doc){
+  ordersDB.findOne({
+    "_id": id
+  }, {}, function(err, doc) {
     res.send(doc)
   })
 });
@@ -536,7 +579,14 @@ router.post('/order/update', function(req, res, next) {
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
   console.log(order_number)
-  ordersDB.findOneAndUpdate({ "name" : order_number}, {$set: req.body}, { upsert: true, setDefaultsOnInsert: true }, function(err, doc) {
+  ordersDB.findOneAndUpdate({
+    "name": order_number
+  }, {
+    $set: req.body
+  }, {
+    upsert: true,
+    setDefaultsOnInsert: true
+  }, function(err, doc) {
     if (err) {
       console.log(err)
       res.send()
@@ -554,11 +604,15 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
   console.log(id);
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.findOne({"_id": id}, {}, function(err, doc) {
+  ordersDB.findOne({
+    "_id": id
+  }, {}, function(err, doc) {
     console.log(doc.note)
     console.log(doc.note_attributes.length);
     // console.log(doc)
-    res.render('order-edit', {"order": doc})
+    res.render('order-edit', {
+      "order": doc
+    })
   })
 
 })
@@ -572,37 +626,49 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
   // console.log(form)
   var newNoteAttributes = [];
   var newNote = ''
-  function callback () {
+
+  function callback() {
     console.log('all done');
     console.log(newNoteAttributes)
     var db = req.db;
     var ordersDB = db.get('orders')
-    ordersDB.update({"_id": id}, {$set: {"note_attributes": newNoteAttributes, "shipping_address": req.body.shipping_address, "note": req.body.note}}, function(err, doc) {
+    ordersDB.update({
+      "_id": id
+    }, {
+      $set: {
+        "note_attributes": newNoteAttributes,
+        "shipping_address": req.body.shipping_address,
+        "note": req.body.note
+      }
+    }, function(err, doc) {
       // console.log(doc)
-      res.redirect('/order/save/confirmation/'+ id)
+      res.redirect('/order/save/confirmation/' + id)
     })
   }
   var itemsProcessed = 0;
   Object.entries(form).forEach(
-      ([key, value]) => {
-        console.log(key, value)
-        if (key === 'note') {
-          newNote = value
-          console.log("note: " + newNote)
-          itemsProcessed++;
-          if(itemsProcessed === Object.entries(form).length) {
-            callback();
-          }
-        } else {
-          var item = {name: key, value: value}
-          console.log(item)
-          newNoteAttributes.push(item)
-          itemsProcessed++;
-          if(itemsProcessed === Object.entries(form).length) {
-            callback();
-          }
+    ([key, value]) => {
+      console.log(key, value)
+      if (key === 'note') {
+        newNote = value
+        console.log("note: " + newNote)
+        itemsProcessed++;
+        if (itemsProcessed === Object.entries(form).length) {
+          callback();
+        }
+      } else {
+        var item = {
+          name: key,
+          value: value
+        }
+        console.log(item)
+        newNoteAttributes.push(item)
+        itemsProcessed++;
+        if (itemsProcessed === Object.entries(form).length) {
+          callback();
         }
       }
+    }
   );
 
 
@@ -615,9 +681,13 @@ router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, func
   console.log(id);
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.findOne({"_id": id}, {}, function(err, doc) {
+  ordersDB.findOne({
+    "_id": id
+  }, {}, function(err, doc) {
     console.log(doc.note_attributes)
-    res.render('order-save', {"order": doc})
+    res.render('order-save', {
+      "order": doc
+    })
   })
 
 })
@@ -626,7 +696,7 @@ router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, func
 router.post('/order/pdf/save/:id', multipartMiddleware, function(req, res, next) {
 
   var id = req.params.id;
-  var filename  = './'+ id +'.pdf';
+  var filename = './' + id + '.pdf';
   console.log(id);
   var db = req.db;
   var file = req.body
@@ -646,7 +716,9 @@ router.get('/order/delete/:id', multipartMiddleware, function(req, res, next) {
   console.log(id);
   var db = req.db;
   var ordersDB = db.get('orders')
-  ordersDB.remove({'_id': id})
+  ordersDB.remove({
+    '_id': id
+  })
   res.redirect('/orders')
 })
 
@@ -659,32 +731,35 @@ router.post('/new2/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
-  ordersDB.findOne({ "name" : order_number}, {}, function(err, doc) {
-  console.log('*/-----------NEW ORDER------------/*')
-  console.log(err)
-  // console.log(doc)
-  if (doc) {
-    if (doc.source_name === 'subscription_contract') {
-      var original_order = doc;
-      console.log(doc.customer.id)
-      var username = "dfaae36a8dfe43777643418b1252f183";
-      var password = "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";
-      var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/"+ doc.customer.id +"/orders.json";
-      var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+  ordersDB.findOne({
+    "name": order_number
+  }, {}, function(err, doc) {
+    console.log('*/-----------NEW ORDER------------/*')
+    console.log(err)
+    // console.log(doc)
+    if (doc) {
+      if (doc.source_name === 'subscription_contract') {
+        var original_order = doc;
+        console.log(doc.customer.id)
+        var username = "dfaae36a8dfe43777643418b1252f183";
+        var password = "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";
+        var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+        var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
-      request.get(
-          {
-              url : url,
-              headers : {
-                  "Authorization" : auth
-              },
+        request.get({
+            url: url,
+            headers: {
+              "Authorization": auth
+            },
           },
-          function (error, response, body) {
+          function(error, response, body) {
             // console.log(response.headers.date)
             // console.log(body)
             if (error) {
               console.log(error)
-              res.send('index', {"message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"})
+              res.send('index', {
+                "message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"
+              })
             } else {
               var orders = JSON.parse(body).orders;
               orders.forEach(order => {
@@ -711,250 +786,534 @@ router.post('/new2/order', function(req, res, next) {
 
                   var formData2 = {
                     "order": {
-                    "id": original_order.id,
-                    "note": order.note,
-                    "tags": order.tags,
-                    "note_attributes": order.note_attributes
+                      "id": original_order.id,
+                      "note": order.note,
+                      "tags": order.tags,
+                      "note_attributes": order.note_attributes
                     }
                   }
                   var username2 = "dfaae36a8dfe43777643418b1252f183";
                   var password2 = "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";
-                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/"+ original_order.id +".json";
+                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
                   var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
 
-                  request.put(
-                      {
-                          url : url2,
-                          headers : {
-                              "Authorization" : auth2
-                          },
-                          json: true,
-                          body: formData2
+                  request.put({
+                      url: url2,
+                      headers: {
+                        "Authorization": auth2
                       },
-                      function (error, response, body) {
-                        // console.log(response.headers.date)
-                        // console.log(body)
-                        if (error) {
-                          console.log(error)
+                      json: true,
+                      body: formData2
+                    },
+                    function(error, response, body) {
+                      // console.log(response.headers.date)
+                      // console.log(body)
+                      if (error) {
+                        console.log(error)
+                      } else {
+                        doc.note = nl2br(doc.note);
+                        // console.log(doc.note);
+                        doc.deliver_day = "";
+                        if (doc.user_id) {
+
                         } else {
-                          console.log(body)
-                         res.send(body);
+                          doc.user_id = "";
                         }
+                        doc.orderNotes = {};
+
+                        for (i=0; i<doc.note_attributes.length; i++) {
+                            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+                            var value = doc.note_attributes[i].value.toString();
+                            doc.orderNotes[key] = value;
+                            if (i=== doc.note_attributes.length-1) {
+                              // console.log(doc.orderNotes)
+                            }
+                        }
+                        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+                        // console.log(doc)
+                        if (doc.orderNotes.checkout_method === "delivery") {
+
+                        }
+
+                        if (doc.orderNotes.checkout_method === "pickup") {
+
+                        }
+                        var printerDB = db.get('printer')
+                        printerDB.findOne({}, {}, function(err, printer) {
+                          // console.log(printer.printer_id)
+                        if ( doc.note_attributes[1] != undefined) {
+                          var options = {
+                              screenSize: {
+                                'width': 1350,
+                                'height': 2200
+                              }
+                            }
+                            var options2 = {
+                                  'width': 1350,
+                                  'height': 2200
+                              }
+                              // console.log(doc._id)
+                          webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+                            console.log(err)
+                              // setTimeout(function() {
+                              // 545151
+                                var formData = {
+                                      "printer": 69910985,
+                                      "title": "Order: "+ doc.order_number,
+                                      "contentType": "pdf_uri",
+                                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+                                      "source": "api documentation!",
+                                      "options": {
+                                        "paper": "Legal",
+                                      }
+                                }
+                                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                                var password = "";
+                                var url = "https://api.printnode.com/printjobs";
+                                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+                              request.post(
+                                  {
+                                      url : url,
+                                      headers : {
+                                          "Authorization" : auth
+                                      },
+                                      json: true,
+                                      body: formData
+                                  },
+                                  function (error, response, body) {
+                                    if (error) {
+                                      console.log(error)
+                                      // setTimeout(function() {
+                                        res.end();
+                                      // }, 1000)
+                                    } else {
+                                      // console.log(response)
+                                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                                      console.log('NEW ORDER#:' + doc.order_number)
+                                      // setTimeout(function() {
+                                        res.end();
+                                      // }, 1000)
+                                    }
+                                  }
+                                );
+
+                              // }, 4000)
+                          });
+
+                        } else {
+                          res.end();
+                        }
+                        })
+                      } else {
+                        res.send()
                       }
-                    );
+                      }
+                    }
+                  );
                 }
               });
-              // console.log(orders)
-              // res.send({'orders': orders});
             }
           }
         );
 
+      } else {
+        doc.note = nl2br(doc.note);
+        // console.log(doc.note);
+        doc.deliver_day = "";
+        if (doc.user_id) {
+
+        } else {
+          doc.user_id = "";
+        }
+        doc.orderNotes = {};
+
+        for (i=0; i<doc.note_attributes.length; i++) {
+            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+            var value = doc.note_attributes[i].value.toString();
+            doc.orderNotes[key] = value;
+            if (i=== doc.note_attributes.length-1) {
+              // console.log(doc.orderNotes)
+            }
+        }
+        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+        // console.log(doc)
+        if (doc.orderNotes.checkout_method === "delivery") {
+
+        }
+
+        if (doc.orderNotes.checkout_method === "pickup") {
+
+        }
+        var printerDB = db.get('printer')
+        printerDB.findOne({}, {}, function(err, printer) {
+          // console.log(printer.printer_id)
+        if ( doc.note_attributes[1] != undefined) {
+          var options = {
+              screenSize: {
+                'width': 1350,
+                'height': 2200
+              }
+            }
+            var options2 = {
+                  'width': 1350,
+                  'height': 2200
+              }
+              // console.log(doc._id)
+          webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+            console.log(err)
+              // setTimeout(function() {
+              // 545151
+                var formData = {
+                      "printer": 69910985,
+                      "title": "Order: "+ doc.order_number,
+                      "contentType": "pdf_uri",
+                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+                      "source": "api documentation!",
+                      "options": {
+                        "paper": "Legal",
+                      }
+                }
+                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                var password = "";
+                var url = "https://api.printnode.com/printjobs";
+                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+              request.post(
+                  {
+                      url : url,
+                      headers : {
+                          "Authorization" : auth
+                      },
+                      json: true,
+                      body: formData
+                  },
+                  function (error, response, body) {
+                    if (error) {
+                      console.log(error)
+                      // setTimeout(function() {
+                        res.end();
+                      // }, 1000)
+                    } else {
+                      // console.log(response)
+                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                      console.log('NEW ORDER#:' + doc.order_number)
+                      // setTimeout(function() {
+                        res.end();
+                      // }, 1000)
+                    }
+                  }
+                );
+
+              // }, 4000)
+          });
+
+        } else {
+          res.end();
+        }
+        })
+      } else {
+        res.send()
+      }
+      }
+
     } else {
 
-    }
-      //   var db = req.db;
-      //   var ordersDB = db.get('orders')
-        // ordersDB.insert(req.body)
-      //   // console.log(req.body)
-      //   var items = req.body.line_items;
-      //
-      //     ordersDB.findOne({"id": req.body.id}, {}, function(err, doc) {
-      //       doc.note = nl2br(doc.note);
-      //       // console.log(doc.note);
-      //       doc.deliver_day = "";
-      //       if (doc.user_id) {
-      //
-      //       } else {
-      //         doc.user_id = "";
-      //       }
-      //       doc.orderNotes = {};
-      //
-      //       for (i=0; i<doc.note_attributes.length; i++) {
-      //           var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
-      //           var value = doc.note_attributes[i].value.toString();
-      //           doc.orderNotes[key] = value;
-      //           if (i=== doc.note_attributes.length-1) {
-      //             // console.log(doc.orderNotes)
-      //           }
-      //       }
-      //       if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-      //       // console.log(doc)
-      //       if (doc.orderNotes.checkout_method === "delivery") {
-      //
-      //       }
-      //
-      //       if (doc.orderNotes.checkout_method === "pickup") {
-      //
-      //       }
-      //       var printerDB = db.get('printer')
-      //       printerDB.findOne({}, {}, function(err, printer) {
-      //         // console.log(printer.printer_id)
-      //       if ( doc.note_attributes[1] != undefined) {
-      //         var options = {
-      //             screenSize: {
-      //               'width': 1350,
-      //               'height': 2200
-      //             }
-      //           }
-      //           var options2 = {
-      //                 'width': 1350,
-      //                 'height': 2200
-      //             }
-      //             // console.log(doc._id)
-      //         webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-      //           console.log(err)
-      //             // setTimeout(function() {
-      //             // 545151
-      //               var formData = {
-      //                     "printer": 69910985,
-      //                     "title": "Order: "+ doc.order_number,
-      //                     "contentType": "pdf_uri",
-      //                     "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-      //                     "source": "api documentation!",
-      //                     "options": {
-      //                       "paper": "Legal",
-      //                     }
-      //               }
-      //               var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-      //               var password = "";
-      //               var url = "https://api.printnode.com/printjobs";
-      //               var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-      //
-      //             request.post(
-      //                 {
-      //                     url : url,
-      //                     headers : {
-      //                         "Authorization" : auth
-      //                     },
-      //                     json: true,
-      //                     body: formData
-      //                 },
-      //                 function (error, response, body) {
-      //                   if (error) {
-      //                     console.log(error)
-      //                     // setTimeout(function() {
-      //                       res.end();
-      //                     // }, 1000)
-      //                   } else {
-      //                     // console.log(response)
-      //                     console.log(moment().format('MMMM Do YYYY, h:mm a'));
-      //                     console.log('NEW ORDER#:' + doc.order_number)
-      //                     // setTimeout(function() {
-      //                       res.end();
-      //                     // }, 1000)
-      //                   }
-      //                 }
-      //               );
-      //
-      //             // }, 4000)
-      //         });
-      //
-      //       } else {
-      //         res.end();
-      //       }
-      //       })
-      //     } else {
-      //       res.send()
-      //     }
-      //     })
-      // } else {
-      //   doc.note = nl2br(doc.note);
-      //   // console.log(doc.note);
-      //   doc.deliver_day = "";
-      //   if (doc.user_id) {
-      //
-      //   } else {
-      //     doc.user_id = "";
-      //   }
-      //   doc.orderNotes = {};
-      //
-      //   for (i=0; i<doc.note_attributes.length; i++) {
-      //       var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
-      //       var value = doc.note_attributes[i].value.toString();
-      //       doc.orderNotes[key] = value;
-      //       if (i=== doc.note_attributes.length-1) {
-      //         // console.log(doc.orderNotes)
-      //
-      //       }
-      //   }
-      //   if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-      //   // console.log(doc.number)
-      //   var printerDB = db.get('printer')
-      //   printerDB.findOne({}, {}, function(err, printer) {
-      //     // console.log(printer.printer_id)
-      //   if ( doc.note_attributes[1] != undefined) {
-      //     var options = {
-      //         screenSize: {
-      //           'width': 1350,
-      //           'height': 2200
-      //         }
-      //       }
-      //       var options2 = {
-      //             'width': 1350,
-      //             'height': 2200
-      //         }
-      //         // console.log(doc._id)
-      //     webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
-      //       console.log(err)
-      //         // setTimeout(function() {
-      //         // 545151
-      //           var formData = {
-      //                 "printer": 69910985,
-      //                 "title": "Order: "+ doc.order_number,
-      //                 "contentType": "pdf_uri",
-      //                 "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
-      //                 "source": "api documentation!",
-      //                 "options": {
-      //                   "paper": "Legal",
-      //                 }
-      //           }
-      //           var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
-      //           var password = "";
-      //           var url = "https://api.printnode.com/printjobs";
-      //           var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
-      //
-      //         request.post(
-      //             {
-      //                 url : url,
-      //                 headers : {
-      //                     "Authorization" : auth
-      //                 },
-      //                 json: true,
-      //                 body: formData
-      //             },
-      //             function (error, response, body) {
-      //               if (error) {
-      //                 console.log(error)
-      //                 // setTimeout(function() {
-      //                   res.end();
-      //                 // }, 1000)
-      //               } else {
-      //                 // console.log(response)
-      //                 console.log(moment().format('MMMM Do YYYY, h:mm a'));
-      //                 console.log('NEW ORDER#:' + doc.order_number)
-      //                 // setTimeout(function() {
-      //                   res.end();
-      //                 // }, 1000)
-      //               }
-      //             }
-      //           );
-      //
-      //         // }, 4000)
-      //     });
-      //   } else {
-      //     res.end();
-      //   }
-      //   })
-      // } else {
-      //   res.send();
-      // }
-      //      // res.send();
+      var db = req.db;
+      var ordersDB = db.get('orders')
+      ordersDB.insert(req.body)
+      // console.log(req.body)
+      var items = req.body.line_items;
+
+      ordersDB.findOne({
+        "id": req.body.id
+      }, {}, function(err, doc) {
+
+
+
+      if (doc.source_name === 'subscription_contract') {
+        var original_order = doc;
+        console.log(doc.customer.id)
+        var username = "dfaae36a8dfe43777643418b1252f183";
+        var password = "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";
+        var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+        var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+        request.get({
+            url: url,
+            headers: {
+              "Authorization": auth
+            },
+          },
+          function(error, response, body) {
+            // console.log(response.headers.date)
+            // console.log(body)
+            if (error) {
+              console.log(error)
+              res.send('index', {
+                "message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"
+              })
+            } else {
+              var orders = JSON.parse(body).orders;
+              orders.forEach(order => {
+                if (order.shipping_lines[0].title === 'Subscription shipping') {
+                  console.log(order.note_attributes)
+                  console.log(order.tags)
+                  console.log(original_order.id)
+                  var today = moment().format('YYYY/MM/DD')
+                  var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
+                  var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
+                  console.log(dateIndex)
+                  if (dateIndex > -1) {
+                    order.note_attributes[dateIndex] = {
+                      "name": 'Delivery-Date',
+                      "value": today
+                    }
+                  }
+                  if (dateIndex2 > -1) {
+                    order.note_attributes[dateIndex2] = {
+                      "name": 'Pickup-Date',
+                      "value": today
+                    }
+                  }
+
+                  var formData2 = {
+                    "order": {
+                      "id": original_order.id,
+                      "note": order.note,
+                      "tags": order.tags,
+                      "note_attributes": order.note_attributes
+                    }
+                  }
+                  var username2 = "dfaae36a8dfe43777643418b1252f183";
+                  var password2 = "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";
+                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
+                  var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
+
+                  request.put({
+                      url: url2,
+                      headers: {
+                        "Authorization": auth2
+                      },
+                      json: true,
+                      body: formData2
+                    },
+                    function(error, response, body) {
+                      // console.log(response.headers.date)
+                      // console.log(body)
+                      if (error) {
+                        console.log(error)
+                      } else {
+                        doc.note = nl2br(doc.note);
+                        // console.log(doc.note);
+                        doc.deliver_day = "";
+                        if (doc.user_id) {
+
+                        } else {
+                          doc.user_id = "";
+                        }
+                        doc.orderNotes = {};
+
+                        for (i=0; i<doc.note_attributes.length; i++) {
+                            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+                            var value = doc.note_attributes[i].value.toString();
+                            doc.orderNotes[key] = value;
+                            if (i=== doc.note_attributes.length-1) {
+                              // console.log(doc.orderNotes)
+                            }
+                        }
+                        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+                        // console.log(doc)
+                        if (doc.orderNotes.checkout_method === "delivery") {
+
+                        }
+
+                        if (doc.orderNotes.checkout_method === "pickup") {
+
+                        }
+                        var printerDB = db.get('printer')
+                        printerDB.findOne({}, {}, function(err, printer) {
+                          // console.log(printer.printer_id)
+                        if ( doc.note_attributes[1] != undefined) {
+                          var options = {
+                              screenSize: {
+                                'width': 1350,
+                                'height': 2200
+                              }
+                            }
+                            var options2 = {
+                                  'width': 1350,
+                                  'height': 2200
+                              }
+                              // console.log(doc._id)
+                          webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+                            console.log(err)
+                              // setTimeout(function() {
+                              // 545151
+                                var formData = {
+                                      "printer": 69910985,
+                                      "title": "Order: "+ doc.order_number,
+                                      "contentType": "pdf_uri",
+                                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+                                      "source": "api documentation!",
+                                      "options": {
+                                        "paper": "Legal",
+                                      }
+                                }
+                                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                                var password = "";
+                                var url = "https://api.printnode.com/printjobs";
+                                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+                              request.post(
+                                  {
+                                      url : url,
+                                      headers : {
+                                          "Authorization" : auth
+                                      },
+                                      json: true,
+                                      body: formData
+                                  },
+                                  function (error, response, body) {
+                                    if (error) {
+                                      console.log(error)
+                                      // setTimeout(function() {
+                                        res.end();
+                                      // }, 1000)
+                                    } else {
+                                      // console.log(response)
+                                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                                      console.log('NEW ORDER#:' + doc.order_number)
+                                      // setTimeout(function() {
+                                        res.end();
+                                      // }, 1000)
+                                    }
+                                  }
+                                );
+
+                              // }, 4000)
+                          });
+
+                        } else {
+                          res.end();
+                        }
+                        })
+                      } else {
+                        res.send()
+                      }
+                      }
+                    }
+                  );
+                }
+              });
+            }
+          }
+        );
+
+      } else {
+        doc.note = nl2br(doc.note);
+        // console.log(doc.note);
+        doc.deliver_day = "";
+        if (doc.user_id) {
+
+        } else {
+          doc.user_id = "";
+        }
+        doc.orderNotes = {};
+
+        for (i=0; i<doc.note_attributes.length; i++) {
+            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+            var value = doc.note_attributes[i].value.toString();
+            doc.orderNotes[key] = value;
+            if (i=== doc.note_attributes.length-1) {
+              // console.log(doc.orderNotes)
+            }
+        }
+        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+        // console.log(doc)
+        if (doc.orderNotes.checkout_method === "delivery") {
+
+        }
+
+        if (doc.orderNotes.checkout_method === "pickup") {
+
+        }
+        var printerDB = db.get('printer')
+        printerDB.findOne({}, {}, function(err, printer) {
+          // console.log(printer.printer_id)
+        if ( doc.note_attributes[1] != undefined) {
+          var options = {
+              screenSize: {
+                'width': 1350,
+                'height': 2200
+              }
+            }
+            var options2 = {
+                  'width': 1350,
+                  'height': 2200
+              }
+              // console.log(doc._id)
+          webshot("https://admin-wildthings.devotestudio.com/order/pdf/"+doc._id, "./public/pdf/"+ doc._id +".pdf", options, function(err) {
+            console.log(err)
+              // setTimeout(function() {
+              // 545151
+                var formData = {
+                      "printer": 69910985,
+                      "title": "Order: "+ doc.order_number,
+                      "contentType": "pdf_uri",
+                      "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
+                      "source": "api documentation!",
+                      "options": {
+                        "paper": "Legal",
+                      }
+                }
+                var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                var password = "";
+                var url = "https://api.printnode.com/printjobs";
+                var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+              request.post(
+                  {
+                      url : url,
+                      headers : {
+                          "Authorization" : auth
+                      },
+                      json: true,
+                      body: formData
+                  },
+                  function (error, response, body) {
+                    if (error) {
+                      console.log(error)
+                      // setTimeout(function() {
+                        res.end();
+                      // }, 1000)
+                    } else {
+                      // console.log(response)
+                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                      console.log('NEW ORDER#:' + doc.order_number)
+                      // setTimeout(function() {
+                        res.end();
+                      // }, 1000)
+                    }
+                  }
+                );
+
+              // }, 4000)
+          });
+
+        } else {
+          res.end();
+        }
+        })
+      } else {
+        res.send()
+      }
       }
     })
+    }
+  })
 
 
-  // }
 
 });
 
@@ -966,33 +1325,25 @@ router.post('/new2/order', function(req, res, next) {
 
 
 
-
-
-
-
-
-
-
-
 function isLoggedIn(req, res, next) {
 
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated())
+    return next();
 
-    // if they aren't redirect them to the home page
-    res.redirect('/login');
+  // if they aren't redirect them to the home page
+  res.redirect('/login');
 }
 
 function isSuperAdmin(req, res, next) {
-    var email = req.user.local.email
-    if (email === "jacksrf@gmail.com") {
-        return next();
-    } else {
-        res.redirect('/admin/home', {
-            "message": "****You dont have access to that page... sorry!"
-        });
-    }
+  var email = req.user.local.email
+  if (email === "jacksrf@gmail.com") {
+    return next();
+  } else {
+    res.redirect('/admin/home', {
+      "message": "****You dont have access to that page... sorry!"
+    });
+  }
 }
 
 module.exports = router;
