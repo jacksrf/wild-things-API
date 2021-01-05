@@ -838,8 +838,8 @@ router.post('/new2/order', function(req, res, next) {
                         if (doc.orderNotes.checkout_method === "pickup") {
 
                         }
-                        var printerDB = db.get('printer')
-                        printerDB.findOne({}, {}, function(err, printer) {
+                        // var printerDB = db.get('printer')
+                        // printerDB.findOne({}, {}, function(err, printer) {
                           // console.log(printer.printer_id)
                         if ( doc.note_attributes[1] != undefined) {
                           var options = {
@@ -904,7 +904,7 @@ router.post('/new2/order', function(req, res, next) {
                         } else {
                           res.end();
                         }
-                        })
+                        // })
                       } else {
                         res.send()
                       }
@@ -945,8 +945,8 @@ router.post('/new2/order', function(req, res, next) {
         if (doc.orderNotes.checkout_method === "pickup") {
 
         }
-        var printerDB = db.get('printer')
-        printerDB.findOne({}, {}, function(err, printer) {
+        // var printerDB = db.get('printer')
+        // printerDB.findOne({}, {}, function(err, printer) {
           // console.log(printer.printer_id)
         if ( doc.note_attributes[1] != undefined) {
           var options = {
@@ -1011,7 +1011,7 @@ router.post('/new2/order', function(req, res, next) {
         } else {
           res.end();
         }
-        })
+        // })
       } else {
         res.send()
       }
@@ -1131,8 +1131,8 @@ router.post('/new2/order', function(req, res, next) {
                         if (doc.orderNotes.checkout_method === "pickup") {
 
                         }
-                        var printerDB = db.get('printer')
-                        printerDB.findOne({}, {}, function(err, printer) {
+                        // var printerDB = db.get('printer')
+                        // printerDB.findOne({}, {}, function(err, printer) {
                           // console.log(printer.printer_id)
                         if ( doc.note_attributes[1] != undefined) {
                           var options = {
@@ -1197,7 +1197,7 @@ router.post('/new2/order', function(req, res, next) {
                         } else {
                           res.end();
                         }
-                        })
+                        // })
                       } else {
                         res.send()
                       }
@@ -1238,8 +1238,8 @@ router.post('/new2/order', function(req, res, next) {
         if (doc.orderNotes.checkout_method === "pickup") {
 
         }
-        var printerDB = db.get('printer')
-        printerDB.findOne({}, {}, function(err, printer) {
+        // var printerDB = db.get('printer')
+        // printerDB.findOne({}, {}, function(err, printer) {
           // console.log(printer.printer_id)
         if ( doc.note_attributes[1] != undefined) {
           var options = {
@@ -1304,7 +1304,7 @@ router.post('/new2/order', function(req, res, next) {
         } else {
           res.end();
         }
-        })
+        // })
       } else {
         res.send()
       }
