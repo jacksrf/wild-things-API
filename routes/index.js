@@ -858,7 +858,7 @@ router.post('/new2/order', function(req, res, next) {
                               // setTimeout(function() {
                               // 545151
                                 var formData = {
-                                      "printer": 69910985,
+                                      "printer": 69889163,
                                       "title": "Order: "+ doc.order_number,
                                       "contentType": "pdf_uri",
                                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
@@ -965,7 +965,7 @@ router.post('/new2/order', function(req, res, next) {
               // setTimeout(function() {
               // 545151
                 var formData = {
-                      "printer": 69910985,
+                      "printer": 69889163,
                       "title": "Order: "+ doc.order_number,
                       "contentType": "pdf_uri",
                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
@@ -1151,7 +1151,7 @@ router.post('/new2/order', function(req, res, next) {
                               // setTimeout(function() {
                               // 545151
                                 var formData = {
-                                      "printer": 69910985,
+                                      "printer": 69889163,
                                       "title": "Order: "+ doc.order_number,
                                       "contentType": "pdf_uri",
                                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
@@ -1258,7 +1258,7 @@ router.post('/new2/order', function(req, res, next) {
               // setTimeout(function() {
               // 545151
                 var formData = {
-                      "printer": 69910985,
+                      "printer": 69889163,
                       "title": "Order: "+ doc.order_number,
                       "contentType": "pdf_uri",
                       "content": "https://api-wildthings.devotestudio.com/pdf/"+ doc._id +".pdf",
