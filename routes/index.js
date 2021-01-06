@@ -199,8 +199,12 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
     }, function(err, orders) {
       console.log(err)
       // console.log(orders)
+      var ordersClean = Array.from(new Set(orders.map(a => a.id)))
+        .map(id => {
+          return orders.find(a => a.id === id)
+        })
       res.render('orders', {
-        orders: orders,
+        orders: ordersClean,
         moment: moment
       })
     })
@@ -219,8 +223,12 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
     }, function(err, orders) {
       console.log(err)
       // console.log(orders)
+      var ordersClean = Array.from(new Set(orders.map(a => a.id)))
+        .map(id => {
+          return orders.find(a => a.id === id)
+        })
       res.render('orders', {
-        orders: orders,
+        orders: ordersClean,
         moment: moment
       })
     })
