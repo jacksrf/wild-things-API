@@ -111,7 +111,8 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
         return orders.find(a => a.id === id)
       })
     res.render('orders', {
-      orders: todaysOrdersClean
+      orders: todaysOrdersClean,
+      moment: moment
     })
   })
 });

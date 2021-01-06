@@ -3,7 +3,7 @@
   <head>
     <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   </head>
   <style>
   body {
@@ -122,6 +122,7 @@ text-align: center;
           <button class="item button btn btn-success"><a href="/order/reprint/pdf/<%= orders[i]._id %>?key=<%= Math.random() %>">PRINT</a></button>
           <!-- <button class="item button btn btn-warning"><a href="/order/edit/<%= orders[i]._id %>">EDIT NOTES</a></button> -->
           <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button>
+          <div class="item name" style="width: 300px; padding-left: 10px;">Updated: <%= moment(orders[i].updated_at).startOf('min').fromNow(); %></div>
         </div>
       <% } %>
     </div>
