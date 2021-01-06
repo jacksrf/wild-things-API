@@ -200,7 +200,8 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
       console.log(err)
       // console.log(orders)
       res.render('orders', {
-        orders: orders
+        orders: orders,
+        moment: moment
       })
     })
   } else {
@@ -219,7 +220,8 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
       console.log(err)
       // console.log(orders)
       res.render('orders', {
-        orders: orders
+        orders: orders,
+        moment: moment
       })
     })
   }
