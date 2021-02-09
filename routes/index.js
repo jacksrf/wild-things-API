@@ -696,10 +696,17 @@ router.post('/order/update', function(req, res, next) {
   }, function(err, doc) {
     if (err) {
       console.log(err)
+
       res.send()
     } else {
-      // console.log(doc)
-      res.send()
+      if (!doc) {
+            // Create it
+            res.redirect(307, '/new/order');
+        } else {
+          // console.log(doc)
+          res.send()
+        }
+
     }
   })
 });
