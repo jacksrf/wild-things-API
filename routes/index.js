@@ -158,9 +158,9 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
   var ordersDB = db.get('orders')
   var todaysOrders = [];
   ordersDB.find({}, {
-    limit: 1000,
+    limit: 2000,
     sort: {
-      'processed_at': -1
+      _id: -1
     }
   }, function(err, orders) {
     console.log(err)
@@ -225,9 +225,9 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
   var ordersDB = db.get('orders')
   var todaysOrders = [];
   ordersDB.find({}, {
-    limit: 1000,
+    limit: 2000,
     sort: {
-      'processed_at': -1
+      _id: -1
     }
   }, function(err, orders) {
     console.log(err)
