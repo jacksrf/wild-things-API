@@ -355,7 +355,7 @@ router.get('/subscriptions', function(req, res, next) {
   })
 })
 
-router.post('/new/order', function(req, res, next) {
+router.post('/new2/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
@@ -841,7 +841,7 @@ router.get('/order/delete/:id', multipartMiddleware, function(req, res, next) {
 
 
 
-router.post('/new2/order', function(req, res, next) {
+router.post('/new/order', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
@@ -852,6 +852,9 @@ router.post('/new2/order', function(req, res, next) {
     console.log(err)
     // console.log(doc)
     if (doc) {
+
+/////////////////////////////////
+
       if (doc.source_name === 'subscription_contract') {
         var original_order = doc;
         console.log(doc.customer.id)
@@ -881,7 +884,7 @@ router.post('/new2/order', function(req, res, next) {
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
-                  var today = moment().format('YYYY/MM/DD')
+                  var today = moment().add(3,'d').format('YYYY/MM/DD')
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
                   console.log(dateIndex)
@@ -1130,6 +1133,9 @@ router.post('/new2/order', function(req, res, next) {
         res.send()
       }
       }
+
+///////////////////////////////////////////////
+
 
     } else {
 
