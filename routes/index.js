@@ -881,11 +881,16 @@ router.post('/new/order', function(req, res, next) {
               })
             } else {
               var orders = JSON.parse(body).orders;
+              var subscription_number = orders.length + 1;
+              var subscription_tag = "Subscription " + subscription_number;
+              var subscription_tag2 = "Subscription";
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping') {
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
+                  order.tags.push(subscription_tag)
+                  order.tags.push(subscription_tag2)
                   var today = moment().add(3, 'd').format('YYYY/MM/DD')
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
@@ -1175,11 +1180,16 @@ router.post('/new/order', function(req, res, next) {
                 })
               } else {
                 var orders = JSON.parse(body).orders;
+                var subscription_number = orders.length + 1;
+                var subscription_tag = "Subscription " + subscription_number;
+                var subscription_tag2 = "Subscription";
                 orders.forEach(order => {
                   if (order.shipping_lines[0].title === 'Subscription shipping') {
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
+                    order.tags.push(subscription_tag)
+                    order.tags.push(subscription_tag2)
                     var today = moment().format('YYYY/MM/DD')
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                     var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
