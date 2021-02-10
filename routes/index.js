@@ -886,14 +886,13 @@ router.post('/new/order', function(req, res, next) {
               var subscription_tag2 = "Subscription";
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                  var tags = order.tags.split(',');
+                  var order_tags = order.tags.split(',');
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
-                  tags.push(subscription_tag)
-                  tags.push(subscription_tag2)
-                  tags.join()
-                  var new_tags = tags.join()
+                  order_tags.push(subscription_tag)
+                  order_tags.push(subscription_tag2)
+                  var new_tags = order_tags.join()
                   console.log(new_tags)
                   var today = moment().add(3, 'd').format('YYYY/MM/DD')
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
@@ -1189,14 +1188,13 @@ router.post('/new/order', function(req, res, next) {
                 var subscription_tag2 = "Subscription";
                 orders.forEach(order => {
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                    var tags = order.tags.split(',');
+                    var order_tags = order.tags.split(',');
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
-                    tags.push(subscription_tag)
-                    tags.push(subscription_tag2)
-                    tags.join()
-                    var new_tags = tags.join()
+                    order_tags.push(subscription_tag)
+                    order_tags.push(subscription_tag2)
+                    var new_tags = order_tags.join()
                     console.log(new_tags)
                     var today = moment().format('YYYY/MM/DD')
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
@@ -1526,13 +1524,12 @@ router.post('/new3/order', function(req, res, next) {
               var subscription_tag2 = "Subscription";
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                  var tags = order.tags.split(',');
+                  var order_tags = order.tags.split(', ');
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
-                  tags.push(subscription_tag)
-                  tags.push(subscription_tag2)
-                  tags.join()
+                  order_tags.push(subscription_tag)
+                  order_tags.push(subscription_tag2)
                   var new_tags = tags.join()
                   console.log(new_tags)
                   var today = moment().add(3, 'd').format('YYYY/MM/DD')
@@ -1831,14 +1828,14 @@ router.post('/new3/order', function(req, res, next) {
                 orders.forEach(order => {
                   console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                    var tags = order.tags.split(',');
+                    var order_tags = order.tags.split(',');
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
-                    tags.push(subscription_tag)
-                    tags.push(subscription_tag2)
-                    tags.join()
-                    var new_tags = tags.join()
+                    order_tags.push(subscription_tag)
+                    order_tags.push(subscription_tag2)
+                    order_tags.join()
+                    var new_tags = order_tags.join()
                     console.log(new_tags)
                     var today = moment().format('YYYY/MM/DD')
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
