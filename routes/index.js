@@ -1824,7 +1824,7 @@ router.post('/new3/order', function(req, res, next) {
                 console.log(subscription_number)
                 orders.forEach(order => {
                   console.log(order.shipping_lines[0].title)
-                  if (order.shipping_lines[0].title === 'Subscription shipping') {
+                  if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var tags = order.tags.split(',');
                     console.log(order.note_attributes)
                     console.log(order.tags)
