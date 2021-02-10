@@ -1810,7 +1810,7 @@ router.post('/new3/order', function(req, res, next) {
             },
             function(error, response, body) {
               // console.log(response.headers.date)
-              // console.log(body)
+              console.log(body)
               if (error) {
                 console.log(error)
                 res.send('index', {
@@ -1821,6 +1821,7 @@ router.post('/new3/order', function(req, res, next) {
                 var subscription_number = orders.length + 1;
                 var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
+                console.log(subscription_number)
                 orders.forEach(order => {
                   if (order.shipping_lines[0].title === 'Subscription shipping') {
                     var tags = order.tags.split(',');
