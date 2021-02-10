@@ -1457,6 +1457,635 @@ router.post('/new/order', function(req, res, next) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.post('/new3/order', function(req, res, next) {
+  var db = req.db;
+  var ordersDB = db.get('orders')
+  var order_number = req.body.name;
+  ordersDB.findOne({
+    "name": order_number
+  }, {}, function(err, doc) {
+    console.log('*/-----------NEW ORDER------------/*')
+    console.log(err)
+    // console.log(doc)
+    if (doc) {
+
+      /////////////////////////////////
+
+      if (doc.source_name === 'subscription_contract') {
+        var original_order = doc;
+        console.log(doc.customer.id)
+        var username = "dfaae36a8dfe43777643418b1252f183";
+        var password = "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";
+        var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+        var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+        request.get({
+            url: url,
+            headers: {
+              "Authorization": auth
+            },
+          },
+          function(error, response, body) {
+            // console.log(response.headers.date)
+            // console.log(body)
+            if (error) {
+              console.log(error)
+              res.send('index', {
+                "message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"
+              })
+            } else {
+              var orders = JSON.parse(body).orders;
+              var subscription_number = orders.length + 1;
+              var subscription_tag = "Subscription " + subscription_number;
+              var subscription_tag2 = "Subscription";
+              orders.forEach(order => {
+                if (order.shipping_lines[0].title === 'Subscription shipping') {
+                  var tags = order.tags.split(',');
+                  console.log(order.note_attributes)
+                  console.log(order.tags)
+                  console.log(original_order.id)
+                  tags.push(subscription_tag)
+                  tags.push(subscription_tag2)
+                  tags.join()
+                  var today = moment().add(3, 'd').format('YYYY/MM/DD')
+                  var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
+                  var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
+                  console.log(dateIndex)
+                  if (dateIndex > -1) {
+                    order.note_attributes[dateIndex] = {
+                      "name": 'Delivery-Date',
+                      "value": today
+                    }
+                  }
+                  if (dateIndex2 > -1) {
+                    order.note_attributes[dateIndex2] = {
+                      "name": 'Pickup-Date',
+                      "value": today
+                    }
+                  }
+
+                  var formData2 = {
+                    "order": {
+                      "id": original_order.id,
+                      "note": order.note,
+                      "tags": tags,
+                      "note_attributes": order.note_attributes
+                    }
+                  }
+                  var username2 = "dfaae36a8dfe43777643418b1252f183";
+                  var password2 = "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";
+                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
+                  var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
+
+                  request.put({
+                      url: url2,
+                      headers: {
+                        "Authorization": auth2
+                      },
+                      json: true,
+                      body: formData2
+                    },
+                    function(error, response, body) {
+                      // console.log(response.headers.date)
+                      // console.log(body)
+                      if (error) {
+                        console.log(error)
+                      } else {
+                        doc.note = nl2br(doc.note);
+                        // console.log(doc.note);
+                        doc.deliver_day = "";
+                        if (doc.user_id) {
+
+                        } else {
+                          doc.user_id = "";
+                        }
+                        doc.orderNotes = {};
+
+                        for (i = 0; i < doc.note_attributes.length; i++) {
+                          var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+                          var value = doc.note_attributes[i].value.toString();
+                          doc.orderNotes[key] = value;
+                          if (i === doc.note_attributes.length - 1) {
+                            // console.log(doc.orderNotes)
+                          }
+                        }
+                        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+                          // console.log(doc)
+                          if (doc.orderNotes.checkout_method === "delivery") {
+
+                          }
+
+                          if (doc.orderNotes.checkout_method === "pickup") {
+
+                          }
+                          // var printerDB = db.get('printer')
+                          // printerDB.findOne({}, {}, function(err, printer) {
+                          // console.log(printer.printer_id)
+                          if (doc.note_attributes[1] != undefined) {
+                            // var options = {
+                            //   screenSize: {
+                            //     'width': 1350,
+                            //     'height': 2200
+                            //   }
+                            // }
+                            // var options2 = {
+                            //   'width': 1350,
+                            //   'height': 2200
+                            // }
+                            // console.log(doc._id)
+                            // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                            //   console.log(err)
+                            //   // setTimeout(function() {
+                            //   // 545151
+                            //   var formData = {
+                            //     "printer": 69910985,
+                            //     "title": "Order: " + doc.order_number,
+                            //     "contentType": "pdf_uri",
+                            //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                            //     "source": "api documentation!",
+                            //     "options": {
+                            //       "paper": "Legal",
+                            //     }
+                            //   }
+                            //   var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                            //   var password = "";
+                            //   var url = "https://api.printnode.com/printjobs";
+                            //   var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+                            //
+                            //   request.post({
+                            //       url: url,
+                            //       headers: {
+                            //         "Authorization": auth
+                            //       },
+                            //       json: true,
+                            //       body: formData
+                            //     },
+                            //     function(error, response, body) {
+                            //       if (error) {
+                            //         console.log(error)
+                            //         // setTimeout(function() {
+                            //         res.end();
+                            //         // }, 1000)
+                            //       } else {
+                                    // console.log(response)
+                                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                                    console.log('NEW ORDER#:' + doc.order_number)
+                                    // setTimeout(function() {
+                                    res.end();
+                                    // }, 1000)
+                            //       }
+                            //     }
+                            //   );
+                            //
+                            //   // }, 4000)
+                            // });
+
+                          } else {
+                            res.end();
+                          }
+                          // })
+                        } else {
+                          res.send()
+                        }
+                      }
+                    }
+                  );
+                }
+              });
+            }
+          }
+        );
+
+      } else {
+        doc.note = nl2br(doc.note);
+        // console.log(doc.note);
+        doc.deliver_day = "";
+        if (doc.user_id) {
+
+        } else {
+          doc.user_id = "";
+        }
+        doc.orderNotes = {};
+
+        for (i = 0; i < doc.note_attributes.length; i++) {
+          var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+          var value = doc.note_attributes[i].value.toString();
+          doc.orderNotes[key] = value;
+          if (i === doc.note_attributes.length - 1) {
+            // console.log(doc.orderNotes)
+          }
+        }
+        if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+          // console.log(doc)
+          if (doc.orderNotes.checkout_method === "delivery") {
+
+          }
+
+          if (doc.orderNotes.checkout_method === "pickup") {
+
+          }
+          // var printerDB = db.get('printer')
+          // printerDB.findOne({}, {}, function(err, printer) {
+          // console.log(printer.printer_id)
+          if (doc.note_attributes[1] != undefined) {
+            // var options = {
+            //   screenSize: {
+            //     'width': 1350,
+            //     'height': 2200
+            //   }
+            // }
+            // var options2 = {
+            //   'width': 1350,
+            //   'height': 2200
+            // }
+            // // console.log(doc._id)
+            // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+            //   console.log(err)
+            //   // setTimeout(function() {
+            //   // 545151
+            //   var formData = {
+            //     "printer": 69910985,
+            //     "title": "Order: " + doc.order_number,
+            //     "contentType": "pdf_uri",
+            //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+            //     "source": "api documentation!",
+            //     "options": {
+            //       "paper": "Legal",
+            //     }
+            //   }
+            //   var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+            //   var password = "";
+            //   var url = "https://api.printnode.com/printjobs";
+            //   var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+            //
+            //   request.post({
+            //       url: url,
+            //       headers: {
+            //         "Authorization": auth
+            //       },
+            //       json: true,
+            //       body: formData
+            //     },
+            //     function(error, response, body) {
+            //       if (error) {
+            //         console.log(error)
+            //         // setTimeout(function() {
+            //         res.end();
+            //         // }, 1000)
+            //       } else {
+                    // console.log(response)
+                    console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                    console.log('NEW ORDER#:' + doc.order_number)
+                    // setTimeout(function() {
+                    res.end();
+                    // }, 1000)
+            //       }
+            //     }
+            //   );
+            //
+            //   // }, 4000)
+            // });
+
+          } else {
+            res.end();
+          }
+          // })
+        } else {
+          res.send()
+        }
+      }
+
+      ///////////////////////////////////////////////
+
+
+    } else {
+
+      var db = req.db;
+      var ordersDB = db.get('orders')
+      ordersDB.insert(req.body)
+      // console.log(req.body)
+      var items = req.body.line_items;
+
+      ordersDB.findOne({
+        "id": req.body.id
+      }, {}, function(err, doc) {
+
+
+
+        if (doc.source_name === 'subscription_contract') {
+          var original_order = doc;
+          console.log(doc.customer.id)
+          var username = "dfaae36a8dfe43777643418b1252f183";
+          var password = "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";
+          var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+          var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+
+          request.get({
+              url: url,
+              headers: {
+                "Authorization": auth
+              },
+            },
+            function(error, response, body) {
+              // console.log(response.headers.date)
+              // console.log(body)
+              if (error) {
+                console.log(error)
+                res.send('index', {
+                  "message": "THERE WAS AN ISSUE PRINTING, LET TREY KNOW IMMEDIATELY"
+                })
+              } else {
+                var orders = JSON.parse(body).orders;
+                var subscription_number = orders.length + 1;
+                var subscription_tag = "Subscription " + subscription_number;
+                var subscription_tag2 = "Subscription";
+                orders.forEach(order => {
+                  if (order.shipping_lines[0].title === 'Subscription shipping') {
+                    var tags = order.tags.split(',');
+                    console.log(order.note_attributes)
+                    console.log(order.tags)
+                    console.log(original_order.id)
+                    tags.push(subscription_tag)
+                    tags.push(subscription_tag2)
+                    tags.join()
+                    var today = moment().format('YYYY/MM/DD')
+                    var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
+                    var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
+                    console.log(dateIndex)
+                    if (dateIndex > -1) {
+                      order.note_attributes[dateIndex] = {
+                        "name": 'Delivery-Date',
+                        "value": today
+                      }
+                    }
+                    if (dateIndex2 > -1) {
+                      order.note_attributes[dateIndex2] = {
+                        "name": 'Pickup-Date',
+                        "value": today
+                      }
+                    }
+
+                    var formData2 = {
+                      "order": {
+                        "id": original_order.id,
+                        "note": order.note,
+                        "tags": tags,
+                        "note_attributes": order.note_attributes
+                      }
+                    }
+                    var username2 = "dfaae36a8dfe43777643418b1252f183";
+                    var password2 = "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";
+                    var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
+                    var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
+
+                    request.put({
+                        url: url2,
+                        headers: {
+                          "Authorization": auth2
+                        },
+                        json: true,
+                        body: formData2
+                      },
+                      function(error, response, body) {
+                        // console.log(response.headers.date)
+                        // console.log(body)
+                        if (error) {
+                          console.log(error)
+                        } else {
+                          doc.note = nl2br(doc.note);
+                          // console.log(doc.note);
+                          doc.deliver_day = "";
+                          if (doc.user_id) {
+
+                          } else {
+                            doc.user_id = "";
+                          }
+                          doc.orderNotes = {};
+
+                          for (i = 0; i < doc.note_attributes.length; i++) {
+                            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+                            var value = doc.note_attributes[i].value.toString();
+                            doc.orderNotes[key] = value;
+                            if (i === doc.note_attributes.length - 1) {
+                              // console.log(doc.orderNotes)
+                            }
+                          }
+                          if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+                            // console.log(doc)
+                            if (doc.orderNotes.checkout_method === "delivery") {
+
+                            }
+
+                            if (doc.orderNotes.checkout_method === "pickup") {
+
+                            }
+                            // var printerDB = db.get('printer')
+                            // printerDB.findOne({}, {}, function(err, printer) {
+                            // console.log(printer.printer_id)
+                            if (doc.note_attributes[1] != undefined) {
+                              // var options = {
+                              //   screenSize: {
+                              //     'width': 1350,
+                              //     'height': 2200
+                              //   }
+                              // }
+                              // var options2 = {
+                              //   'width': 1350,
+                              //   'height': 2200
+                              // }
+                              // // console.log(doc._id)
+                              // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                              //   console.log(err)
+                              //   // setTimeout(function() {
+                              //   // 545151
+                              //   var formData = {
+                              //     "printer": 69910985,
+                              //     "title": "Order: " + doc.order_number,
+                              //     "contentType": "pdf_uri",
+                              //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                              //     "source": "api documentation!",
+                              //     "options": {
+                              //       "paper": "Legal",
+                              //     }
+                              //   }
+                              //   var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+                              //   var password = "";
+                              //   var url = "https://api.printnode.com/printjobs";
+                              //   var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+                              //
+                              //   request.post({
+                              //       url: url,
+                              //       headers: {
+                              //         "Authorization": auth
+                              //       },
+                              //       json: true,
+                              //       body: formData
+                              //     },
+                              //     function(error, response, body) {
+                              //       if (error) {
+                              //         console.log(error)
+                              //         // setTimeout(function() {
+                              //         res.end();
+                              //         // }, 1000)
+                              //       } else {
+                                      // console.log(response)
+                                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                                      console.log('NEW ORDER#:' + doc.order_number)
+                                      // setTimeout(function() {
+                                      res.end();
+                                      // }, 1000)
+                              //       }
+                              //     }
+                              //   );
+                              //
+                              //   // }, 4000)
+                              // });
+
+                            } else {
+                              res.end();
+                            }
+                            // })
+                          } else {
+                            res.send()
+                          }
+                        }
+                      }
+                    );
+                  }
+                });
+              }
+            }
+          );
+
+        } else {
+          doc.note = nl2br(doc.note);
+          // console.log(doc.note);
+          doc.deliver_day = "";
+          if (doc.user_id) {
+
+          } else {
+            doc.user_id = "";
+          }
+          doc.orderNotes = {};
+
+          for (i = 0; i < doc.note_attributes.length; i++) {
+            var key = doc.note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
+            var value = doc.note_attributes[i].value.toString();
+            doc.orderNotes[key] = value;
+            if (i === doc.note_attributes.length - 1) {
+              // console.log(doc.orderNotes)
+            }
+          }
+          if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
+            // console.log(doc)
+            if (doc.orderNotes.checkout_method === "delivery") {
+
+            }
+
+            if (doc.orderNotes.checkout_method === "pickup") {
+
+            }
+            // var printerDB = db.get('printer')
+            // printerDB.findOne({}, {}, function(err, printer) {
+            // console.log(printer.printer_id)
+            if (doc.note_attributes[1] != undefined) {
+              // var options = {
+              //   screenSize: {
+              //     'width': 1350,
+              //     'height': 2200
+              //   }
+              // }
+              // var options2 = {
+              //   'width': 1350,
+              //   'height': 2200
+              // }
+              // // console.log(doc._id)
+              // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+              //   console.log(err)
+              //   // setTimeout(function() {
+              //   // 545151
+              //   var formData = {
+              //     "printer": 69910985,
+              //     "title": "Order: " + doc.order_number,
+              //     "contentType": "pdf_uri",
+              //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+              //     "source": "api documentation!",
+              //     "options": {
+              //       "paper": "Legal",
+              //     }
+              //   }
+              //   var username = "S67hEzvCL_PbFZ2k_1UINbTAFzFLQ1zufwB9rwepYwk";
+              //   var password = "";
+              //   var url = "https://api.printnode.com/printjobs";
+              //   var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+              //
+              //   request.post({
+              //       url: url,
+              //       headers: {
+              //         "Authorization": auth
+              //       },
+              //       json: true,
+              //       body: formData
+              //     },
+              //     function(error, response, body) {
+              //       if (error) {
+              //         console.log(error)
+              //         // setTimeout(function() {
+              //         res.end();
+              //         // }, 1000)
+              //       } else {
+                      // console.log(response)
+                      console.log(moment().format('MMMM Do YYYY, h:mm a'));
+                      console.log('NEW ORDER#:' + doc.order_number)
+                      // setTimeout(function() {
+                      res.end();
+                      // }, 1000)
+              //       }
+              //     }
+              //   );
+              //
+              //   // }, 4000)
+              // });
+
+            } else {
+              res.end();
+            }
+            // })
+          } else {
+            res.send()
+          }
+        }
+      })
+    }
+  })
+
+
+
+});
+
+
 function isLoggedIn(req, res, next) {
 
   // if user is authenticated in the session, carry on
