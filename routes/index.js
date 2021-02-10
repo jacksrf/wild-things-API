@@ -1823,6 +1823,7 @@ router.post('/new3/order', function(req, res, next) {
                 var subscription_tag2 = "Subscription";
                 console.log(subscription_number)
                 orders.forEach(order => {
+                  console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping') {
                     var tags = order.tags.split(',');
                     console.log(order.note_attributes)
@@ -1831,6 +1832,7 @@ router.post('/new3/order', function(req, res, next) {
                     tags.push(subscription_tag)
                     tags.push(subscription_tag2)
                     tags.join()
+                    console.log(tags)
                     var today = moment().format('YYYY/MM/DD')
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                     var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
