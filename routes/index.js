@@ -886,11 +886,12 @@ router.post('/new/order', function(req, res, next) {
               var subscription_tag2 = "Subscription";
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping') {
+                  var tags = order.tags;
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
-                  order.tags.push(subscription_tag)
-                  order.tags.push(subscription_tag2)
+                  tags.push(subscription_tag)
+                  tags.push(subscription_tag2)
                   var today = moment().add(3, 'd').format('YYYY/MM/DD')
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
@@ -912,7 +913,7 @@ router.post('/new/order', function(req, res, next) {
                     "order": {
                       "id": original_order.id,
                       "note": order.note,
-                      "tags": order.tags,
+                      "tags": tags,
                       "note_attributes": order.note_attributes
                     }
                   }
@@ -1185,11 +1186,12 @@ router.post('/new/order', function(req, res, next) {
                 var subscription_tag2 = "Subscription";
                 orders.forEach(order => {
                   if (order.shipping_lines[0].title === 'Subscription shipping') {
+                    var tags = order.tags;
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
-                    order.tags.push(subscription_tag)
-                    order.tags.push(subscription_tag2)
+                    tags.push(subscription_tag)
+                    tags.push(subscription_tag2)
                     var today = moment().format('YYYY/MM/DD')
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                     var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
@@ -1211,7 +1213,7 @@ router.post('/new/order', function(req, res, next) {
                       "order": {
                         "id": original_order.id,
                         "note": order.note,
-                        "tags": order.tags,
+                        "tags": tags,
                         "note_attributes": order.note_attributes
                       }
                     }
