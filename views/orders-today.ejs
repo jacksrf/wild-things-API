@@ -132,7 +132,7 @@ text-align: center;
           <div class="item name">------------------</div>
           <% } %>
           <div class="item number"><%= orders[i].orderNotes.checkout_method %></div>
-          <% if (orders[i].orderNotes.checkout_method === 'delivery') { %>
+          <% if (orders[i].orderNotes.checkout_method === 'delivery' && orders[i].shipping_address) { %>
           <div class="item number"><%= orders[i].shipping_address.zip %></div>
           <% } else { %>
           <div class="item number"></div>
