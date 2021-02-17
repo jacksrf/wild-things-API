@@ -1529,18 +1529,19 @@ router.post('/new3/order', function(req, res, next) {
               // console.log("Orders: " + subscription_number)
               orders.slice(1).forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                  var today = moment().format('YYYY/MM/DD')
+                  var today_tag = moment().format('MM/DD/YYYY')
                   var order_tags = order.tags.split(',');
                   // console.log('OLD TAGS: ' + order_tags)
                   // console.log(order.note_attributes)
                   // console.log(order.tags)
                   // console.log(original_order.id)
-                  // order_tags.push(subscription_tag)
+                  order_tags.push(today_tag)
                   order_tags.push(subscription_tag2)
                   // order_tags.join()
                   var new_tags = order_tags.join()
                   // console.log(new_tags)
                   // console.log('NEW TAGS: ' + new_tags)
-                  var today = moment().format('YYYY/MM/DD')
                   console.log('TODAY: ' + today)
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
@@ -1839,18 +1840,20 @@ router.post('/new3/order', function(req, res, next) {
                 orders.slice(1).forEach(order => {
                   console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                    var today = moment().format('YYYY/MM/DD')
+                    var today_tag = moment().format('MM/DD/YYYY')
                     var order_tags = order.tags.split(',');
                     console.log('OLD TAGS: ' + order_tags)
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
-                    // order_tags.push(subscription_tag)
+                    order_tags.push(today_tag)
                     order_tags.push(subscription_tag2)
                     // order_tags.join()
                     var new_tags = order_tags.join()
                     console.log(new_tags)
                     console.log('NEW TAGS: ' + new_tags)
-                    var today = moment().format('YYYY/MM/DD')
+
                     console.log('TODAY: ' + today)
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                     var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
