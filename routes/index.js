@@ -888,7 +888,7 @@ router.post('/new/order', function(req, res, next) {
               // var subscription_number = orders.length + 1;
               // var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
-              console.log("Orders: " + subscription_number)
+              // console.log("Orders: " + subscription_number)
               orders.slice(1).forEach(order => {
                 console.log(order.shipping_lines[0].title)
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
@@ -909,7 +909,7 @@ router.post('/new/order', function(req, res, next) {
                   console.log('TODAY: ' + today)
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
-                  // console.log(dateIndex)
+                  console.log(dateIndex)
                   if (dateIndex > -1) {
                     order.note_attributes[dateIndex] = {
                       "name": 'Delivery-Date',
