@@ -573,10 +573,10 @@ router.post('/new2/order', function(req, res, next) {
 
 
 router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   // console.log(ip)
   var key = req.query.key;
-  // console.log(key)
+  console.log(key)
   var id = req.params.id;
   var db = req.db;
   var ordersDB = db.get('orders')
@@ -584,15 +584,18 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   ordersDB.findOne({
     "_id": id
   }, {}, function(err, doc) {
-    // console.log(doc)
+    if (err) {
+      console.log(err)
+    }
+    console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      // console.log(doc.updated_at)
+      console.log(doc.updated_at)
       var isafter = moment(doc.updated_at).isAfter('2018-06-01T00:00:00+00:00');
-      // console.log(isafter)
+      console.log(isafter)
       // console.log(doc.note_attributes)
       // if (isafter === "true" || isafter === true) {
-      // console.log(doc.note_attributes)
+      console.log(doc.note_attributes)
       if (doc.note_attributes[1] != undefined) {
         var options = {
           screenSize: {
@@ -1524,15 +1527,19 @@ router.post('/new3/order', function(req, res, next) {
               var subscription_tag2 = "Subscription";
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                  var order_tags = order.tags.split(', ');
+                  var order_tags = order.tags.split(',');
+                  console.log('OLD TAGS: ' + order_tags)
                   console.log(order.note_attributes)
                   console.log(order.tags)
                   console.log(original_order.id)
                   order_tags.push(subscription_tag)
                   order_tags.push(subscription_tag2)
-                  var new_tags = tags.join()
+                  // order_tags.join()
+                  var new_tags = order_tags.join()
                   console.log(new_tags)
-                  var today = moment().add(3, 'd').format('YYYY/MM/DD')
+                  console.log('NEW TAGS: ' + new_tags)
+                  var today = moment().format('YYYY/MM/DD')
+                  console.log('TODAY: ' + today)
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                   var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
                   console.log(dateIndex)
@@ -1829,15 +1836,18 @@ router.post('/new3/order', function(req, res, next) {
                   console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var order_tags = order.tags.split(',');
+                    console.log('OLD TAGS: ' + order_tags)
                     console.log(order.note_attributes)
                     console.log(order.tags)
                     console.log(original_order.id)
                     order_tags.push(subscription_tag)
                     order_tags.push(subscription_tag2)
-                    order_tags.join()
+                    // order_tags.join()
                     var new_tags = order_tags.join()
                     console.log(new_tags)
+                    console.log('NEW TAGS: ' + new_tags)
                     var today = moment().format('YYYY/MM/DD')
+                    console.log('TODAY: ' + today)
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
                     var dateIndex2 = order.note_attributes.findIndex(x => x.name === 'Pickup-Date');
                     console.log(dateIndex)
