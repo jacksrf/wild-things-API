@@ -866,7 +866,7 @@ router.post('/new/order', function(req, res, next) {
         console.log(doc.customer.id)
         var username = "dfaae36a8dfe43777643418b1252f183";
         var password = "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";
-        var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+        var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
         var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
         request.get({
@@ -933,7 +933,7 @@ router.post('/new/order', function(req, res, next) {
                   }
                   var username2 = "dfaae36a8dfe43777643418b1252f183";
                   var password2 = "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";
-                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json?status=any";
+                  var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
                   var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
 
                   request.put({
@@ -1177,7 +1177,7 @@ router.post('/new/order', function(req, res, next) {
           console.log(doc.customer.id)
           var username = "dfaae36a8dfe43777643418b1252f183";
           var password = "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";
-          var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json";
+          var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
           var auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
           request.get({
@@ -1244,7 +1244,7 @@ router.post('/new/order', function(req, res, next) {
                     }
                     var username2 = "dfaae36a8dfe43777643418b1252f183";
                     var password2 = "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";
-                    var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json?status=any";
+                    var url2 = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/orders/" + original_order.id + ".json";
                     var auth2 = "Basic " + new Buffer(username2 + ":" + password2).toString("base64");
 
                     request.put({
