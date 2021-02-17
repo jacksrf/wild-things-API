@@ -1531,7 +1531,7 @@ router.post('/new3/order', function(req, res, next) {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                   var today = moment().format('YYYY/MM/DD')
                   var today_tag = moment().format('MM/DD/YYYY')
-                  var order_tags = order.tags.split(',');
+                  var order_tags = order.tags.split(',').slice(1);
                   // console.log('OLD TAGS: ' + order_tags)
                   // console.log(order.note_attributes)
                   // console.log(order.tags)
@@ -1842,7 +1842,7 @@ router.post('/new3/order', function(req, res, next) {
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var today = moment().format('YYYY/MM/DD')
                     var today_tag = moment().format('MM/DD/YYYY')
-                    var order_tags = order.tags.split(',');
+                    var order_tags = order.tags.split(',').slice(1);
                     console.log('OLD TAGS: ' + order_tags)
                     console.log(order.note_attributes)
                     console.log(order.tags)
