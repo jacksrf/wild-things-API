@@ -1499,6 +1499,7 @@ router.post('/new3/order', function(req, res, next) {
       /////////////////////////////////
 
       if (doc.source_name === 'subscription_contract') {
+        console.log('SUBSCRIPTION CODE 1')
         var original_order = doc;
         console.log(doc.customer.id)
         var username = "dfaae36a8dfe43777643418b1252f183";
@@ -1514,7 +1515,7 @@ router.post('/new3/order', function(req, res, next) {
           },
           function(error, response, body) {
             // console.log(response.headers.date)
-            // console.log(body)
+            console.log(body)
             if (error) {
               console.log(error)
               res.send('index', {
@@ -1525,6 +1526,7 @@ router.post('/new3/order', function(req, res, next) {
               var subscription_number = orders.length + 1;
               var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
+              console.log("Orders: " + subscription_number)
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                   var order_tags = order.tags.split(',');
@@ -1805,6 +1807,7 @@ router.post('/new3/order', function(req, res, next) {
 
 
         if (doc.source_name === 'subscription_contract') {
+          console.log('SUBSCRIPTION CODE 2')
           var original_order = doc;
           console.log(doc.customer.id)
           var username = "dfaae36a8dfe43777643418b1252f183";
@@ -1831,7 +1834,7 @@ router.post('/new3/order', function(req, res, next) {
                 var subscription_number = orders.length + 1;
                 var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
-                console.log(subscription_number)
+                console.log("Orders: " + subscription_number)
                 orders.forEach(order => {
                   console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
