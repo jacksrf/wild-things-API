@@ -1526,7 +1526,7 @@ router.post('/new3/order', function(req, res, next) {
               // var subscription_number = orders.length + 1;
               // var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
-              console.log("Orders: " + subscription_number)
+              // console.log("Orders: " + subscription_number)
               orders.forEach(order => {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                   var order_tags = order.tags.split(',');
@@ -1834,7 +1834,7 @@ router.post('/new3/order', function(req, res, next) {
                 // var subscription_number = orders.length + 1;
                 // var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
-                console.log("Orders: " + subscription_number)
+                // console.log("Orders: " + subscription_number)
                 orders.forEach(order => {
                   console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
