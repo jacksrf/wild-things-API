@@ -891,10 +891,20 @@ router.post('/new/order', function(req, res, next) {
               // console.log("Orders: " + subscription_number)
               orders.slice(1).forEach(order => {
                 // console.log(order.shipping_lines[0].title)
+                if (order.shipping_lines.length) {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                  var today = moment().add(3,'days').format('YYYY/MM/DD')
-                  var today_tag = moment().format('MM/DD/YYYY')
-                  var today_tag_plusthree = moment().add(3,'days').format('MM/DD/YYYY')
+                  var today = moment().format('YYYY/MM/DD')
+                  var current_day_of_week = moment().weekday();
+                  console.log(current_day_of_week)
+                  var today_tag;
+                  var today_tag_plusthree;
+                  if (current_day_of_week === 7) {
+                    today_tag = moment().add(1, 'days').format('MM/DD/YYYY')
+                    today_tag_plusthree = moment().add(1,'days').format('MM/DD/YYYY')
+                  } else {
+                    today_tag = moment().format('MM/DD/YYYY')
+                    today_tag_plusthree = moment().add(1,'days').format('MM/DD/YYYY')
+                  }
                   var order_tags = order.tags.split(',').slice(1);
                   console.log('OLD TAGS: ' + order_tags)
                   console.log(order.note_attributes)
@@ -1054,6 +1064,9 @@ router.post('/new/order', function(req, res, next) {
                     }
                   );
                 }
+              } else {
+                
+              }
               });
             }
           }
@@ -1205,19 +1218,19 @@ router.post('/new/order', function(req, res, next) {
                 var subscription_tag2 = "Subscription";
                 // console.log("Orders: " + subscription_number)
                 orders.slice(1).forEach(order => {
-                  // console.log(order.shipping_lines[0].title)
+                  if (order.shipping_lines.length) {
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
-                    var today = moment().add(3,'days').format('YYYY/MM/DD')
+                    var today = moment().format('YYYY/MM/DD')
                     var current_day_of_week = moment().weekday();
                     console.log(current_day_of_week)
                     var today_tag;
                     var today_tag_plusthree;
                     if (current_day_of_week === 7) {
                       today_tag = moment().add(1, 'days').format('MM/DD/YYYY')
-                      today_tag_plusthree = moment().add(4,'days').format('MM/DD/YYYY')
+                      today_tag_plusthree = moment().add(1,'days').format('MM/DD/YYYY')
                     } else {
                       today_tag = moment().format('MM/DD/YYYY')
-                      today_tag_plusthree = moment().add(3,'days').format('MM/DD/YYYY')
+                      today_tag_plusthree = moment().add(1,'days').format('MM/DD/YYYY')
                     }
                     var order_tags = order.tags.split(',').slice(1);
 
@@ -1379,6 +1392,8 @@ router.post('/new/order', function(req, res, next) {
                       }
                     );
                   }
+                } else {
+                }
                 });
               }
             }
