@@ -889,9 +889,9 @@ router.post('/new/order', function(req, res, next) {
               // var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
               // console.log("Orders: " + subscription_number)
-              orders.slice(1).forEach(order => {
+              orders.slice(1).find(order => {
                 // console.log(order.shipping_lines[0].title)
-                if (order.shipping_lines.length) {
+
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                   var today = moment().format('YYYY/MM/DD')
                   var current_day_of_week = moment().weekday();
@@ -1064,9 +1064,7 @@ router.post('/new/order', function(req, res, next) {
                     }
                   );
                 }
-              } else {
-                
-              }
+
               });
             }
           }
@@ -1217,8 +1215,8 @@ router.post('/new/order', function(req, res, next) {
                 // var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
                 // console.log("Orders: " + subscription_number)
-                orders.slice(1).forEach(order => {
-                  if (order.shipping_lines.length) {
+                orders.slice(1).find(order => {
+
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var today = moment().format('YYYY/MM/DD')
                     var current_day_of_week = moment().weekday();
@@ -1392,8 +1390,7 @@ router.post('/new/order', function(req, res, next) {
                       }
                     );
                   }
-                } else {
-                }
+                
                 });
               }
             }
