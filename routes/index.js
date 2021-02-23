@@ -637,8 +637,8 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
                 body: formData
               },
               function(error, response, body) {
-                // console.log(response.headers.date)
-                // console.log(body)
+                console.log(response.headers.date)
+                console.log(body)
                 if (error) {
                   console.log(error)
                   res.send('index', {
