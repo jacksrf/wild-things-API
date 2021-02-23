@@ -575,7 +575,7 @@ router.post('/new2/order', function(req, res, next) {
 router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
   // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   // console.log(ip)
-  // var key = req.query.key;
+  var key = req.query.key;
   // console.log(key)
   var id = req.params.id;
   var db = req.db;
