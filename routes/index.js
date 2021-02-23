@@ -889,10 +889,11 @@ router.post('/new/order', function(req, res, next) {
               // var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
               // console.log("Orders: " + subscription_number)
-              orders.slice(1).find(order => {
-                // console.log(order.shipping_lines[0].title)
-                if (order.shipping_lines.length > 0) {
+              var found = false;
+              orders.slice(1).forEach(order => {
+                if (order.shipping_lines.length > 0 && found === false) {
                 if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                  found = true;
                   var today = moment().format('YYYY/MM/DD')
                   var current_day_of_week = moment().weekday();
                   console.log(current_day_of_week)
@@ -1217,9 +1218,11 @@ router.post('/new/order', function(req, res, next) {
                 // var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
                 // console.log("Orders: " + subscription_number)
+                var found = false;
                 orders.slice(1).forEach(order => {
-                  if (order.shipping_lines.length > 0) {
+                  if (order.shipping_lines.length > 0 && found === false) {
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                    found = true;
                     var today = moment().format('YYYY/MM/DD')
                     var current_day_of_week = moment().weekday();
                     console.log(current_day_of_week)
