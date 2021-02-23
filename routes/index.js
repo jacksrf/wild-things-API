@@ -889,10 +889,10 @@ router.post('/new/order', function(req, res, next) {
               // var subscription_tag = "Subscription " + subscription_number;
               var subscription_tag2 = "Subscription";
               // console.log("Orders: " + subscription_number)
-              orders.slice(1).find(order => order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping' => {
+              orders.slice(1).find(order => {
                 // console.log(order.shipping_lines[0].title)
 
-                // if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                   var today = moment().format('YYYY/MM/DD')
                   var current_day_of_week = moment().weekday();
                   console.log(current_day_of_week)
@@ -1063,7 +1063,7 @@ router.post('/new/order', function(req, res, next) {
                       }
                     }
                   );
-                // }
+                }
 
               });
             }
@@ -1215,9 +1215,9 @@ router.post('/new/order', function(req, res, next) {
                 // var subscription_tag = "Subscription " + subscription_number;
                 var subscription_tag2 = "Subscription";
                 // console.log("Orders: " + subscription_number)
-                orders.slice(1).find(order => order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping' => {
-
-                  // if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
+                orders.slice(1).forEach(order => {
+                  if (order.shipping_lines.length) {
+                  if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var today = moment().format('YYYY/MM/DD')
                     var current_day_of_week = moment().weekday();
                     console.log(current_day_of_week)
@@ -1389,8 +1389,9 @@ router.post('/new/order', function(req, res, next) {
                         }
                       }
                     );
-                  // }
-
+                  }
+                } else {
+                }
                 });
               }
             }
