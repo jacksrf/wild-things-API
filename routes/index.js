@@ -158,7 +158,7 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
   var ordersDB = db.get('orders')
   var todaysOrders = [];
   ordersDB.find({}, {
-    limit: 2000,
+    limit: 1000,
     sort: {
       _id: -1
     }
@@ -168,7 +168,7 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
     for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
-      if (orders[j].note_attributes) {
+      if (orders[j].note_attributes && orders[j].customer) {
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
@@ -235,7 +235,7 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
     for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
-      if (orders[j].note_attributes) {
+      if (orders[j].note_attributes && orders[j].customer) {
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
