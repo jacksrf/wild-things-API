@@ -124,6 +124,7 @@ text-align: center;
         <!-- <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button> -->
       </div>
       <% for (i=0; i<orders.length; i++) { %>
+        <% if (orders[i]) { %>
         <div class="row">
           <div class="item number">#<%= orders[i].order_number %></div>
           <% if (orders[i].customer) { %>
@@ -143,6 +144,7 @@ text-align: center;
           <!-- <button class="item button btn btn-warning"><a href="/order/edit/<%= orders[i]._id %>">EDIT NOTES</a></button> -->
           <!-- <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button> -->
         </div>
+        <% } %>
       <% } %>
     </div>
 

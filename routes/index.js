@@ -168,20 +168,22 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
     for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
-      if (orders[j].note_attributes && orders[j].customer) {
+      if (orders[j].note_attributes && orders[j].customer != undefined) {
+        console.log(orders[j].customer)
+        console.log(orders[j].name)
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
           orders[j].orderNotes[key] = value;
           if (i === orders[j].note_attributes.length - 1) {
             // console.log(orders[j].orderNotes)
-            console.log(orders[j].orderNotes.delivery_date)
-            console.log(today)
+            // console.log(orders[j].orderNotes.delivery_date)
+            // console.log(today)
             if (orders[j].orderNotes.checkout_method === 'delivery') {
               if (orders[j].orderNotes.delivery_date) {
                 var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
                 if (delivery_date_clean === today) {
-                  console.log(orders[j].name)
+                  // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -191,7 +193,7 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
               if (orders[j].orderNotes.pickup_date) {
                 var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
                 if (pickup_date_clean === today) {
-                  console.log(orders[j].name)
+                  // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -236,6 +238,7 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
       if (orders[j].note_attributes && orders[j].customer) {
+        console.log(orders[j].customer)
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
