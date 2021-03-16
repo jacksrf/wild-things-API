@@ -275,7 +275,7 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
           .map(id => {
             return todaysOrders.find(a => a.id === id)
           })
-        res.render('orders-today', {
+        res.render('orders-tomorrow', {
           orders: todaysOrdersClean
         })
       }

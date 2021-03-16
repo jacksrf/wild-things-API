@@ -120,7 +120,7 @@ text-align: center;
         <!-- <button class="item button btn btn-danger"><a href="/order/json/<%= orders[i]._id %>">JSON</a></button> -->
       </div>
       <% for (i=0; i<orders.length; i++) { %>
-        <% if (orders[i]) { %>
+        <% if (orders[i] && (orders[i] != 'undefined' ||  orders[i] != undefined)) { %>
         <div class="row">
           <div class="item number">#<%= orders[i].order_number %></div>
           <% if (orders[i].customer) { %>
