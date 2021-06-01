@@ -371,13 +371,13 @@ router.post('/new2/order', function(req, res, next) {
     if (doc) {
       var db = req.db;
       var ordersDB = db.get('orders')
-      ordersDB.insert(req.body)
+      // ordersDB.create(req.body)
       // console.log(req.body)
       var items = req.body.line_items;
 
-      ordersDB.findOne({
-        "id": req.body.id
-      }, {}, function(err, doc) {
+      // ordersDB.findOne({
+      //   "id": req.body.id
+      ordersDB.create(req.body, function(err, doc) {
         doc.note = nl2br(doc.note);
         // console.log(doc.note);
         doc.deliver_day = "";
@@ -1182,15 +1182,13 @@ router.post('/new/order', function(req, res, next) {
 
       var db = req.db;
       var ordersDB = db.get('orders')
-      ordersDB.insert(req.body)
+      // ordersDB.create(req.body
       // console.log(req.body)
       var items = req.body.line_items;
 
-      ordersDB.findOne({
-        "id": req.body.id
-      }, {}, function(err, doc) {
-
-
+      // ordersDB.findOne({
+      //   "id": req.body.id
+      ordersDB.create(req.body, function(err, doc) {
 
         if (doc.source_name === 'subscription_contract') {
           console.log('SUBSCRIPTION CODE 2')
@@ -1855,13 +1853,13 @@ router.post('/new3/order', function(req, res, next) {
 
       var db = req.db;
       var ordersDB = db.get('orders')
-      ordersDB.insert(req.body)
+      // ordersDB.create(req.body)
       // console.log(req.body)
       var items = req.body.line_items;
 
-      ordersDB.findOne({
-        "id": req.body.id
-      }, {}, function(err, doc) {
+      // ordersDB.findOne({
+      //   "id": req.body.id
+      ordersDB.create(req.body, function(err, doc) {
 
 
 
