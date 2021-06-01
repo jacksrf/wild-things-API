@@ -1189,7 +1189,7 @@ router.post('/new/order', function(req, res, next) {
       // ordersDB.findOne({
       //   "id": req.body.id
       ordersDB.insert(req.body, function(err, doc) {
-
+        console.log(err)
         if (doc.source_name === 'subscription_contract') {
           console.log('SUBSCRIPTION CODE 2')
           var original_order = doc;
