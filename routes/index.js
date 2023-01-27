@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var rest = require('restler');
+// var rest = require('restler');
 var fs = require('fs');
-var pdf = require('html-pdf');
+// var pdf = require('html-pdf');
 var request = require('request');
 // var jsPDF = require('jspdf');
-var cheerio = require('cheerio')
-var htmlToImage = require('html-to-image');
-var webshot = require('webshot');
+// var cheerio = require('cheerio')
+// var htmlToImage = require('html-to-image');
+var webshot = require('webshot-node');
 var moment = require('moment');
 var nl2br = require('nl2br');
 
@@ -18,7 +18,6 @@ var passport = require('passport');
 var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb')
-var fetch = require("node-fetch");
 
 router.use(function(req, res, next) {
   next();
@@ -423,7 +422,7 @@ router.post('/new2/order', function(req, res, next) {
           'height': 2200
         }
               // console.log(doc._id)
-              webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+              webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                 console.log(err)
                 // setTimeout(function() {
                 // 545151
@@ -431,7 +430,7 @@ router.post('/new2/order', function(req, res, next) {
                   "printer": 69910985,
                   "title": "Order: " + doc.order_number,
                   "contentType": "pdf_uri",
-                  "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                  "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                   "source": "api documentation!",
                   "options": {
                     "paper": "Legal",
@@ -517,7 +516,7 @@ router.post('/new2/order', function(req, res, next) {
           'height': 2200
         }
             // console.log(doc._id)
-            webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+            webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               console.log(err)
               // setTimeout(function() {
               // 545151
@@ -525,7 +524,7 @@ router.post('/new2/order', function(req, res, next) {
                 "printer": 69910985,
                 "title": "Order: " + doc.order_number,
                 "contentType": "pdf_uri",
-                "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                 "source": "api documentation!",
                 "options": {
                   "paper": "Legal",
@@ -618,7 +617,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
           'height': 2200
         }
         console.log(doc._id)
-        webshot("admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+        webshot("admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
           console.log(err)
           setTimeout(function() {
             // console.log(printer.printer_id)
@@ -627,7 +626,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
               "printer": 69910985,
               "title": "Order: " + doc.order_number,
               "contentType": "pdf_uri",
-              "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf?t=" + Math.random(),
+              "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf?t=" + Math.random(),
               "source": "api documentation!",
               "options": {
                 "paper": "Legal",
@@ -1019,7 +1018,7 @@ router.post('/new/order', function(req, res, next) {
           'height': 2200
         }
                             // console.log(doc._id)
-                            webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                            webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                               console.log(err)
                               // setTimeout(function() {
                               // 545151
@@ -1027,7 +1026,7 @@ router.post('/new/order', function(req, res, next) {
                                 "printer": 69910985,
                                 "title": "Order: " + doc.order_number,
                                 "contentType": "pdf_uri",
-                                "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                                "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                                 "source": "api documentation!",
                                 "options": {
                                   "paper": "Legal",
@@ -1130,7 +1129,7 @@ router.post('/new/order', function(req, res, next) {
           'height': 2200
         }
             // console.log(doc._id)
-            webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+            webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               console.log(err)
               // setTimeout(function() {
               // 545151
@@ -1138,7 +1137,7 @@ router.post('/new/order', function(req, res, next) {
                 "printer": 69910985,
                 "title": "Order: " + doc.order_number,
                 "contentType": "pdf_uri",
-                "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                 "source": "api documentation!",
                 "options": {
                   "paper": "Legal",
@@ -1351,7 +1350,7 @@ router.post('/new/order', function(req, res, next) {
           'height': 2200
         }
                               // console.log(doc._id)
-                              webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                              webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                                 console.log(err)
                                 // setTimeout(function() {
                                 // 545151
@@ -1359,7 +1358,7 @@ router.post('/new/order', function(req, res, next) {
                                   "printer": 69910985,
                                   "title": "Order: " + doc.order_number,
                                   "contentType": "pdf_uri",
-                                  "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                                  "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                                   "source": "api documentation!",
                                   "options": {
                                     "paper": "Legal",
@@ -1461,7 +1460,7 @@ router.post('/new/order', function(req, res, next) {
           'height': 2200
         }
               // console.log(doc._id)
-              webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+              webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                 console.log(err)
                 // setTimeout(function() {
                 // 545151
@@ -1469,7 +1468,7 @@ router.post('/new/order', function(req, res, next) {
                   "printer": 69910985,
                   "title": "Order: " + doc.order_number,
                   "contentType": "pdf_uri",
-                  "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                  "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                   "source": "api documentation!",
                   "options": {
                     "paper": "Legal",
@@ -1699,7 +1698,7 @@ router.post('/new3/order', function(req, res, next) {
                             //   'height': 2200
                             // }
                             // console.log(doc._id)
-                            // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                            // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                             //   console.log(err)
                             //   // setTimeout(function() {
                             //   // 545151
@@ -1707,7 +1706,7 @@ router.post('/new3/order', function(req, res, next) {
                             //     "printer": 69910985,
                             //     "title": "Order: " + doc.order_number,
                             //     "contentType": "pdf_uri",
-                            //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                            //     "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                             //     "source": "api documentation!",
                             //     "options": {
                             //       "paper": "Legal",
@@ -1805,7 +1804,7 @@ router.post('/new3/order', function(req, res, next) {
             //   'height': 2200
             // }
             // // console.log(doc._id)
-            // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+            // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
             //   console.log(err)
             //   // setTimeout(function() {
             //   // 545151
@@ -1813,7 +1812,7 @@ router.post('/new3/order', function(req, res, next) {
             //     "printer": 69910985,
             //     "title": "Order: " + doc.order_number,
             //     "contentType": "pdf_uri",
-            //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+            //     "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
             //     "source": "api documentation!",
             //     "options": {
             //       "paper": "Legal",
@@ -2010,7 +2009,7 @@ router.post('/new3/order', function(req, res, next) {
                               //   'height': 2200
                               // }
                               // // console.log(doc._id)
-                              // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+                              // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                               //   console.log(err)
                               //   // setTimeout(function() {
                               //   // 545151
@@ -2018,7 +2017,7 @@ router.post('/new3/order', function(req, res, next) {
                               //     "printer": 69910985,
                               //     "title": "Order: " + doc.order_number,
                               //     "contentType": "pdf_uri",
-                              //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+                              //     "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
                               //     "source": "api documentation!",
                               //     "options": {
                               //       "paper": "Legal",
@@ -2116,7 +2115,7 @@ router.post('/new3/order', function(req, res, next) {
               //   'height': 2200
               // }
               // // console.log(doc._id)
-              // webshot("https://admin-wildthings.devotestudio.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+              // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               //   console.log(err)
               //   // setTimeout(function() {
               //   // 545151
@@ -2124,7 +2123,7 @@ router.post('/new3/order', function(req, res, next) {
               //     "printer": 69910985,
               //     "title": "Order: " + doc.order_number,
               //     "contentType": "pdf_uri",
-              //     "content": "https://api-wildthings.devotestudio.com/pdf/" + doc._id + ".pdf",
+              //     "content": "https://api.wildthings-pos.com/pdf/" + doc._id + ".pdf",
               //     "source": "api documentation!",
               //     "options": {
               //       "paper": "Legal",
