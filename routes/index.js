@@ -618,7 +618,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
         }
         // // console.log(doc._id)
         webshot("admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
-          console.log(err)
+          console.log("ERROR: " + err)
           setTimeout(function() {
             // console.log(printer.printer_id)
             var formData = {
