@@ -134,7 +134,7 @@ router.get('/orders', isLoggedIn, function(req, res, next) {
     }
   }, function(err, orders) {
     console.log(err)
-    // console.log(orders)
+    // // console.log(orders)
     var todaysOrdersClean = Array.from(new Set(orders.map(a => a.id)))
       .map(id => {
         return orders.find(a => a.id === id)
@@ -163,26 +163,26 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
     }
   }, function(err, orders) {
     console.log(err)
-    // console.log(orders)
+    // // console.log(orders)
     for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
       if (orders[j].note_attributes && orders[j].customer != undefined) {
-        // console.log(orders[j].customer)
-        // console.log(orders[j].name)
+        // // console.log(orders[j].customer)
+        // // console.log(orders[j].name)
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
           orders[j].orderNotes[key] = value;
           if (i === orders[j].note_attributes.length - 1) {
-            // console.log(orders[j].orderNotes)
-            // console.log(orders[j].orderNotes.delivery_date)
+            // // console.log(orders[j].orderNotes)
+            // // console.log(orders[j].orderNotes.delivery_date)
             // console.log(today)
             if (orders[j].orderNotes.checkout_method === 'delivery') {
               if (orders[j].orderNotes.delivery_date) {
                 var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
                 if (delivery_date_clean === today) {
-                  // console.log(orders[j].name)
+                  // // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -192,7 +192,7 @@ router.get('/orders/today', isLoggedIn, function(req, res, next) {
               if (orders[j].orderNotes.pickup_date) {
                 var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
                 if (pickup_date_clean === today) {
-                  // console.log(orders[j].name)
+                  // // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -232,25 +232,25 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
     }
   }, function(err, orders) {
     console.log(err)
-    // console.log(orders)
+    // // console.log(orders)
     for (j = 0; j < orders.length; j++) {
       orders[j].deliver_day = "";
       orders[j].orderNotes = {};
       if (orders[j].note_attributes && orders[j].customer) {
-        // console.log(orders[j].customer)
+        // // console.log(orders[j].customer)
         for (i = 0; i < orders[j].note_attributes.length; i++) {
           var key = orders[j].note_attributes[i].name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase();
           var value = orders[j].note_attributes[i].value.toString();
           orders[j].orderNotes[key] = value;
           if (i === orders[j].note_attributes.length - 1) {
-            // console.log(orders[j].orderNotes)
-            // console.log(orders[j].orderNotes.delivery_date)
+            // // console.log(orders[j].orderNotes)
+            // // console.log(orders[j].orderNotes.delivery_date)
             // console.log(today)
             if (orders[j].orderNotes.checkout_method === 'delivery') {
               if (orders[j].orderNotes.delivery_date) {
                 var delivery_date_clean = orders[j].orderNotes.delivery_date.replace(/-/g, "/")
                 if (delivery_date_clean === today) {
-                  // console.log(orders[j].name)
+                  // // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -260,7 +260,7 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
               if (orders[j].orderNotes.pickup_date) {
                 var pickup_date_clean = orders[j].orderNotes.pickup_date.replace(/-/g, "/")
                 if (pickup_date_clean === today) {
-                  // console.log(orders[j].name)
+                  // // console.log(orders[j].name)
                   todaysOrders.push(orders[j])
                 }
               }
@@ -285,7 +285,7 @@ router.get('/orders/tomorrow', isLoggedIn, function(req, res, next) {
 
 router.post('/orders/search', isLoggedIn, function(req, res, next) {
   var order = req.body.order;
-  // console.log(order)
+  // // console.log(order)
   var order_number = '#' + order;
   var db = req.db;
   var ordersDB = db.get('orders')
@@ -297,7 +297,7 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
       }
     }, function(err, orders) {
       console.log(err)
-      // console.log(orders)
+      // // console.log(orders)
       var ordersClean = Array.from(new Set(orders.map(a => a.id)))
         .map(id => {
           return orders.find(a => a.id === id)
@@ -321,7 +321,7 @@ router.post('/orders/search', isLoggedIn, function(req, res, next) {
       }
     }, function(err, orders) {
       console.log(err)
-      // console.log(orders)
+      // // console.log(orders)
       var ordersClean = Array.from(new Set(orders.map(a => a.id)))
         .map(id => {
           return orders.find(a => a.id === id)
@@ -345,13 +345,13 @@ router.get('/subscriptions', function(req, res, next) {
   ordersDB.find({
     "source_name": 'subscription_contract'
   }, {}, function(err, docs) {
-    // console.log(docs.length)
+    // // console.log(docs.length)
     var ordersClean = Array.from(new Set(docs.map(a => a.id)))
       .map(id => {
         return docs.find(a => a.id === id)
       })
     for (i = 0; i < ordersClean.length; i++) {
-      // console.log(ordersClean[i].name)
+      // // console.log(ordersClean[i].name)
     }
     res.send()
   })
@@ -366,7 +366,7 @@ router.post('/new2/order', function(req, res, next) {
   }, {}, function(err, doc) {
     console.log('*/-----------NEW ORDER------------/*')
     console.log(err)
-    // console.log(doc)
+    // // console.log(doc)
     if (doc) {
       var db = req.db;
       var ordersDB = db.get('orders')
@@ -378,7 +378,7 @@ router.post('/new2/order', function(req, res, next) {
       //   "id": req.body.id
       ordersDB.insert(req.body, function(err, doc) {
         doc.note = nl2br(doc.note);
-        // console.log(doc.note);
+        // // console.log(doc.note);
         doc.deliver_day = "";
         if (doc.user_id) {
 
@@ -392,11 +392,11 @@ router.post('/new2/order', function(req, res, next) {
           var value = doc.note_attributes[i].value.toString();
           doc.orderNotes[key] = value;
           if (i === doc.note_attributes.length - 1) {
-            // console.log(doc.orderNotes)
+            // // console.log(doc.orderNotes)
           }
         }
         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-          // console.log(doc)
+          // // console.log(doc)
           if (doc.orderNotes.checkout_method === "delivery") {
 
           }
@@ -421,7 +421,7 @@ router.post('/new2/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-              // console.log(doc._id)
+              // // console.log(doc._id)
               webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                 console.log(err)
                 // setTimeout(function() {
@@ -479,7 +479,7 @@ router.post('/new2/order', function(req, res, next) {
       })
     } else {
       doc.note = nl2br(doc.note);
-      // console.log(doc.note);
+      // // console.log(doc.note);
       doc.deliver_day = "";
       if (doc.user_id) {
 
@@ -493,12 +493,12 @@ router.post('/new2/order', function(req, res, next) {
         var value = doc.note_attributes[i].value.toString();
         doc.orderNotes[key] = value;
         if (i === doc.note_attributes.length - 1) {
-          // console.log(doc.orderNotes)
+          // // console.log(doc.orderNotes)
 
         }
       }
       if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-        // console.log(doc.number)
+        // // console.log(doc.number)
         var printerDB = db.get('printer')
         printerDB.findOne({}, {}, function(err, printer) {
           // console.log(printer.printer_id)
@@ -515,7 +515,7 @@ router.post('/new2/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-            // console.log(doc._id)
+            // // console.log(doc._id)
             webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               console.log(err)
               // setTimeout(function() {
@@ -594,15 +594,15 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
     if (err) {
       console.log(err)
     }
-    // console.log(doc)
+    // // console.log(doc)
     var printerDB = db.get('printer')
     printerDB.findOne({}, {}, function(err, printer) {
-      // console.log(doc.updated_at)
+      // // console.log(doc.updated_at)
       var isafter = moment(doc.updated_at).isAfter('2018-06-01T00:00:00+00:00');
       // console.log(isafter)
-      // console.log(doc.note_attributes)
+      // // console.log(doc.note_attributes)
       // if (isafter === "true" || isafter === true) {
-      // console.log(doc.note_attributes)
+      // // console.log(doc.note_attributes)
       if (doc.note_attributes[1] != undefined) {
         var options = {
           screenSize: {
@@ -616,7 +616,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-        // console.log(doc._id)
+        // // console.log(doc._id)
         webshot("admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
           console.log(err)
           setTimeout(function() {
@@ -699,7 +699,7 @@ router.post('/order/update', function(req, res, next) {
   var db = req.db;
   var ordersDB = db.get('orders')
   var order_number = req.body.name;
-  // console.log(order_number)
+  // // console.log(order_number)
   ordersDB.findOneAndUpdate({
     "name": order_number
   }, {
@@ -717,7 +717,7 @@ router.post('/order/update', function(req, res, next) {
         // Create it
         res.redirect(307, '/new/order');
       } else {
-        // console.log(doc)
+        // // console.log(doc)
         res.send()
       }
 
@@ -735,9 +735,9 @@ router.get('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, res
   ordersDB.findOne({
     "_id": id
   }, {}, function(err, doc) {
-    // console.log(doc.note)
-    // console.log(doc.note_attributes.length);
-    // console.log(doc)
+    // // console.log(doc.note)
+    // // console.log(doc.note_attributes.length);
+    // // console.log(doc)
     res.render('order-edit', {
       "order": doc
     })
@@ -769,7 +769,7 @@ router.post('/order/edit/:id', isLoggedIn, multipartMiddleware, function(req, re
         "note": req.body.note
       }
     }, function(err, doc) {
-      // console.log(doc)
+      // // console.log(doc)
       res.redirect('/order/save/confirmation/' + id)
     })
   }
@@ -812,7 +812,7 @@ router.get('/order/save/confirmation/:id', isLoggedIn, multipartMiddleware, func
   ordersDB.findOne({
     "_id": id
   }, {}, function(err, doc) {
-    // console.log(doc.note_attributes)
+    // // console.log(doc.note_attributes)
     res.render('order-save', {
       "order": doc
     })
@@ -864,7 +864,7 @@ router.post('/new/order', function(req, res, next) {
   }, {}, function(err, doc) {
     console.log('*/-----------NEW ORDER------------/*')
     console.log(err)
-    // console.log(doc)
+    // // console.log(doc)
     if (doc) {
 
       /////////////////////////////////
@@ -872,7 +872,7 @@ router.post('/new/order', function(req, res, next) {
       if (doc.source_name === 'subscription_contract') {
         console.log('SUBSCRIPTION CODE 1')
         var original_order = doc;
-        // console.log(doc.customer.id)
+        // // console.log(doc.customer.id)
         var username = "dfaae36a8dfe43777643418b1252f183";
         var password = "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";
         var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
@@ -917,8 +917,8 @@ router.post('/new/order', function(req, res, next) {
                   }
                   var order_tags = order.tags.split(',').slice(1);
                   console.log('OLD TAGS: ' + order_tags)
-                  // console.log(order.note_attributes)
-                  // console.log(order.tags)
+                  // // console.log(order.note_attributes)
+                  // // console.log(order.tags)
                   // console.log(original_order.id)
 
                   var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
@@ -975,7 +975,7 @@ router.post('/new/order', function(req, res, next) {
                         console.log(error)
                       } else {
                         doc.note = nl2br(doc.note);
-                        // console.log(doc.note);
+                        // // console.log(doc.note);
                         doc.deliver_day = "";
                         if (doc.user_id) {
 
@@ -989,11 +989,11 @@ router.post('/new/order', function(req, res, next) {
                           var value = doc.note_attributes[i].value.toString();
                           doc.orderNotes[key] = value;
                           if (i === doc.note_attributes.length - 1) {
-                            // console.log(doc.orderNotes)
+                            // // console.log(doc.orderNotes)
                           }
                         }
                         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-                          // console.log(doc)
+                          // // console.log(doc)
                           if (doc.orderNotes.checkout_method === "delivery") {
 
                           }
@@ -1017,7 +1017,7 @@ router.post('/new/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-                            // console.log(doc._id)
+                            // // // console.log(doc._id)
                             webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                               console.log(err)
                               // setTimeout(function() {
@@ -1086,7 +1086,7 @@ router.post('/new/order', function(req, res, next) {
 
       } else {
         doc.note = nl2br(doc.note);
-        // console.log(doc.note);
+        // // console.log(doc.note);
         doc.deliver_day = "";
         if (doc.user_id) {
 
@@ -1100,11 +1100,11 @@ router.post('/new/order', function(req, res, next) {
           var value = doc.note_attributes[i].value.toString();
           doc.orderNotes[key] = value;
           if (i === doc.note_attributes.length - 1) {
-            // console.log(doc.orderNotes)
+            // // console.log(doc.orderNotes)
           }
         }
         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-          // console.log(doc)
+          // // console.log(doc)
           if (doc.orderNotes.checkout_method === "delivery") {
 
           }
@@ -1128,7 +1128,7 @@ router.post('/new/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-            // console.log(doc._id)
+            // // console.log(doc._id)
             webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               console.log(err)
               // setTimeout(function() {
@@ -1203,7 +1203,7 @@ router.post('/new/order', function(req, res, next) {
         if (doc.source_name === 'subscription_contract') {
           console.log('SUBSCRIPTION CODE 2')
           var original_order = doc;
-          console.log(doc.customer.id)
+          // console.log(doc.customer.id)
           var username = "dfaae36a8dfe43777643418b1252f183";
           var password = "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";
           var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
@@ -1249,8 +1249,8 @@ router.post('/new/order', function(req, res, next) {
                     var order_tags = order.tags.split(',').slice(1);
 
                     console.log('OLD TAGS: ' + order_tags)
-                    // console.log(order.note_attributes)
-                    // console.log(order.tags)
+                    // // console.log(order.note_attributes)
+                    // // console.log(order.tags)
                     // console.log(original_order.id)
 
                     var dateIndex = order.note_attributes.findIndex(x => x.name === 'Delivery-Date');
@@ -1307,7 +1307,7 @@ router.post('/new/order', function(req, res, next) {
                           console.log(error)
                         } else {
                           doc.note = nl2br(doc.note);
-                          // console.log(doc.note);
+                          // // console.log(doc.note);
                           doc.deliver_day = "";
                           if (doc.user_id) {
 
@@ -1321,11 +1321,11 @@ router.post('/new/order', function(req, res, next) {
                             var value = doc.note_attributes[i].value.toString();
                             doc.orderNotes[key] = value;
                             if (i === doc.note_attributes.length - 1) {
-                              // console.log(doc.orderNotes)
+                              // // // console.log(doc.orderNotes)
                             }
                           }
                           if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-                            // console.log(doc)
+                            // // // console.log(doc)
                             if (doc.orderNotes.checkout_method === "delivery") {
 
                             }
@@ -1349,7 +1349,7 @@ router.post('/new/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-                              // console.log(doc._id)
+                              // // // console.log(doc._id)
                               webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                                 console.log(err)
                                 // setTimeout(function() {
@@ -1417,7 +1417,7 @@ router.post('/new/order', function(req, res, next) {
 
         } else {
           doc.note = nl2br(doc.note);
-          // console.log(doc.note);
+          // // // console.log(doc.note);
           doc.deliver_day = "";
           if (doc.user_id) {
 
@@ -1431,11 +1431,11 @@ router.post('/new/order', function(req, res, next) {
             var value = doc.note_attributes[i].value.toString();
             doc.orderNotes[key] = value;
             if (i === doc.note_attributes.length - 1) {
-              // console.log(doc.orderNotes)
+              // // // console.log(doc.orderNotes)
             }
           }
           if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-            // console.log(doc)
+            // // // console.log(doc)
             if (doc.orderNotes.checkout_method === "delivery") {
 
             }
@@ -1459,7 +1459,7 @@ router.post('/new/order', function(req, res, next) {
           'width': 1350,
           'height': 2200
         }
-              // console.log(doc._id)
+              // // // console.log(doc._id)
               webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                 console.log(err)
                 // setTimeout(function() {
@@ -1562,7 +1562,7 @@ router.post('/new3/order', function(req, res, next) {
   }, {}, function(err, doc) {
     console.log('*/-----------NEW ORDER------------/*')
     console.log(err)
-    // console.log(doc)
+    // // // console.log(doc)
     if (doc) {
 
       /////////////////////////////////
@@ -1570,7 +1570,7 @@ router.post('/new3/order', function(req, res, next) {
       if (doc.source_name === 'subscription_contract') {
         console.log('SUBSCRIPTION CODE 1')
         var original_order = doc;
-        console.log(doc.customer.id)
+        // // console.log(doc.customer.id)
         var username = "dfaae36a8dfe43777643418b1252f183";
         var password = "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";
         var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
@@ -1602,8 +1602,8 @@ router.post('/new3/order', function(req, res, next) {
                   var today_tag = moment().format('MM/DD/YYYY')
                   var order_tags = order.tags.split(',').slice(1);
                   // console.log('OLD TAGS: ' + order_tags)
-                  // console.log(order.note_attributes)
-                  // console.log(order.tags)
+                  // // console.log(order.note_attributes)
+                  // // console.log(order.tags)
                   // console.log(original_order.id)
                   order_tags.push(today_tag)
                   order_tags.push(subscription_tag2)
@@ -1657,7 +1657,7 @@ router.post('/new3/order', function(req, res, next) {
                         console.log(error)
                       } else {
                         doc.note = nl2br(doc.note);
-                        // console.log(doc.note);
+                        // // // console.log(doc.note);
                         doc.deliver_day = "";
                         if (doc.user_id) {
 
@@ -1671,11 +1671,11 @@ router.post('/new3/order', function(req, res, next) {
                           var value = doc.note_attributes[i].value.toString();
                           doc.orderNotes[key] = value;
                           if (i === doc.note_attributes.length - 1) {
-                            // console.log(doc.orderNotes)
+                            // // // console.log(doc.orderNotes)
                           }
                         }
                         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-                          // console.log(doc)
+                          // // // console.log(doc)
                           if (doc.orderNotes.checkout_method === "delivery") {
 
                           }
@@ -1697,7 +1697,7 @@ router.post('/new3/order', function(req, res, next) {
                             //   'width': 1350,
                             //   'height': 2200
                             // }
-                            // console.log(doc._id)
+                            // // // console.log(doc._id)
                             // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                             //   console.log(err)
                             //   // setTimeout(function() {
@@ -1763,7 +1763,7 @@ router.post('/new3/order', function(req, res, next) {
 
       } else {
         doc.note = nl2br(doc.note);
-        // console.log(doc.note);
+        // // console.log(doc.note);
         doc.deliver_day = "";
         if (doc.user_id) {
 
@@ -1777,11 +1777,11 @@ router.post('/new3/order', function(req, res, next) {
           var value = doc.note_attributes[i].value.toString();
           doc.orderNotes[key] = value;
           if (i === doc.note_attributes.length - 1) {
-            // console.log(doc.orderNotes)
+            // // console.log(doc.orderNotes)
           }
         }
         if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-          // console.log(doc)
+          // // console.log(doc)
           if (doc.orderNotes.checkout_method === "delivery") {
 
           }
@@ -1803,7 +1803,7 @@ router.post('/new3/order', function(req, res, next) {
             //   'width': 1350,
             //   'height': 2200
             // }
-            // // console.log(doc._id)
+            // // // console.log(doc._id)
             // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
             //   console.log(err)
             //   // setTimeout(function() {
@@ -1880,7 +1880,7 @@ router.post('/new3/order', function(req, res, next) {
         if (doc.source_name === 'subscription_contract') {
           console.log('SUBSCRIPTION CODE 2')
           var original_order = doc;
-          // console.log(doc.customer.id)
+          // // console.log(doc.customer.id)
           var username = "dfaae36a8dfe43777643418b1252f183";
           var password = "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";
           var url = "https://wild-things-bhm.myshopify.com/admin/api/2021-01/customers/" + doc.customer.id + "/orders.json?status=any";
@@ -1907,14 +1907,14 @@ router.post('/new3/order', function(req, res, next) {
                 var subscription_tag2 = "Subscription";
                 // console.log("Orders: " + subscription_number)
                 orders.slice(1).forEach(order => {
-                  console.log(order.shipping_lines[0].title)
+                  // console.log(order.shipping_lines[0].title)
                   if (order.shipping_lines[0].title === 'Subscription shipping' || order.shipping_lines[0].title === 'Subscription · Shipping') {
                     var today = moment().format('YYYY/MM/DD')
                     var today_tag = moment().format('MM/DD/YYYY')
                     var order_tags = order.tags.split(',').slice(1);
                     console.log('OLD TAGS: ' + order_tags)
-                    // console.log(order.note_attributes)
-                    // console.log(order.tags)
+                    // // console.log(order.note_attributes)
+                    // // console.log(order.tags)
                     // console.log(original_order.id)
                     order_tags.push(today_tag)
                     order_tags.push(subscription_tag2)
@@ -1968,7 +1968,7 @@ router.post('/new3/order', function(req, res, next) {
                           console.log(error)
                         } else {
                           doc.note = nl2br(doc.note);
-                          // console.log(doc.note);
+                          // // console.log(doc.note);
                           doc.deliver_day = "";
                           if (doc.user_id) {
 
@@ -1982,11 +1982,11 @@ router.post('/new3/order', function(req, res, next) {
                             var value = doc.note_attributes[i].value.toString();
                             doc.orderNotes[key] = value;
                             if (i === doc.note_attributes.length - 1) {
-                              // console.log(doc.orderNotes)
+                              // // console.log(doc.orderNotes)
                             }
                           }
                           if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-                            // console.log(doc)
+                            // // console.log(doc)
                             if (doc.orderNotes.checkout_method === "delivery") {
 
                             }
@@ -2008,7 +2008,7 @@ router.post('/new3/order', function(req, res, next) {
                               //   'width': 1350,
                               //   'height': 2200
                               // }
-                              // // console.log(doc._id)
+                              // // // console.log(doc._id)
                               // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
                               //   console.log(err)
                               //   // setTimeout(function() {
@@ -2074,7 +2074,7 @@ router.post('/new3/order', function(req, res, next) {
 
         } else {
           doc.note = nl2br(doc.note);
-          // console.log(doc.note);
+          // // console.log(doc.note);
           doc.deliver_day = "";
           if (doc.user_id) {
 
@@ -2088,11 +2088,11 @@ router.post('/new3/order', function(req, res, next) {
             var value = doc.note_attributes[i].value.toString();
             doc.orderNotes[key] = value;
             if (i === doc.note_attributes.length - 1) {
-              // console.log(doc.orderNotes)
+              // // console.log(doc.orderNotes)
             }
           }
           if (doc.orderNotes.checkout_method === "delivery" || doc.orderNotes.checkout_method === 'pickup') {
-            // console.log(doc)
+            // // console.log(doc)
             if (doc.orderNotes.checkout_method === "delivery") {
 
             }
@@ -2114,7 +2114,7 @@ router.post('/new3/order', function(req, res, next) {
               //   'width': 1350,
               //   'height': 2200
               // }
-              // // console.log(doc._id)
+              // // // console.log(doc._id)
               // webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
               //   console.log(err)
               //   // setTimeout(function() {
