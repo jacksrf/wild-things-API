@@ -617,7 +617,7 @@ router.get('/order/reprint/pdf/:id', isLoggedIn, function(req, res, next) {
           'height': 2200
         }
         // // console.log(doc._id)
-        webshot("admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
+        webshot("https://admin.wildthings-pos.com/order/pdf/" + doc._id, "./public/pdf/" + doc._id + ".pdf", options, function(err) {
           console.log("ERROR: " + err)
           setTimeout(function() {
             // console.log(printer.printer_id)
